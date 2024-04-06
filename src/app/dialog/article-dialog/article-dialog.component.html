@@ -1,0 +1,88 @@
+<style>
+    nav ul {
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+    }
+
+    .monText {
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .grosText {
+        text-transform: uppercase;
+    }
+</style>
+
+<div class="justify-content-center">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+                    <div class="row mb-2" *ngIf="action=='view'">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-2 col-xl-2 grosText">référence</label>
+                        <div class="col-sm-10 col-md-9 col-lg-5 col-xl-5">
+                            <input type="text" placeholder="1 UNITE" name="lieu" class="form-control form-control-sm" id="lieu" required
+                                [(ngModel)]="article.refArticle" readonly/>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-2 col-xl-2 grosText">unite</label>
+                        <div class="col-sm-10 col-md-9 col-lg-5 col-xl-5">
+                            <input type="text" placeholder="1 UNITE" name="lieu" class="form-control form-control-sm"
+                                id="lieu" required [(ngModel)]="article.conditionnement" [readonly]="action=='view'" />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="dateDebutValid" class="col-sm-12 col-md-12 col-lg-2 col-xl-2 grosText">debut
+                            Validité</label>
+                        <div class="col-sm-10 col-md-9 col-lg-3 col-xl-3">
+                            <input type="datetime-local" name="dateDebutValid" class="form-control form-control-sm"
+                                id="dateDebutValid" required [(ngModel)]="article.dateDebutValid"
+                                [readonly]="action=='view'" />
+                        </div>
+                        <label for="dateFinValid" class="col-sm-12 col-md-12 col-lg-2 col-xl-2 grosText">Fin
+                            Validité</label>
+                        <div class="col-sm-10 col-md-9 col-lg-3 col-xl-3">
+                            <input type="datetime-local" name="dateFinValid" class="form-control form-control-sm"
+                                id="dateFinValid" required [(ngModel)]="article.dateFinValid"
+                                [readonly]="action=='view'" />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-2 col-xl-2 grosText">prix</label>
+                        <div class="col-sm-5 col-md-5 col-lg-10 col-xl-10">
+                            <p-inputNumber inputId="integeronly" [(ngModel)]="article.prixDeReference"
+                                [disabled]="action=='view'" name="montantMandat"
+                                [inputStyle]="{'width':'100%','height':'30px'}">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-2 col-xl-2 grosText">désignation</label>
+                        <div class="col-sm-10 col-md-9 col-lg-10 col-xl-10">
+                            <textarea name="designation" class="form-control form-control-sm" id="objet" required
+                                [(ngModel)]="article.designation" rows="2" [readonly]="action=='view'"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="fixed-bottom bg-light p-2">
+    <div class="d-flex justify-content-end me-2 mb-2">
+        <button class="btn btn-danger btn-sm mx-2" (click)="close()">
+            <i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'Fermer' | translate }}</button>
+        <button type="button" class="btn btn-success btn-sm mx-2" (click)="save()"
+            *ngIf="config.data.param!='view'">
+            <span *ngIf="config.data.param=='new'">
+                <span><i class="fa fa-save" aria-hidden="true"></i>&nbsp;&nbsp; {{ 'Enregistrer' | translate
+                    }}</span></span>
+            <span *ngIf="config.data.param=='edit'">
+                <span><i class="fa fa-save" aria-hidden="true"></i>&nbsp;&nbsp; {{ 'Modifier' | translate
+                    }}</span></span>
+        </button>
+    </div>
+</footer>

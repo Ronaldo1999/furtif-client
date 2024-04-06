@@ -1,0 +1,68 @@
+.paramclientEl {
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 16px;
+}
+
+.paramclientCard {
+    border-left: 5px solid #1d3b55;
+    margin-top: 1%;
+    background-color: #dde5eb;
+    padding: 5px;
+}
+
+.paramclientCard:hover {
+    cursor: pointer;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.ng-autocomplete {
+    width: 100%;
+    //max-width: 600px;
+    display: table;
+    margin: 0 auto;
+}
+
+.mon:hover {
+    cursor: pointer;
+}
+
+.headd {
+    font-size: 13px;
+    color: #1d3b55;
+    font-weight: 600;
+    text-decoration: underline;
+    font-style: italic;
+}
+
+label {
+    font-weight: 600;
+    color: #1d3b55;
+}
+
+.fieldset {
+    margin-top: 2%;
+    border: 0.3px solid rgb(186, 186, 186);
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.848);
+}
+
+.bo {
+    margin: 3%;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.658);
+}
+.bod {
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgba(230, 230, 230, 0.922);
+}
+
+.legend {
+    font-weight: bold;
+    color: #1d3b55;
+    font-size: 14px;
+    margin-left: 1%;
+}

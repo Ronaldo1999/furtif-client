@@ -1,0 +1,554 @@
+<style>
+    table {
+        width: 100%;
+    }
+
+    .parentAxe:hover {
+        cursor: pointer;
+    }
+</style>
+
+<h2 class="d-flex justify-content-center text-capitalize text-primary"> {{ 'Axe Stratégique' | translate }} </h2>
+<hr style="margin-bottom: 20px;">
+
+<div class="container-fluid texte">
+
+    <div class="row">
+
+        <div class="col d-flex justify-content-start">
+            <span class="p-float-label">
+                <p-dropdown [(ngModel)]="organisation.organisationID" [style]="{width:'300px',height:'40px'}"
+                    [showClear]="true" optionValue="organisationID" [options]="organisations" optionLabel="libelleFr"
+                    placeholder=" "></p-dropdown>
+                <label for="inputtext">Organisations</label>
+            </span>&nbsp;&nbsp;&nbsp;
+            <button pButton pRipple label="Rechercher" icon="pi pi-search" class="p-button-primary p-button-sm me-2"
+                (click)="rechercher()"></button>
+        </div>
+
+        <div class="col d-flex justify-content-end">
+            <button *ngIf="btnAdd!=' '" class="btn big btn-success btn-sm mx-2" (click)="create()">
+                {{ btnAdd | translate }} </button>
+            <button *ngIf="newObjForProgram==true" class="btn big btn-success btn-sm mx-2" (click)="createObj()">
+                {{ btnAddO | translate }} </button>
+            <button class="btn big  btn-sm mx-2" (click)="editer()"
+                [ngClass]="select==true ? ' btn-warning' : 'btn-outline-warning disabled'">
+                {{ 'modifier' | translate }} </button>
+            <button class="btn big  btn-sm mx-2" [ngClass]="select==true ? 'btn-danger' : 'btn-outline-danger disabled'"
+                (click)="confirm()">
+                {{ 'supprimer' | translate }} </button>
+        </div>
+
+    </div>
+
+    <div class="row" style="margin-top: 1%;">
+        <div class="col">
+            <p-table [value]="axesStrategiques" #fc [paginator]="false" styleClass="p-datatable-sm"
+                responsiveLayout="scroll" (onSelectRow)="nodeSelect($event)">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 5%;"></th>
+                        <th style="width: 10%;">Type</th>
+                        <th style="width: 85%;">Désignation</th>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 1%;">
+        <div class="col">
+            <p-table [value]="axesStrategiques" #fc [rows]="5" [paginator]="true" [(contextMenuSelection)]="selectedAxe"
+                styleClass="p-datatable-sm" responsiveLayout="scroll" [rowHover]="true" dataKey="arbreID"
+                [showCurrentPageReport]="true" (onRowUnselect)="nodeUnselect($event)" selectionMode="single"
+                (onSelectRow)="nodeSelect($event)">
+
+                <ng-template pTemplate="body" let-axe let-i="index">
+                    <ul style="list-style: none;">
+                        <li>
+                            <tr [pContextMenuRow]="axe" class="parentAxe">
+                                <p>
+                                    <span> <i style="font-size: 24px;" class="fas fa-chevron-right"
+                                            (click)="getChild(axe)"></i>&nbsp;&nbsp;<span
+                                            style="color: brown;">{{defineType(axe)}}</span>
+                                    </span>&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                        (click)="nodeSelect(axe)" [style.color]="axe.color">{{axe.libelleFr}}</span>
+                                </p>
+                            </tr>
+                            <span *ngFor="let activite1 of activitesStrategiques">
+                                <ul style="list-style: none;">
+                                    <li
+                                        *ngIf="activite1.axestrategiqueID==axe.axestrategiqueID && activite1.niveauActiviteID==1">
+                                        <tr [pContextMenuRow]="axe" class="parentAxe">
+                                            <p>
+                                                <span> <i style="font-size: 24px;" class="fas fa-chevron-right"
+                                                        (click)="getChild(activite1)"></i>&nbsp;&nbsp;<span
+                                                        style="color: brown;">{{defineType(activite1)}}</span>
+                                                </span>&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                                    (click)="nodeSelect(activite1)"
+                                                    [style.color]="activite1.color">{{activite1.libelleFr}}</span>
+                                            </p>
+                                        </tr>
+                                        <span *ngFor="let objectif of objectifStrategiques">
+                                            <ul style="list-style: none;">
+                                                <li
+                                                    *ngIf="objectif.activitestrategiqueID==activite1.activitestrategiqueID && activite1.niveauActiviteID==1">
+                                                    <tr [pContextMenuRow]="objectif" class="parentAxe">
+                                                        <p>
+                                                            <span> <i style="font-size: 24px;"
+                                                                    class="fas fa-chevron-right"
+                                                                    (click)="getChild(objectif)"></i>&nbsp;&nbsp;<span
+                                                                    style="color: brown;">{{defineType(objectif)}}</span>
+                                                            </span>&nbsp;&nbsp; -
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                                                (click)="nodeSelect(objectif)"
+                                                                [style.color]="objectif.color">{{objectif.libelleFr}}</span>
+                                                        </p>
+                                                    </tr>
+                                                    <span *ngFor="let indicateur of indcateurStrategiques">
+                                                        <ul style="list-style: none;">
+                                                            <li *ngIf="indicateur.objectifID==objectif.objectifID">
+                                                                <tr [pContextMenuRow]="indicateur" class="parentAxe">
+                                                                    <p>
+                                                                        <span> <i style="font-size: 24px;"
+                                                                                class="fas fa-chevron-right"
+                                                                                (click)="getChild(indicateur)"></i>&nbsp;&nbsp;<span
+                                                                                style="color: brown;">{{defineType(indicateur)}}</span>
+                                                                        </span>&nbsp;&nbsp; -
+                                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                                                            (click)="nodeSelect(indicateur)"
+                                                                            [style.color]="indicateur.color">{{indicateur.libelleFr}}</span>
+                                                                    </p>
+                                                                </tr>
+                                                            </li>
+                                                        </ul>
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                        <span *ngFor="let activite2 of activitesStrategiquesFils">
+                                            <ul style="list-style: none;">
+                                                <li
+                                                    *ngIf="activite2.activiteParentID==activite1.activitestrategiqueID && activite2.niveauActiviteID==2">
+                                                    <tr [pContextMenuRow]="activite2" class="parentAxe">
+                                                        <p>
+                                                            <span> <i style="font-size: 24px;"
+                                                                    class="fas fa-chevron-right"
+                                                                    (click)="getChild(activite2)"></i>&nbsp;&nbsp;<span
+                                                                    style="color: brown;">{{defineType(activite2)}}</span>
+                                                            </span>&nbsp;&nbsp; - &nbsp;&nbsp;<span
+                                                                (click)="nodeSelect(activite2)"
+                                                                [style.color]="activite2.color">{{activite2.libelleFr}}</span>
+                                                        </p>
+                                                    </tr>
+                                                    <span *ngFor="let objectif of objectifStrategiques">
+                                                        <ul style="list-style: none;">
+                                                            <li
+                                                                *ngIf="objectif.activitestrategiqueID==activite2.activitestrategiqueID && activite2.niveauActiviteID==2">
+                                                                <tr [pContextMenuRow]="objectif" class="parentAxe">
+                                                                    <p>
+                                                                        <span> <i style="font-size: 24px;"
+                                                                                class="fas fa-chevron-right"
+                                                                                (click)="getChild(objectif)"></i>&nbsp;&nbsp;<span
+                                                                                style="color: brown;">{{defineType(objectif)}}</span>
+                                                                        </span>&nbsp;&nbsp; - &nbsp;&nbsp;<span
+                                                                            (click)="nodeSelect(objectif)"
+                                                                            [style.color]="objectif.color">{{objectif.libelleFr}}</span>
+                                                                    </p>
+                                                                </tr>
+                                                                <span *ngFor="let indicateur of indcateurStrategiques">
+                                                                    <ul style="list-style: none;">
+                                                                        <li
+                                                                            *ngIf="indicateur.objectifID==objectif.objectifID">
+                                                                            <tr [pContextMenuRow]="indicateur"
+                                                                                class="parentAxe">
+                                                                                <p>
+                                                                                    <span> <i style="font-size: 24px;"
+                                                                                            class="fas fa-chevron-right"
+                                                                                            (click)="getChild(indicateur)"></i>&nbsp;&nbsp;<span
+                                                                                            style="color: brown;">{{defineType(indicateur)}}</span>
+                                                                                    </span>&nbsp;&nbsp; -
+                                                                                    &nbsp;&nbsp;<span
+                                                                                        (click)="nodeSelect(indicateur)"
+                                                                                        [style.color]="indicateur.color">{{indicateur.libelleFr}}</span>
+                                                                                </p>
+                                                                            </tr>
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </li>
+                                                        </ul>
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </span>
+                        </li>
+                    </ul>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="container-fluid texte">
+    <div class="row">
+
+        <div class="col d-flex justify-content-start">
+            <span class="p-float-label">
+                <p-dropdown [(ngModel)]="organisation.organisationID" [style]="{width:'300px',height:'40px'}"
+                    [showClear]="true" optionValue="organisationID" [options]="organisations" optionLabel="libelleFr"
+                    placeholder=" "></p-dropdown>
+                <label for="inputtext">Organisations</label>
+            </span>&nbsp;&nbsp;&nbsp;
+            <button pButton pRipple label="Rechercher" icon="pi pi-search" class="p-button-primary p-button-sm me-2"
+                (click)="rechercher()"></button>
+        </div>
+
+        <div class="col d-flex justify-content-end">
+            <button *ngIf="btnAdd!=' '" class="btn big btn-success btn-sm mx-2" (click)="create()">
+                {{ btnAdd | translate }} </button>
+            <button class="btn big  btn-sm mx-2" (click)="editer()"
+                [ngClass]="select==true ? ' btn-warning' : 'btn-outline-warning disabled'">
+                {{ 'modifier' | translate }} </button>
+            <button class="btn big  btn-sm mx-2" [ngClass]="select==true ? 'btn-danger' : 'btn-outline-danger disabled'"
+                (click)="confirm()">
+                {{ 'supprimer' | translate }} </button>
+        </div>
+
+    </div>
+
+    <div class="row" style="margin-top: 1%;">
+        <div class="col">
+
+            <p-treeTable [value]="arbre" [columns]="col" [resizableColumns]="true" selectionMode="single"
+                styleClass="p-treetable-sm" [(selection)]="selectedNode1" dataKey="libelleFr"
+                (onNodeExpand)="onNodeExpand($event)" (onNodeSelect)="nodeSelect($event)"
+                (onNodeUnselect)="nodeUnselect($event)">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="width: 5%;"></th>
+                        <th style="width: 30%;">Type</th>
+                        <th style="width: 65%;">Désignation</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                    <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
+                        <td>
+                            <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                        </td>
+                        <td>{{ defineType(rowData) }}</td>
+                        <td>{{ rowData.libelleFr }}</td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="columns.length">
+                            Aucun Enregistrement trouvé
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-treeTable>
+        </div>
+
+    </div>
+
+</div> -->
+
+
+<!-- Modal de gestion formelle d'un axe Strategique -->
+<p-dialog [header]="libelle" [(visible)]="modalStrat" [modal]="true" [style]="{width:'50vw'}" [draggable]="true"
+    [resizable]="false" [closable]="false">
+    <div class="modal-body">
+
+        <div class="row mb-2">
+            <label for="libelleFr" style="font-weight: 500;" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle
+                Fr</label>
+            <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                <input type="text" [readonly]="action=='view'" [required]="action=='new' || action=='edit'"
+                    class="form-control form-control-sm" name="libelleFr" [(ngModel)]="axeStrategique.libelleFr"
+                    required />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="libelleUs" style="font-weight: 500;" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle
+                Us</label>
+            <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                <input [readonly]="action=='view'" [required]="action=='new' || action=='edit'" type="text"
+                    class="form-control form-control-sm" name="libelleUs" [(ngModel)]="axeStrategique.libelleUs"
+                    required />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="numordre" style="font-weight: 500;" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Numéro
+                d'ordre</label>
+            <div class="col-sm-10 col-md-9 col-lg-4 col-xl-4">
+                <input type="text" class="form-control form-control-sm" name="numordre"
+                    [(ngModel)]="axeStrategique.numordre" [readonly]="action=='view'"
+                    [required]="action=='new' || action=='edit'" />
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button icon="pi pi-times" (click)="modalStrat=false" pButton pRipple type="button" [label]="btnCancelLabel"
+            class="p-button-secondary p-button-text"></button>
+        <button icon="pi pi-save" *ngIf="action=='new'|| action=='edit'" (click)="saveAxe()" pButton pRipple
+            type="button" label="Sauvegarder" class="p-button-success p-button-text"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Gestion des activités -->
+<p-dialog [header]="libelleActivite" [(visible)]="dialogActivite" [modal]="true" [style]="{width:'50vw'}"
+    [draggable]="true" [resizable]="false" [closable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+
+                <div class="row mb-2">
+                    <label for="code" style="font-weight: 700; "
+                        class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Code</label>
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        <input [readonly]="actionActivite=='view'"
+                            [required]="actionActivite=='newActivite' || actionActivite=='editActivite'" type="text"
+                            class="form-control form-control-sm" name="code" [(ngModel)]="activiteStrategique.code"
+                            required />
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="code" style="font-weight: 700; "
+                        class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Millesime</label>
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mt-1 mx-1">
+                        <p-dropdown [style]="{width:'80%',height:'35px'}" [disabled]="actionActivite=='view'"
+                            [(ngModel)]="activiteStrategique.millesime" [showClear]="true" optionValue="millesime"
+                            [options]="exercices" optionLabel="libelleFr" placeholder=" " name="millesime">
+                        </p-dropdown>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="phase" style="font-weight: 700; " class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle
+                        Fr</label>
+                    <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                        <input [required]="actionActivite=='newActivite' || actionActivite=='editActivite'" type="text"
+                            class="form-control form-control-sm" name="libelleFr"
+                            [readonly]="actionActivite=='viewActivite'" [(ngModel)]="activiteStrategique.libelleFr"
+                            required />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="phase" style="font-weight: 700; " class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle
+                        Us</label>
+                    <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                        <input [required]="actionActivite=='newActivite' || actionActivite=='editActivite'" type="text"
+                            class="form-control form-control-sm" name="libelleUs"
+                            [readonly]="actionActivite=='viewActivite'" [(ngModel)]="activiteStrategique.libelleUs"
+                            required />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="phase" style="font-weight: 700; "
+                        class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Réference</label>
+                    <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                        <input type="number"
+                            [required]="actionActivite=='newActivite' || actionActivite=='editActivite'"
+                            class="form-control form-control-sm" name="libelleFr" [readonly]="actionActivite=='view'"
+                            [(ngModel)]="activiteStrategique.reference" required />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="cible" style="font-weight: 700; "
+                        class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Cible</label>
+                    <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                        <input [required]="actionActivite=='newActivite' || actionActivite=='editActivite'" type="text"
+                            [readonly]="actionActivite=='viewActivite'" class="form-control form-control-sm"
+                            name="cible" [(ngModel)]="activiteStrategique.cible" required />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="poids" style="font-weight: 700; "
+                        class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Poids</label>
+                    <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                        <input type="number"
+                            [required]="actionActivite=='newActivite' || actionActivite=='editActivite'"
+                            [readonly]="actionActivite=='viewActivite'" class="form-control form-control-sm"
+                            name="poids" [(ngModel)]="activiteStrategique.poids" required />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="taux" style="font-weight: 700; "
+                        class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Taux</label>
+                    <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                        <input type="number"
+                            [required]="actionActivite=='newActivite' || actionActivite=='editActivite'"
+                            [readonly]="actionActivite=='viewActivite'" class="form-control form-control-sm" name="taux"
+                            [(ngModel)]="activiteStrategique.taux" required />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="echeance" style="font-weight: 700; "
+                        class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Echeance</label>
+                    <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                        <input type="date" [required]="actionActivite=='newActivite' || actionActivite=='editActivite'"
+                            class="form-control form-control-sm" name="echeance"
+                            [readonly]="actionActivite=='viewActivite'" [(ngModel)]="activiteStrategique.echeance"
+                            required />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="cout" style="font-weight: 700; "
+                        class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Coût</label>
+                    <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                        <input type="number" class="form-control form-control-sm" name="cout"
+                            [required]="actionActivite=='newActivite' || actionActivite=='editActivite'"
+                            [(ngModel)]="activiteStrategique.cout" required />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button icon="pi pi-times" (click)="dialogActivite=false" pButton pRipple type="button" [label]="btnCancelLabel"
+            class="p-button-secondary p-button-text"></button>
+        <button icon="pi pi-save" *ngIf="actionActivite=='newActivite'|| actionActivite=='editActivite'"
+            (click)="saveActivite()" pButton pRipple type="button" label="Enregistrer"
+            class="p-button-success p-button-text"></button>
+    </ng-template>
+</p-dialog>
+
+
+<!-- Gestion des objectifs -->
+<p-dialog [header]="libelleObjectif" [(visible)]="dialogObjectif" [modal]="true" [style]="{width:'50vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+                    <div class="row mb-2">
+                        <label for="code" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Code</label>
+                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <input type="text" class="form-control form-control-sm" name="code"
+                                [(ngModel)]="objectif.code" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Fr</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleFr"
+                                [(ngModel)]="objectif.libelleFr" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Us</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleUs"
+                                [(ngModel)]="objectif.libelleUs" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Réference / Désignation</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleUs"
+                                [(ngModel)]="objectif.referenceDesignation" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3"></div>
+                        <div class="col">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <span class="p-float-label">
+                                    <input pInputText type="text" class="form-control form-control-sm" name="sigle"
+                                        [(ngModel)]="objectif.sigle" required />
+                                    <label for="inputtext">Sigle</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <span class="p-float-label">
+                                    <input pInputText type="text" class="form-control form-control-sm" name="numOrdre"
+                                        [(ngModel)]="objectif.numOrdre" required />
+                                    <label for="inputtext">Numéro d'ordre</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="dialogObjectif=false" pButton pRipple type="button"
+            [label]="btnCancelLabel" class="p-button-text p-button-secondary"></p-button>
+        <p-button icon="pi pi-save" *ngIf="actionObjectif=='newObjectif'|| actionObjectif=='editObjectif'"
+            (click)="saveObjectif()" pButton pRipple type="button" label="Enregistrer"
+            class="p-button-text p-button-success">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<!-- Gestion des indicateur -->
+<p-dialog [header]="libelleIndicateur" [(visible)]="dialogIndicateur" [modal]="true" [style]="{width:'50vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+
+                    <div class="row mb-2">
+                        <label for="code" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Code</label>
+                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <input type="text" class="form-control form-control-sm" name="code"
+                                [(ngModel)]="indicateur.code" required />
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Fr</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleFr"
+                                [(ngModel)]="indicateur.libelleFr" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Us</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleUs"
+                                [(ngModel)]="indicateur.libelleUs" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button icon="pi pi-times" (click)="dialogIndicateur=false" pButton pRipple type="button" label="Annuler"
+            class="p-button-secondary p-button-text"></button>
+        <button icon="pi pi-save" *ngIf="action=='new'" (click)="saveIndicateur()" pButton pRipple type="button"
+            label="Ajouter" class="p-button-success p-button-text"></button>
+    </ng-template>
+
+</p-dialog>
+
+<!-- Dialog de confirmation d'action -->
+<p-dialog [(visible)]="dialogConfirmAction" [header]="ConfirmationLibelle" [modal]="true" [style]="{width: '30vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700;"
+                    [style.color]="color">{{message}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="dialogConfirmAction=false" label="Ok" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog header="Confirmation"></p-confirmDialog>

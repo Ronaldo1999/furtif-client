@@ -1,0 +1,197 @@
+<div class="container-fluid" id="main">
+  <div class="row row-offcanvas row-offcanvas-left">
+    <div class="col-md-12 col-lg-12 main">
+      <div class="col-md-12">
+        <div class="card shadow ele border-0">
+          <div class="card-content">
+            <div class="card-body cleartfix">
+              <div class="media align-items-stretch">
+                <div class="align-self-center">
+                  <i class="icon-pencil primary font-large-2 mr-2"></i>
+                </div>
+                <div class="media-body">
+                  <h4
+                    style="font-size: 26px; text-align: center; font-weight: 800; color: #1d3b55; text-transform: uppercase;">
+                    <img style="height: 50px; width: 50px;" src="assets/icons/actions/dashboard.png" alt=""
+                      class="img-responsive img-circle" />&nbsp;&nbsp; Tableau de board
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="alert alert-warning fade collapse" role="alert" id="myAlert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <strong>Holy guacamole!</strong> It's free.. this is an example theme.
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-xl-6 col-lg-6">
+          <div class="card shadow card-inverse card-secondary">
+            <div class="card-block bg-secondary" style="padding: 2%;">
+              <div class="rotate">
+                <i class="fa fa-user fa-5x"></i>
+              </div>
+              <h6 class="text-uppercase">Utilisateurs système</h6>
+              <h1 class="display-1">{{users.length}}</h1>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6">
+          <div class="card shadow card-inverse card-info">
+            <div class="card-block bg-info" style="padding: 2%;">
+              <div class="rotate">
+                <i class="fa fa-users fa-5x"></i>
+              </div>
+              <h6 class="text-uppercase">Groupes systemes</h6>
+              <h1 class="display-1">{{groupGlobalList.length}}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-xl-4 col-lg-6">
+          <div class="card shadow card-inverse card-primary">
+            <div class="card-block bg-primary" style="padding: 2%;">
+              <div class="rotate">
+                <i class="fa fa-folder fa-5x"></i>
+              </div>
+              <h6 class="text-uppercase">Documents enregistré</h6>
+              <h1 class="display-1">{{docs}}</h1>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-6">
+          <div class="card shadow card-inverse card-success">
+            <div class="card-block bg-success" style="padding: 2%;">
+              <div class="rotate">
+                <i class="fa fa-file fa-5x"></i>
+              </div>
+              <h6 class="text-uppercase">Types de documents</h6>
+              <h1 class="display-1">{{typs}}</h1>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-6">
+          <div class="card shadow card-inverse card-warning">
+            <div class="card-block bg-warning" style="padding: 2%;">
+              <div class="rotate">
+                <i class="fa fa-file fa-5x"></i>
+              </div>
+              <h6 class="text-uppercase">Statuts de documents</h6>
+              <h1 class="display-1">{{stats}}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/row-->
+    </div>
+    <!--/main col-->
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-xl-4 col-md-12">
+    <div class="card shadow ele border-0">
+      <div class="card-content">
+        <div class="card-body cleartfix">
+          <p-chart type="radar" [data]="data" [options]="chartOptions"></p-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-md-12">
+    <div class="card shadow ele border-0">
+      <div class="card-content">
+        <div class="card-body cleartfix">
+          <p-chart type="pie" [data]="data" [options]="chartOptions"></p-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-md-12">
+    <div class="card shadow ele border-0">
+      <div class="card-content">
+        <div class="card-body cleartfix">
+          <p-chart type="bar" [data]="data" [options]="chartOptions"></p-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+<div class="row">
+  <h1>statistiques par filtres</h1>
+</div>
+<p-toolbar styleClass="p-mb-4">
+  <ng-template pTemplate="left">
+    <i class="item-page"><img src="assets/icons/actions/sdocuments.png" alt=""
+        class="img-responsive img-circle item-icon" /></i>&nbsp;&nbsp;
+    <span class="titrePage">{{ libeType }}</span>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <span style="font-family: Arial, sans-serif; font-size: 16px; font-weight:600">{{ "filterBy" | translate
+      }}</span>&nbsp;&nbsp;&nbsp;
+    <p-splitButton label="Type" [model]="items" [style]="{height:'35px'}"
+      styleClass="p-button-raised p-button-secondary mr-2 mb-2">
+    </p-splitButton>
+    &nbsp;&nbsp;
+    <p-splitButton label="Status" [model]="itemsStatuts" [style]="{'height':'35px','margin-top': '1%'}"
+      styleClass="p-button-raised p-button-secondary mr-2 mb-2"></p-splitButton>&nbsp;&nbsp;
+  </ng-template>
+</p-toolbar>
+<div class="container-fluid" id="main">
+  <div class="row row-offcanvas row-offcanvas-left">
+    <div class="col-md-12 col-lg-12 main">
+      <div class="col-md-12">
+        <div class="card shadow ele border-0">
+          <div class="card-content">
+            <div class="card-body cleartfix">
+              <div class="media align-items-stretch">
+                <div class="align-self-center">
+                  <i class="icon-pencil primary font-large-2 mr-2"></i>
+                </div>
+                <div class="media-body">
+                  <h4
+                    style="font-size: 26px; text-align: center; font-weight: 800; color: #1d3b55; text-transform: uppercase;">
+                    <img style="height: 50px; width: 50px;" src="assets/icons/actions/sdocuments.png" alt=""
+                      class="img-responsive img-circle" />&nbsp;&nbsp; Nombre de documents : {{documents.length}}
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <!--/row-->
+    </div>
+    <!--/main col-->
+  </div>
+
+</div>
+
+<div class="progress-spinner" *ngIf="spinner==true" style="z-index: 9999">
+	<div class="spinner">
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+  <div class="d-flex justify-content-center affiche">
+    <h6 style="color: rgb(255, 255, 255); z-index: 999">Chargement...</h6>
+  </div>
+</div>

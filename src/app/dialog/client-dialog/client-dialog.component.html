@@ -1,0 +1,108 @@
+<div class="modal-body">
+    <div class="row">
+        <div class="col-6">
+            <div class="brise-input">
+                <input [(ngModel)]="client.nom" [readonly]="action=='view'" type="text" name="text" required>
+                <label *ngIf="action!='view'">{{ "client-noms" | translate }}</label>
+                <span class="line"></span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="brise-input">
+                <input [(ngModel)]="client.contact" [readonly]="action=='view'" type="text" name="text" required>
+                <label *ngIf="action!='view'">{{ "client-contact" | translate }}</label>
+                <span class="line"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="brise-input">
+                <input [(ngModel)]="client.ville" [readonly]="action=='view'" type="text" name="text" required>
+                <label *ngIf="action!='view'">{{ "client-ville" | translate }}</label>
+                <span class="line"></span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="brise-input">
+                <input [(ngModel)]="client.pays" [readonly]="action=='view'" type="text" name="text" required>
+                <label *ngIf="action!='view'">{{ "client-pays" | translate }}</label>
+                <span class="line"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="brise-input">
+                <input [(ngModel)]="client.telephone1" [readonly]="action=='view'" type="text" name="text" required>
+                <label *ngIf="action!='view'">{{ "client-telephone1" | translate }}</label>
+                <span class="line"></span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="brise-input">
+                <input [(ngModel)]="client.telephone2" [readonly]="action=='view'" type="text" name="text" required>
+                <label *ngIf="action!='view'">{{ "client-telephone2" | translate }}</label>
+                <span class="line"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="brise-input">
+                <input [(ngModel)]="client.fax" [readonly]="action=='view'" type="tel" name="text" required>
+                <label *ngIf="action!='view'">{{ "client-fax" | translate }}</label>
+                <span class="line"></span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="brise-input">
+                <input #clientemail="ngModel" [ngClass]="{ 'is-invalid': clientemail.errors?.pattern }" required
+                    [(ngModel)]="client.email" [readonly]="action=='view'" type="clientemail" name="text" clientemail
+                    required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                <label *ngIf="action!='view'">{{ "client-email" | translate }}
+                    <span *ngIf="clientemail.errors?.pattern" class="text-danger error-text">({{ "invalidEmail" |
+                        translate}})</span>
+                </label>
+                <span class="line"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="select">
+                <select [(ngModel)]="client.groupeClientID" class="select-text" required>
+                    <option value="" disabled selected></option>
+                    <option *ngFor="let c of groupesClients" [ngValue]="c.groupeClientID">
+                        <span>{{c.libelleFr}}</span>
+                    </option>
+                </select>
+                <span class="select-highlight"></span>
+                <span class="select-bar"></span>
+                <label class="select-label">{{ "client-categorie" | translate }}</label>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="d-flex justify-content-center m-4">
+        <button class="pure-material-button-contained bg-secondary" (click)="close()">
+            <span *ngIf="action!='view'">
+                <i class='bx bxs-minus-circle icon-btn'></i>&nbsp;
+                <span>{{ "annuler" | translate }}</span>
+            </span>
+            <span *ngIf="action=='view'">
+                <i class='pi pi-times'></i>&nbsp;
+                <span>{{ "fermer" | translate }}</span>
+            </span>
+        </button>&nbsp;&nbsp;
+        <button *ngIf="action=='new'" class="pure-material-button-contained bg-success" (click)="save()"><i
+                class="pi pi-save"></i>
+            &nbsp;<span>{{ "enregistrer" | translate }}</span>
+        </button>
+        <button *ngIf="action=='edit'" class="pure-material-button-contained bg-primary" (click)="save()"><i
+                class="pi pi-save"></i>
+            &nbsp;<span>{{ "sauvegarder" | translate }}</span>
+        </button>
+    </div>
+</footer>

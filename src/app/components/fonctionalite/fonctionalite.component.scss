@@ -1,0 +1,33 @@
+:host ::ng-deep .p-dropdown {
+  width: 14rem;
+}
+
+nav ul {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+}
+
+.monText {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cheu:hover {
+  cursor: pointer;
+}
+
+.visah {
+  font-weight: 600;
+  background-color: rgba(242, 249, 55, 0.466);
+}
+
+.visaD {
+  font-weight: 600;
+  color: red;
+  background-color: rgba(249, 136, 55, 0.466);
+}
+
+.pere {
+  text-transform: uppercase;
+}

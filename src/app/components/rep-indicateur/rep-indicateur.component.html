@@ -1,0 +1,26 @@
+<body>
+    <div class="corp">
+      <!-- <div class="row">
+        <div class="col d-flex justify-content-center">
+          <div class="card" style="margin-top: 1.5%">
+            <span class="mont" style="color: black; text-align: center;">
+              <span class="font-weight-bold">{{'wel1'|translate}}</span><br />
+              {{'wel2'|translate}}
+              </span>
+          </div>
+        </div>
+      </div> -->
+      <div class="container">
+        <div class="row align-middle" style="margin-top: 10%;">
+          <div *ngIf="habilitation('PFNL01')" class="col-md-6 col-lg-6 col-sm-12 column text-center" (click)="getModule('mod1', 1)" pTooltip="{{'mod1Label'|translate}}" tooltipPosition="top">
+            <img src="assets/icons/mod1.png" style="height: 100px; width: 100px" alt="" class="img-responsive mon-img" />
+            <div class="txt"><h6>{{'Liste des indicateurs'|translate}}</h6></div>
+          </div>
+          <div *ngIf="habilitation('PFNL02')" class="col-md-6 col-lg-6 col-sm-12 column text-center" (click)="getModule('mod2', 2)" pTooltip="{{'mod2Label'|translate}}" tooltipPosition="top">
+            <img src="assets/icons/mod2.png" style="height: 100px; width: 100px" alt="" class="img-responsive mon-img" />
+            <div class="txt"><h6>{{'Key performance indicator'|translate}}</h6></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>

@@ -1,0 +1,250 @@
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <i class="item-page"><img src="assets/icons/actions/tree.png" alt=""
+                    class="img-responsive img-circle item-icon" /></i>&nbsp;&nbsp;
+            <span class="titrePage">{{ "theoChange" | translate }}</span>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <p-splitButton *ngIf="selectedtheories.length" icon="pi pi-cog" [model]="items" [style]="{height:'35px'}"
+                styleClass="p-button-raised p-button-secondary mr-2 mb-2"></p-splitButton>
+            &nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-primary" (click)="newtheorie()"><i class="fa fa-plus"></i>
+                &nbsp; <span>{{
+                    "Ajouter" | translate }}</span></button>&nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-secondary" (click)="rechercher()"><i
+                    class="fa fa-refresh"></i> &nbsp; <span>{{
+                    "actualiser" | translate }}</span></button>&nbsp;&nbsp;
+            <button [disabled]="!selectedtheories || !selectedtheories.length" (click)="delete('delTheorieList')"
+                class="pure-material-button-contained bg-danger"><i class="fa fa-trash"></i> &nbsp; <span>{{
+                    "Supprimer" | translate }}</span></button>&nbsp;&nbsp;
+
+        </ng-template>
+    </p-toolbar>
+    <div class="row mb-2" style="padding-left: 2%;padding-right: 2%; margin-top: -1%;">
+        <div class="brise-input">
+            <input (input)="dt.filterGlobal($any($event.target).value, 'contains')" type="text" name="text" required>
+            <label><i class="pi pi-search"></i> {{ "research" | translate }}</label>
+            <span class="line"></span>
+        </div>
+    </div>
+    <p-scrollPanel [style]="{ width: '100%', height: '33vw' }" styleClass="custombar1">
+        <p-table #dt [value]="theories" [rows]="8" styleClass="p-datatable-sm" [paginator]="true"
+            currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} éléments"
+            [showCurrentPageReport]="true" [globalFilterFields]="[ 'nom','email', 'contact', 'fax']"
+            [(selection)]="selectedtheories" [rowHover]="true" dataKey="canevaID">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3%; text-align: center">N°</th>
+                    <th style="width: 3rem"> <p-tableHeaderCheckbox></p-tableHeaderCheckbox> </th>
+                    <th colspan="1" style="width: 63%;"> Libellé </th>
+                    <th colspan="1" style="width: 15%;"> Date création </th>
+                    <th style="width: 16%" class="text-center"> <i class="pi pi-cog"></i> </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-theorie let-i="rowIndex">
+                <tr>
+                    <td class="text-center">{{i+1}}</td>
+                    <td> <p-tableCheckbox [value]="theorie"></p-tableCheckbox> </td>
+                    <td colspan="1">{{theorie.libelleFr}}</td>
+                    <td colspan="1">{{theorie.creation_date | date:'longDate'}}</td>
+                    <td class="text-center">
+                        <img (click)="consulter2(theorie)" pTooltip="{{ 'defArchitechture' | translate }}"
+                            *ngIf="theorie.liens!=null" tooltipPosition="top" src="assets/icons/tree.png"
+                            class="img-responsive icon-action" />&nbsp;&nbsp;
+                        <img (click)="get(theorie,'edit')" pTooltip="{{ 'modifier' | translate }}" tooltipPosition="top"
+                            src="assets/icons/pencil.png" class="img-responsive icon-action" />&nbsp;&nbsp;
+                        <img (click)="get(theorie, 'view')" pTooltip="{{ 'consulter' | translate }}"
+                            tooltipPosition="top" src="assets/icons/eye.png"
+                            class="img-responsive icon-action" />&nbsp;&nbsp;
+                        <img (click)="delete('delCaneva', theorie)" pTooltip="{{ 'supprimer' | translate }}"
+                            tooltipPosition="left" src="assets/icons/remove.png" class="img-responsive icon-action" />
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-scrollPanel>
+</div>
+
+
+<!-- Gestion des theories logiques -->
+<p-dialog [header]="libelle2" [(visible)]="modalNewCan" [modal]="true" [style]="{width:'40vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+
+                    <div class="row mb-2">
+                        <label for="code" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Code</label>
+                        <div class="col-sm-10 col-md-2 col-lg-2 col-xl-2">
+                            <input type="text" class="form-control form-control-sm" name="code"
+                                [(ngModel)]="theorie.code" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Français</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleFr"
+                                [(ngModel)]="theorie.libelleFr" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="libelleUs" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Anglais</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleUs"
+                                [(ngModel)]="theorie.libelleUs" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2" *ngIf="theorie.liens==null">
+                        <div class="row">
+                            <div class="col-2">
+                                <button icon="pi pi-sitemap" (click)="consulter3(theorie)" pButton pRipple type="button"
+                                    label="Graphique" class="p-button-secondary p-button-text"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button icon="pi pi-times" (click)="modalNewCan=false" pButton pRipple type="button" label="Annuler"
+            class="p-button-secondary p-button-text"></button>
+        <button icon="pi pi-save" *ngIf="action=='new' || action=='edit'" (click)="save(theorie)" pButton pRipple
+            type="button" label="Sauvegarder" class="p-button-success p-button-text"></button>
+    </ng-template>
+
+</p-dialog>
+
+
+
+<!-- Gestion des objectifs -->
+<p-dialog [header]="libelle2" [(visible)]="dialogObjectif" [modal]="true" [style]="{width:'50vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+                    <div class="row mb-2">
+                        <label for="code" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Code</label>
+                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <input type="text" class="form-control form-control-sm" name="code"
+                                [(ngModel)]="objectif.code" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Fr</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleFr"
+                                [(ngModel)]="objectif.libelleFr" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Us</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleUs"
+                                [(ngModel)]="objectif.libelleUs" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Réference / Désignation</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleUs"
+                                [(ngModel)]="objectif.referenceDesignation" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3"></div>
+                        <div class="col">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <span class="p-float-label">
+                                    <input pInputText type="text" class="form-control form-control-sm" name="sigle"
+                                        [(ngModel)]="objectif.sigle" required />
+                                    <label for="inputtext">Sigle</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <span class="p-float-label">
+                                    <input pInputText type="number" class="form-control form-control-sm" name="numOrdre"
+                                        [(ngModel)]="objectif.numOrdre" required />
+                                    <label for="inputtext">Numéro d'ordre</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button icon="pi pi-times" (click)="dialogObjectif=false" pButton pRipple type="button" label="Annuler"
+            class="p-button-secondary p-button-text"></button>
+        <button icon="pi pi-save" pButton pRipple type="button" label="Sauvegarder"
+            class="p-button-success p-button-text"></button>
+        <!-- (click)="saveObjectif()" -->
+    </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="dialogConfirmAction" [header]="ConfirmationLibelle" [modal]="true" [style]="{width: '30vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700;"
+                    [style.color]="color">{{message}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="dialogConfirmAction=false" label="Ok" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<!-- Dialog de confirmation de suppression -->
+<p-dialog header="Confirmation" [(visible)]="dialogDelete" [modal]="true" [style]="{width: '40vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700; color: red;">Êtes-vous
+                    certain de vouloir supprimer cet théorie de changement ?</label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="dialogDelete=false" label="Annuler" styleClass="p-button-text">
+        </p-button>
+        <p-button icon="pi pi-trash" style="color:red" (click)="deleteTheorie(theorie)" label="Supprimer"
+            styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<div class="progress-spinner" *ngIf="spinner==true" style="z-index: 9999">
+	<div class="spinner">
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+  <div class="d-flex justify-content-center affiche">
+    <h6 style="color: rgb(255, 255, 255); z-index: 999">Chargement...</h6>
+  </div>
+</div>

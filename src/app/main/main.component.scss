@@ -1,0 +1,271 @@
+
+* {
+  transition: 0.5s;
+}
+
+.h-100 {
+  height: 100vh !important;
+}
+
+.align-middle {
+  position: relative;
+  top: 20%;
+  transform: translateY(-20%);
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+.column {
+  margin-top: 3rem;
+  padding-left: 3rem;
+
+  &:hover {
+    padding-left: 0;
+
+    .macard .txt {
+      margin-left: 1rem;
+
+      h1,
+      p {
+        color: rgba(255, 255, 255, 1);
+        opacity: 1;
+      }
+    }
+
+    a {
+      /* color: rgba(255, 255, 255, 1); */
+
+      &:after {
+        width: 10%;
+      }
+    }
+  }
+}
+
+.macard {
+  min-height: 170px;
+  margin: 0;
+  padding: 1.7rem 1.2rem;
+  border: none;
+  border-radius: 0;
+  color: rgba(0, 0, 0, 1);
+  letter-spacing: 0.05rem;
+  font-family:  Arial, Helvetica, sans-serif;
+  box-shadow: 0 0 21px rgba(0, 0, 0, 0.27);
+
+  .txt {
+    //margin-left: -3rem;
+    z-index: 1;
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+
+    p {
+      //font-size: .7rem;
+      font-size: 16px;
+      // font-family: "Open Sans", sans-serif;
+      letter-spacing: 0rem;
+      margin-top: 33px;
+      opacity: 1;
+      color: rgba(255, 255, 255, 1);
+    }
+  }
+
+  a {
+    z-index: 3;
+    font-size: 0.7rem;
+    color: rgba(0, 0, 0, 1);
+    margin-left: 1rem;
+    position: relative;
+    bottom: -0.5rem;
+    text-transform: uppercase;
+
+    &:after {
+      content: "";
+      display: inline-block;
+      height: 0.5em;
+      width: 0;
+      margin-right: -100%;
+      margin-left: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 1);
+      transition: 0.5s;
+    }
+  }
+
+  .ico-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  i {
+    position: relative;
+    right: -50%;
+    top: 60%;
+    font-size: 12rem;
+    line-height: 0;
+    opacity: 0.2;
+    color: rgba(255, 255, 255, 1);
+    z-index: 0;
+  }
+}
+
+.list-group-item {
+  font-size: 15px;
+  font-weight: 500;
+  background-color: transparent;
+  color: rgb(64, 92, 93);
+}
+
+.bgpo {
+  background-color: rgba(220, 224, 223, 0.893);
+  padding: 0.3%;
+}
+
+.bgpo2 {
+  background-color: rgba(220, 224, 223, 0.893);
+}
+
+.ronNav {
+  background-color: #ffff;
+  line-height: 2.6;
+}
+
+.activef {
+  border-bottom: 4px solid #1d3b55;
+  color: white;
+  font-weight: bold;
+  margin-right: 2%;
+  margin-left: 2%;
+}
+
+.icone {
+  color: rgb(0, 0, 0);
+}
+
+.icone2 {
+  color: #ffffff;
+}
+
+.btn-quit {
+  color: #000000;
+  font-size: 16px;
+}
+
+.btn-quit:hover {
+  cursor: pointer;
+  color: #f8f8f8;
+  font-size: 18px;
+}
+
+.img-logo:hover {
+  cursor: pointer;
+}
+
+.img-logo {
+  height: 55px;
+  width: 55px
+}
+
+.mon-img {
+  height: 30px;
+  width: 30px;
+  text-transform: uppercase;
+}
+
+.mon-icon {
+  font-size: 20px;
+}
+
+.mon-icon-menu {
+  height: 25px;
+  width: 25px;
+}
+.mon-icon-menu2 {
+  height: 33px;
+  width: 33px;
+}
+
+// Make default navbar links display block at choosen breakpoint and adjust styles to fit...
+@media (max-width: 62em) {
+  .navbar-nav {
+    padding-top: .425rem;
+    padding-left: 0.75rem;
+  }
+
+  .navbar-nav .nav-item {
+    float: none;
+  }
+
+  .navbar-brand {
+    float: left;
+  }
+
+  .navbar-toggler {
+    float: right;
+  }
+
+  .navbar-brand,
+  .navbar-nav .nav-item {
+    display: block;
+  }
+
+  .navbar-nav .nav-item+.nav-item {
+    margin-left: 0;
+  }
+
+  .dropdown-menu {
+    position: relative;
+    float: none;
+  }
+}
+
+@media (min-width: 62em) {
+  .dropdown-menu li {
+    display: inline;
+  }
+
+  .dropdown-item {
+    display: inline !important;
+  }
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.message {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 40%;
+  bottom: 0;
+  display: block;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 0.5em;
+}
+
+
+.main {
+  margin: 0;
+  padding: 0;
+  height: 91.3vh; /* 100% de la hauteur de la fenêtre */
+  background-image: url("../../assets/images/backi.jpg"); /* Remplacez 'votre-image.jpg' par le chemin de votre image */
+  background-size: cover; /* Redimensionne l'image pour couvrir l'ensemble du fond */
+  background-position: center; /* Centre l'image */
+  background-repeat: no-repeat; /* Empêche la répétition de l'image */
+}

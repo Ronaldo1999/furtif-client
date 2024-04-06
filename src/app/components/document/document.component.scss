@@ -1,0 +1,228 @@
+label {
+  font-weight: 600;
+}
+
+.instance {
+  color: #1d3b55;
+  padding: 5px;
+  font-weight: 500;
+  border-radius: 40px;
+  background-color: rgba(157, 156, 156, 0.296);
+  backdrop-filter: blur(10px);
+}
+
+.instanceEncour {
+  /* color: #1d3b55; */
+  padding: 5px;
+  border-radius: 40px;
+  font-weight: 500;
+  background-color: rgba(157, 156, 156, 0.296);
+  backdrop-filter: blur(10px);
+}
+
+
+.paramclientCard {
+  width: 100%;
+  margin-top: 2%;
+  background-color: #dde5eb;
+  padding: 5px;
+}
+
+.paramclientCard:hover {
+  cursor: pointer;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.instance:hover {
+  cursor: pointer;
+}
+
+.instanceEncour:hover {
+  cursor: pointer;
+}
+
+.mon:hover {
+  cursor: pointer;
+}
+
+.actib {
+  background-color: rgba(89, 239, 186, 0.296);
+  backdrop-filter: blur(10px);
+}
+
+.inactib {
+  background-color: rgba(239, 129, 89, 0.296);
+  backdrop-filter: blur(10px);
+}
+
+.paramHistoCard {
+  border-left: 5px solid #1d3b55;
+  margin-top: 1%;
+  padding: 10px;
+}
+
+.paramHistoCard:hover {
+  cursor: pointer;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.paramFileCard {
+  border-left: 5px solid #1d3b55;
+  background-color: #c7c7c7;
+  border-radius: 5px;
+  margin-top: 1%;
+  padding: 10px;
+}
+
+.paramFileCard:hover {
+  cursor: pointer;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.paramFile {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 18px;
+}
+
+.paramclientEl {
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 16px;
+}
+.de{
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.mespills {
+  height: 10px;
+  width: 10px;
+  border-radius: 40px;
+}
+
+/* .backpj {
+  background: rgb(243, 244, 245);
+  height: 100%;
+  color: rgb(100, 108, 127);
+  line-height: 1.4rem;
+  font-family:  Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  border-radius: 5px;
+  text-rendering: optimizeLegibility;
+}
+
+h1 { text-align: center; }
+
+.dropzone {
+  background: white;
+  border-radius: 5px;
+  border: 2px dashed rgb(0, 135, 247);
+  border-image: none;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+} */
+.mon-icon:hover {
+  cursor: pointer;
+}
+
+
+/* new */
+
+.text-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.centered {
+  font-family: sans-serif;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+.dropzone {
+  height: 200px;
+  display: table;
+  width: 100%;
+  background-color: #eee;
+  border: dotted 1px #aaa;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.textLink {
+  background-color: #f45e61;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.textLink::before {
+  content: "\f093";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #fff;
+  font-size: large;
+  margin-right: 10px;
+}
+
+.text-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.centered {
+  font-family: sans-serif;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+.fileItem {
+  width: calc(25% - 6px);
+  overflow: hidden;
+  height: fit-content;
+  margin: 3px;
+  padding: 10px;
+  display: block;
+  position: relative;
+  float: left;
+  border: 2px dashed #778899;
+  border-radius: 5px;
+  transition: 0.3s ease;
+}
+
+.fileItem:hover {
+  border: 2px solid #c33838;
+  background-color: #c33838bf;
+}
+
+.fileItem:hover .fileItemIcon::before {
+  content: "\f00d";
+  color: whitesmoke;
+}
+
+.fileItem:hover .fileItemText {
+  color: whitesmoke;
+}
+
+.fileItemIconDiv {
+  text-align: center;
+}
+
+.fileItemIcon::before {
+  font-style: normal;
+  content: "\f15b";
+  color: #778899;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
+.fileItemText {
+  text-align: center;
+  margin-top: 10px;
+  height: 40px;
+}

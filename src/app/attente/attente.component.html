@@ -1,0 +1,471 @@
+<main class="main">
+  <div class="row">
+    <div class="col d-flex justify-content-center">
+      <div class="macard box" style="margin-top: 1.5%; margin-bottom: 1%; width: 1200px;">
+        <span class="mont" style="color: #ffffff; text-align: center;">
+          <span class="font-weight-bold" style="font-size: 30px;">
+            {{'Bienvenue sur le '|translate}}<span class="text-primary">FURTIF</span></span>
+          <br>
+          <span style="font-size: 20px;">{{'votre système intégré de pilotage pour vos organisation'|translate}}</span>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <span><img (click)="refresh()" src="assets/icons/refresh2.png"
+              style="height: 30px; width:30px; margin-top: -0.3%;" class="img-responsive mon-icon"
+              pTooltip="{{'Rafraichir'|translate}}" tooltipPosition="top" /></span>
+
+          <div style="padding: 3px; border: 0.2px solid rgb(207, 207, 207); border-radius: 8px;">
+            <div class="row">
+              <div class="col d-flex justify-content-center">
+                <button (click)="checkTypeDelai(1)" [style]="{height:'35px'}" pButton pRipple type="button"
+                  class="p-button-text p-button-secondary">
+                  <img src="assets/icons/activitystock.png" alt="" class="img-responsive img-circle mon-icon-menu" />&nbsp;
+                  <span [ngClass]="{'text-primary':typedelai==1, 'font-weight-bold':typedelai==1}"
+                    style="color: rgb(255, 255, 255); text-align: center;">{{'Activités de stock' |translate}}</span>
+                </button>&nbsp;&nbsp;&nbsp;
+                <button (click)="checkTypeDelai(2)" [style]="{height:'35px'}" pButton pRipple type="button"
+                  class="p-button-text p-button-secondary">
+                  <img src="assets/icons/rapports.png" alt="" class="img-responsive img-circle mon-icon-menu" />&nbsp;
+                  <span [ngClass]="{'text-primary':typedelai==2, 'font-weight-bold':typedelai==2}"
+                    style="color: rgb(255, 255, 255); text-align: center;">{{'Rapports'
+                    |translate}}</span>
+                </button>&nbsp;&nbsp;&nbsp;
+                <button (click)="checkTypeDelai(3)" [style]="{height:'35px'}" pButton pRipple type="button"
+                  class="p-button-text p-button-secondary">
+                  <img src="assets/icons/salary.png" alt="" class="img-responsive img-circle mon-icon-menu" />&nbsp;
+                  <span [ngClass]="{'text-primary':typedelai==3, 'font-weight-bold':typedelai==3}"
+                    style="color: rgb(255, 255, 255); text-align: center;">{{'Salaires' |translate}}</span>
+                </button>&nbsp;&nbsp;&nbsp;
+                <button (click)="checkTypeDelai(4)" [style]="{height:'35px'}" pButton pRipple type="button"
+                  class="p-button-text p-button-secondary">
+                  <img src="assets/icons/finscontrats.png" alt="" class="img-responsive img-circle mon-icon-menu" />&nbsp;
+                  <span [ngClass]="{'text-primary':typedelai==4, 'font-weight-bold':typedelai==4}"
+                    style="color: rgb(255, 255, 255); text-align: center;">{{'Fins de contrats'
+                    |translate}}</span>
+                </button>&nbsp;&nbsp;&nbsp;
+                <button (click)="checkTypeDelai(5)" [style]="{height:'35px'}" pButton pRipple type="button"
+                  class="p-button-text p-button-secondary">
+                  <img src="assets/icons/finstaches.png" alt="" class="img-responsive img-circle mon-icon-menu" />&nbsp;
+                  <span [ngClass]="{'text-primary':typedelai==5, 'font-weight-bold':typedelai==5}"
+                    style="color: rgb(255, 255, 255); text-align: center;">{{'Fins de tâches' |translate}}</span>
+                </button>
+              </div>
+            </div>
+            <div class="row" *ngIf="documents.length!=0">
+              <div *ngIf="typedelai==1">
+                <p-scrollPanel [style]="{ width: '100%', height: '22vw' }" styleClass="custombar1">
+                  <div *ngFor="let ele of documents">
+                    <div class="paramHistoCard">
+                      <div class="row">
+                        <div class="col-1">
+                          <img src="assets/icons/historique.png" style="height: 30px; width:30px;"
+                            class="img-responsive mon-icon" />
+                        </div>
+                        <div class="col-11">
+                          <span class="paramclientEl">
+                            <span *ngIf="verifyLength(ele.objet)" pTooltip="{{ ele.objet }}" tooltipPosition="top"> {{
+                              defineDescription(ele.objet) }}... </span>
+                            <span *ngIf="verifyLength(ele.objet) == false"> {{ ele.objet }} </span>
+                          </span>
+                          <span style="color: rgb(55, 55, 55);">{{'ofDatefin'|translate}}</span>&nbsp;
+                          <span style="color: rgb(186, 158, 18);">{{ ele.datefin |date:'longDate' }}&nbsp;<span
+                              style="color: rgb(55, 55, 55);">{{'prendfinle'|translate}}</span></span>&nbsp;
+                          <span style="color: rgb(233, 70, 25); font-weight: 600;">{{ differenceDates(ele.datefin)
+                            }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </p-scrollPanel>
+              </div>
+              <div *ngIf="typedelai==2">
+                <p-scrollPanel [style]="{ width: '100%', height: '22vw' }" styleClass="custombar1">
+                  <div *ngFor="let ele of expoits">
+                    <div class="paramHistoCard">
+                      <div class="row">
+                        <div class="col-1">
+                          <img src="assets/icons/historique.png" style="height: 30px; width:30px;"
+                            class="img-responsive mon-icon" />
+                        </div>
+                        <div class="col-11">
+                          <span class="paramclientEl">
+                            <span *ngIf="verifyLength(ele.objet)" pTooltip="{{ ele.objet }}" tooltipPosition="top"> {{
+                              defineDescription(ele.objet) }}... </span>
+                            <span *ngIf="verifyLength(ele.objet) == false"> {{ ele.objet }} </span>
+                          </span><span style="color: rgb(55, 55, 55);">{{'ofDelai'|translate}}</span>&nbsp;
+                          <span style="color: rgb(186, 158, 18);">{{ ele.datelimite|date:'longDate' }}&nbsp;<span
+                              style="color: rgb(55, 55, 55);">{{'va expirer dans '|translate}}</span></span>&nbsp;
+                          <span style="color: rgb(233, 70, 25); font-weight: 600;">{{ differenceDates(ele.datelimite)
+                            }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </p-scrollPanel>
+              </div>
+            </div>
+            <div *ngIf="expoits.length==0">
+              <div class="row" style="margin-top: 2%;">
+                <div class="col d-flex justify-content-center">
+                  <div class="col-md-12 text-center">
+                    <img src="assets/icons/notfound.png" style="height: 60px; width:60px;"
+                      class="img-responsive mon-icon" />&nbsp;<h5 class="text-center text-secondary"
+                      style="font-size: 20px; font-weight: 700">{{'notingPrev' |translate }}</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row" style="margin-top: 1%">
+            <div class="col d-flex justify-content-center">
+              <p-button icon="pi pi-file-import" (click)="logOut()" label="{{'lockSession'|translate}}"
+                styleClass="p-button-danger p-button-text">
+              </p-button>
+            </div>
+          </div>
+        </span>
+
+      </div>
+    </div>
+  </div>
+</main>
+<p-dialog [modal]="true" header="Confirmation" [(visible)]="dialogConfirmSynch" [style]="{ width: '30vw' }"
+  [closable]="false">
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="text-center">
+                <img src="assets/icons/icons8-cloud_done.png" style="height: 100px; width: 100px" alt=""
+                  class="img-responsive mon-img" />
+                <div class="txt"> <span class="smgPushOk">{{ "smgPushOk" | translate }}</span> </div>
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="col d-flex justify-content-center">
+      <button mat-raised-button color="secondary" (click)="confirm()"> <span>{{ "Ok" | translate }}</span> </button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- <div class="paramHistoCard" [ngClass]="{ actib: ele.actif === 1, inactib: ele.actif === 0}"> -->
+<!-- ********************************** dialogConfirm ********************************** -->
+<p-dialog [modal]="true" header="Confirmation" [(visible)]="dialogConfirm" [style]="{ width: '30vw' }"
+  [closable]="false">
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="text-center">
+                <div class="txt"> <span class="smgPushOk">{{ messageSynch }}</span> </div>
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <!--  <div class="col d-flex justify-content-center">
+      <button mat-raised-button color="secondary" (click)="closeNon()"> <mat-icon>cancel</mat-icon>&nbsp; <span>{{ "non" | translate }}</span></button >&nbsp;&nbsp;
+      <button mat-raised-button class="btn-add" (click)="synchroniser()"> <mat-icon>check</mat-icon>&nbsp;{{ "oui" | translate }} </button>
+    </div> -->
+  </ng-template>
+</p-dialog>
+<!-- logout -->
+<p-dialog [modal]="true" [(visible)]="logoutDialog" [style]="{ width: '400px' }" [modal]="true" [closable]="false"
+  [draggable]="false" [resizable]="false">
+  <ng-template pTemplate="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col d-flex justify-content-start">
+          <img src="assets/images/logo.png" style="height: 30px; width:30px;" class="img-responsive mon-icon" />&nbsp;
+          <h4>{{ "disconnect" | translate }}</h4>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <img src="assets/icons/deconnexion.png" style="height: 70px; width:70px;"
+          class="img-responsive mon-icon" />&nbsp;<h4 class="text-center text-danger"
+          style="font-size: 20px; font-weight: 700; color: red">{{ "deconnecteQuest" | translate }}</h4>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="row justify-content-center">
+      <button class="pure-material-button-contained bg-secondary" (click)="close()"><span>&nbsp;&nbsp;<i
+            class='bx bxs-minus-circle icon-btn'></i>&nbsp;&nbsp;{{ "annuler" | translate }}&nbsp;&nbsp;</span></button>
+      &nbsp;&nbsp;&nbsp;
+      <button class="pure-material-button-contained bg-danger" (click)="logout()"><span>&nbsp;&nbsp;<i
+            class='bx bxs-log-out icon-btn'></i>&nbsp;&nbsp;{{ "quitter" |
+          translate }}&nbsp;&nbsp;</span></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+<p-dialog [modal]="true" header="Confirmation" [(visible)]="errorDialog" [style]="{ width: '30vw' }" [closable]="false">
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="text-center">
+                <img *ngIf="color == 'rgb(255, 166, 0)'" src="assets/icons/notItem.png"
+                  style="height: 100px; width: 100px" alt="" class="img-responsive mon-img" />
+                <img *ngIf="color == 'rgb(255, 34, 0)'" src="assets/icons/errorSynch.png"
+                  style="height: 100px; width: 100px" alt="" class="img-responsive mon-img" />
+                <div class="txt">
+                  <span [style.color]="color" class="font-weight-bold">{{ messageSynch }}</span><br />
+                  <span class="font-weight-bold" *ngIf="color == 'rgb(255, 34, 0)'"></span>
+                </div>
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <!-- <div class="col d-flex justify-content-center">
+      <button mat-raised-button color="secondary" (click)="errorDialog = false"> <mat-icon>cancel</mat-icon>&nbsp; <span>{{ "fermer" | translate }}</span></button>&nbsp;&nbsp;
+      <button *ngIf="color == 'rgb(255, 166, 0)'" mat-raised-button class="btn-add" (click)="errorDialog = false; getdd()"> <mat-icon>refresh</mat-icon>&nbsp;{{ "Relancer" | translate }} </button>
+      <button mat-button (click)="errorDialog = false; getdd()" *ngIf="color == 'rgb(255, 34, 0)'"> <mat-icon class="text-success">search</mat-icon>&nbsp;<span class="text-success">{{ "Rechercher les elements à sysnchroniser" | translate }}</span> </button>
+    </div> -->
+  </ng-template>
+</p-dialog>
+
+<p-dialog [modal]="true" [(visible)]="onLocalDialog" [style]="{ width: '30vw' }" [closable]="false">
+  <ng-template pTemplate="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col d-flex justify-content-start">
+          <img src="assets/images/logo.png" style="height: 25px; width:25px;" class="img-responsive mon-icon" />&nbsp;
+          <h6>FURTIF</h6>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="text-center">
+                <img src="assets/icons/onLocal.png" style="height: 100px; width: 100px" alt=""
+                  class="img-responsive mon-img" />
+                <div class="txt"> <span [style.color]="color" class="font-weight-bold">{{ messageSynch }}</span> </div>
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="col d-flex justify-content-center">
+      <button class="pure-material-button-contained bg-danger" (click)="fermer2()"> <span>{{ "Ok, continuer" | translate
+          }}</span>&nbsp; <i class="pi pi-caret-right"></i></button>
+    </div>
+  </ng-template>
+</p-dialog>
+<div class="progress-spinner" *ngIf="displaySpinnerResearchData" style="z-index: 9999">
+  <div class="d-flex justify-content-center">
+    <p-progressSpinner styleClass="custom-spinner" strokeWidth="8" animationDuration=".7s" styleClass="w-4rem h-4rem"
+      fill="var(--surface-ground)"></p-progressSpinner>
+  </div>
+  <div class="d-flex justify-content-center affiche">
+    <div class="text-center" style="color: rgb(255, 255, 255); z-index: 9999">
+      <img src="assets/icons/icons8-view.png" style="height: 100px; width: 100px" alt=""
+        class="img-responsive mon-img" />
+      <h6>{{ "searchSyn" | translate }}...</h6>
+    </div>
+  </div>
+</div>
+
+<!-- dialog succès -->
+
+<p-dialog [modal]="true" [(visible)]="changePassDialog" [style]="{ width: '35vw' }">
+  <ng-template pTemplate="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col d-flex justify-content-start">
+          <img src="assets/images/lo.png" style="height: 25px; width:25px;" class="img-responsive mon-icon" />&nbsp;<h6>
+            Réinitialisation du mot de passe</h6>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row" style="margin-top: 1%">
+        <div class="col-md-3"> <label for="">{{ "Mot de passe" | translate }} </label> </div>
+        <div class="col-md-9">
+          <input class="form-control" type="password" name="password" id="" [(ngModel)]="newUser.password" required
+            minlength="4" #npassword="ngModel" />
+          <div style="position: relative; margin-top: -10px; color:red; font-size: 14px; margin-left: 2%;" role="alert"
+            *ngIf="npassword.errors">
+            <div style="margin-left: 2%;" *ngIf="npassword.errors.required">{{ 'requierdPassword' | translate }}</div>
+            <div style="margin-left: 2%;" *ngIf="npassword.errors.minlength"> {{ 'maxLenghtPass' | translate }} </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1%">
+        <div class="col-md-3"> <label for="">{{ "Confirmation" | translate }} </label> </div>
+        <div class="col-md-9">
+          <input class="form-control" type="password" name="password" id="" [(ngModel)]="confirmPass" />
+          <div style="position: relative; margin-top: -10px; color:red; font-size: 14px;" role="alert"
+            *ngIf="confirmPass">
+            <div *ngIf="!newUser.password || newUser.password!=confirmPass">{{ 'Le Password est différent' | translate
+              }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <!-- <div class="row justify-content-center">
+      <button mat-raised-button color="secondary" (click)="changePassDialog = false"> <mat-icon>cancel</mat-icon>&nbsp; {{ "Annuler" | translate }}</button >&nbsp;&nbsp;
+      <button mat-raised-button class="btn-activer" [disabled]="!newUser.password || newUser.password!=confirmPass" (click)="confirmChangePass()"> <mat-icon>save</mat-icon>&nbsp; {{ "Enregistrer" | translate }}</button>
+    </div> -->
+  </ng-template>
+</p-dialog>
+
+<!--  ------------------------------------------------------------------------------------------------- Sussess -------------------------------------------------------------------------------------------------  -->
+<p-dialog [(visible)]="successDialog" header="Confirm" [modal]="true" [style]="{ width: '20vw' }" [draggable]="false"
+  [resizable]="false">
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <img src="assets/icons/ok.png" style="height: 50px; width:50px;" class="img-responsive mon-icon" />&nbsp;<h4
+          class="text-center text-success" style="font-size: 20px; font-weight: 700">{{ "Opération réussie" | translate
+          }}</h4>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="row justify-content-center"> <button mat-raised-button (click)="deconnexion()"> {{ "Ok" | translate }}
+      </button> </div>
+  </ng-template>
+</p-dialog>
+<!-- Error -->
+<p-dialog [(visible)]="errorDialog" header="Confirm" [modal]="true" [style]="{ width: '20vw' }" [draggable]="false"
+  [resizable]="false">
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <img src="assets/icons/ko.png" style="height: 50px; width:50px;" class="img-responsive mon-icon" />&nbsp;<h4
+          class="text-center text-danger" style="font-size: 20px; font-weight: 700">{{ "Opération échouée" | translate
+          }}</h4>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="row justify-content-center"> <button mat-raised-button (click)="errorDialog = false"> {{ "Ok" |
+        translate }} </button> </div>
+  </ng-template>
+</p-dialog>
+
+<!-- dialog erreur -->
+<p-dialog header="Erreur" [modal]="true" [(visible)]="displayError" [style]="{ width: '600px' }">
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <img src="assets/icons/ko.png" style="height: 50px; width:50px;" class="img-responsive mon-icon" />&nbsp;<h4
+            class="text-center text-danger" style="font-size: 20px; font-weight: 700">{{ errorMessage | translate }}
+          </h4>
+          <span> {{ errMessageLog }} </span>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="row justify-content-center"> <button mat-raised-button (click)="displayError=false"> {{ "Ok" | translate
+        }} </button> </div>
+  </ng-template>
+</p-dialog>
+
+<div class="progress-spinner" *ngIf="spinner==true" style="z-index: 9999">
+  <div class="spinner">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div class="d-flex justify-content-center affiche">
+    <h6 style="color: rgb(255, 255, 255); z-index: 999">Chargement...</h6>
+  </div>
+</div>
+
+<div class="progress-spinner" *ngIf="displaySpinnerSynchData" style="z-index: 9999">
+  <div class="d-flex justify-content-center"> <p-progressSpinner styleClass="custom-spinner" strokeWidth="8"
+      animationDuration=".7s" styleClass="w-4rem h-4rem" fill="var(--surface-ground)"></p-progressSpinner> </div>
+  <div class="d-flex justify-content-center affiche">
+    <!-- <div class="text-center" style="color: rgb(255, 255, 255); z-index: 9999">
+      <img src="assets/icons/icons8-upload_to_cloud2.png" style="height: 100px; width: 100px" alt="" class="img-responsive mon-img" />
+      <button mat-button color="secondary" (click)="stop()"> <mat-icon color="warn">cancel</mat-icon>&nbsp; <span class="text-danger">{{ "stopOP" | translate }}</span> </button>
+      <h6>{{ "sychtion" | translate }}...</h6>
+    </div> -->
+  </div>
+</div>
+
+<div class="progress-spinner" *ngIf="displaySpinnerTentative" style="z-index: 9999">
+  <div class="d-flex justify-content-center">
+    <p-progressSpinner styleClass="custom-spinner" strokeWidth="8" animationDuration=".7s" styleClass="w-4rem h-4rem"
+      fill="var(--surface-ground)"></p-progressSpinner>
+  </div>
+  <div class="d-flex justify-content-center affiche">
+    <div class="text-center" style="color: rgb(255, 255, 255); z-index: 9999">
+      <img src="assets/icons/icons8-remote_working.png" style="height: 100px; width: 100px" alt=""
+        class="img-responsive mon-img" />
+      <h6>{{ messageTentative | translate }}...</h6>
+    </div>
+  </div>
+</div>
+<p-dialog [modal]="true" header="Confirmation" [(visible)]="stopDialog" [style]="{ width: '30vw' }">
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="text-center">
+          <div class="txt">
+            <span class="font-weight-bold">{{ messageSynch }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <!-- <div class="col d-flex justify-content-center">
+      <button mat-raised-button color="secondary" (click)="fermerStop()">
+        <mat-icon>cancel</mat-icon>&nbsp;
+        <span>{{ "fermer" | translate }}</span>
+      </button>
+    </div> -->
+  </ng-template>
+</p-dialog>

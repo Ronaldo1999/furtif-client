@@ -1,0 +1,68 @@
+
+.ronNav1{
+  background-color: transparent;
+  line-height: 2.6;
+}
+
+.btnn{
+  color: #1d3b55;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ronNav {
+  background-color: #ffff;
+  line-height: 2.2;
+}
+
+
+// Make default navbar links display block at choosen breakpoint and adjust styles to fit...
+@media (max-width: 62em) {
+  .navbar-nav {
+    padding-top: .425rem;
+    padding-left: 0.75rem;
+  }
+
+  .navbar-nav .nav-item {
+    float: none;
+  }
+
+  .navbar-brand {
+    float: left;
+  }
+
+  .navbar-toggler {
+    float: right;
+  }
+
+  .navbar-brand,
+  .navbar-nav .nav-item {
+    display: block;
+  }
+
+  .navbar-nav .nav-item+.nav-item {
+    margin-left: 0;
+  }
+
+  .dropdown-menu {
+    position: relative;
+    float: none;
+  }
+}
+
+.img-logo:hover {
+  cursor: pointer;
+}
+.mon-icon-menu2:hover {
+  cursor: pointer;
+}
+
+.img-logo {
+  height: 55px;
+  width: 55px
+}
+
+.mon-icon-menu2 {
+  height: 33px;
+  width: 33px;
+}

@@ -1,0 +1,225 @@
+<style>
+    nav ul {
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+    }
+
+    .monText {
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .cheu:hover {
+        cursor: pointer;
+    }
+
+    .visah {
+        font-weight: 600;
+        background-color: rgba(242, 249, 55, 0.466);
+    }
+
+    .visaD {
+        font-weight: 600;
+        color: red;
+        background-color: rgba(249, 136, 55, 0.466);
+    }
+
+    .pere {
+        background-color: rgba(216, 215, 213, 0.466);
+    }
+</style>
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+<!-- <div class="container-fluid texte" style="padding: -2%">
+    <div class="row">
+        <div class="col d-flex justify-content-start"> -->
+<!-- <span style="font-weight: 700; color: rgb(146, 146, 146)">{{
+        "ORGANISATION : " | translate
+      }}</span>
+      <label for="" style="font-weight: 700; color: rgb(49, 167, 241)">{{
+        libellOrg
+      }}</label> -->
+<!-- </div>
+        <div class="col d-flex justify-content-center">
+            <h3 class="d-flex justify-content-center text-primary">
+                {{ "gestMercur" | translate }}
+            </h3>
+        </div>
+        <div class="col d-flex justify-content-end"> -->
+<!-- <span
+        style="color: rgb(49, 167, 241); font-weight: 700"
+        *ngIf="habilitation('RL061') == true"
+        >{{ "CB" | translate }}</span
+      >
+      <span
+        style="color: rgb(49, 167, 241); font-weight: 700"
+        *ngIf="habilitation('RL062') == true"
+        >{{ "CF" | translate }}</span
+      >
+      <span
+        style="color: rgb(49, 167, 241); font-weight: 700"
+        *ngIf="habilitation('RL063') == true"
+        >{{ "CP" | translate }}</span
+      >
+      <span
+        style="color: rgb(49, 167, 241); font-weight: 700"
+        *ngIf="habilitation('RL064') == true"
+        >{{ "CC" | translate }}</span
+      >
+      <span
+        style="color: rgb(49, 167, 241); font-weight: 700"
+        *ngIf="habilitation('RL065') == true"
+        >{{ "BDCRA" | translate }}</span
+      > -->
+<!-- </div>
+        <hr />
+    </div>
+</div> -->
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <i class="item-page"><img src="assets/icons/actions/gestMercuriale.png" alt=""
+                    class="img-responsive img-circle item-icon" /></i>&nbsp;&nbsp;
+            <span class="titrePage">{{ "gestMercuriale" | translate }}</span>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <button class="pure-material-button-contained bg-primary" (click)="create()"><i class="fa fa-plus"></i>
+                &nbsp; <span>{{
+                    "Ajouter" | translate }}</span></button>&nbsp;&nbsp;
+            <button (click)="rechercher()" class="pure-material-button-contained bg-secondary"><i
+                    class="fa fa-refresh"></i>
+                &nbsp; <span>{{
+                    "actualiser" | translate }}</span></button>
+        </ng-template>
+    </p-toolbar>
+    <div class="row">
+        <div class="col-4">
+            <p-treeTable #tt [value]="arbre" styleClass="p-treetable-sm" [resizableColumns]="true"
+                selectionMode="single" [rows]="100" [totalRecords]="10000" [scrollable]="true" scrollHeight="70vh"
+                [(selection)]="selectedNodes" (onNodeExpand)="onNodeExpand($event)" (onNodeSelect)="nodeSelect($event)"
+                (onNodeUnselect)="nodeUnselect($event)">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 10%"></th>
+                        <th style="width: 20%">{{ "Code" | translate }}</th>
+                        <th style="width: 70%">{{ "designation" | translate }}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                    <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode" [ngClass]="{ pere: rowNode.type == 'rubrique' }">
+                        <td style="width: 10%" [ngClass]="{ pere: rowData.srId == null }">
+                            <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                        </td>
+                        <td style="width: 20%" [ngClass]="{ pere: rowData.srId == null }">
+                            <span>{{ rowData.numRubrique }}</span>
+                            <span *ngIf="rowData.srId != null">-{{ rowData.numSousRubrique }}</span>
+                        </td>
+                        <td style="width: 70%" [ngClass]="{ pere: rowData.srId == null }">
+                            <span *ngIf="verifyLength(rowData.designation)" pTooltip="{{ rowData.designation }}"
+                                tooltipPosition="top">
+                                {{ defineDescription(rowData.designation) }}...
+                            </span>
+                            <span *ngIf="verifyLength(rowData.designation) == false">
+                                {{ rowData.designation }}
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-treeTable>
+        </div>
+        <div class="col-8">
+            <div class="card">
+                <div class="row mb-2" style="padding-left: 2%;padding-right: 2%; margin-top: -1%;">
+                    <div class="brise-input">
+                        <input (input)="dt.filterGlobal($any($event.target).value, 'contains')" type="text" name="text"
+                            required>
+                        <label><i class="pi pi-search"></i> {{ "research" | translate }}</label>
+                        <span class="line"></span>
+                    </div>
+                </div>
+                <p-scrollPanel [style]="{ width: '100%', height: '30vw' }" styleClass="custombar1">
+                    <p-table #dt [value]="articles" [rows]="10" [paginator]="true" styleClass="p-datatable-sm"
+                        [globalFilterFields]="[  'refArticle',   'designation',   'prixDeReference' ]" [rowHover]="true"
+                        dataKey="amId"
+                        currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} elements"
+                        [showCurrentPageReport]="true" selectionMode="single" [(selection)]="selectedElement"
+                        (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [contextMenu]="cm">
+                        <ng-template pTemplate="header">
+                            <tr class="texte" style="font-size: 14px">
+                                <th colspan="1" style="width: 5%; text-align: center">
+                                    {{ "num" | translate }}
+                                </th>
+                                <th style="width: 15%" pSortableColumn="refArticle">
+                                    <p-sortIcon field="refArticle"></p-sortIcon>{{ "ref" | translate }}
+                                </th>
+                                <th style="width: 50%" pSortableColumn="designation">
+                                    <p-sortIcon field="designation"></p-sortIcon>{{ "designation" | translate }}
+                                </th>
+                                <th style="width: 15%; text-align: center" pSortableColumn="prixDeReference">
+                                    <p-sortIcon field="prixDeReference"></p-sortIcon>{{ "Prix" | translate }}
+                                </th>
+                                <th style="width: 20%; text-align: center" pSortableColumn="conditionnement">
+                                    <p-sortIcon field="conditionnement"></p-sortIcon>{{ "Conditionnement" | translate }}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-article let-i="rowIndex">
+                            <tr class="texte" [pSelectableRow]="article" [pContextMenuRow]="article"
+                                style="font-size: 14px">
+                                <td colspan="1" class="text-primary text-center">{{ i + 1 }}</td>
+                                <td colspan="1" class="font-weight-bold">{{ article.refArticle }}</td>
+                                <td colspan="1">
+                                    <span *ngIf="verifyLength2(article.designation)"
+                                        pTooltip="{{ article.designation }}" tooltipPosition="top">
+                                        {{ defineDescription(article.designation) }}...
+                                    </span>
+                                    <span *ngIf="verifyLength2(article.designation) == false">
+                                        {{ article.designation }}
+                                    </span>
+                                </td>
+                                <td colspan="1" style="text-align: center; font-size: 15; font-weight: 600">
+                                    {{ article.prixDeReference.toLocaleString() }}
+                                </td>
+                                <td colspan="1" style="text-align: center">
+                                    {{ article.conditionnement }}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-scrollPanel>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Dialog de confirmation d'action -->
+<p-dialog [(visible)]="dialogConfirmAction" [header]="ConfirmationLibelle" [modal]="true" [style]="{ width: '30vw' }"
+    [draggable]="false" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700" [style.color]="color">{{
+                    message }}
+                </label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="row justify-content-center">
+            <p-button icon="pi pi-times" (click)="dialogConfirmAction = false" label="{{ 'Ok' | translate }}"
+                styleClass="p-button-text">
+            </p-button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<!-- SPINNER DE CHARGEMENT DU TREETABLE -->
+<div class="progress-spinner" *ngIf="displaySpinner" style="z-index: 9999">
+    <div class="d-flex justify-content-center">
+        <p-progressSpinner styleClass="custom-spinner" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+    </div>
+    <div class="d-flex justify-content-center affiche">
+        <h6 style="color: rgb(255, 255, 255); z-index: 999">
+            {{ "Chargement" | translate }}
+        </h6>
+    </div>
+</div>

@@ -1,0 +1,104 @@
+{
+    "nodes": [
+        {
+            "id": "Intrant id_8ec006",
+            "top": 200,
+            "left": 654,
+            "color": "rgb(242, 63, 14)",
+            "name": "qsxqsxqsxqsxqsxqsxX"
+        },
+        {
+            "id": "Intrant id_eed665",
+            "top": 307,
+            "left": 498,
+            "color": "rgb(52, 239, 136)",
+            "name": "qxqsxqsxqsxqsxqsxqsxX"
+        },
+        {
+            "id": "Intrant id_1c4ca8",
+            "top": 303,
+            "left": 769,
+            "color": "rgb(52, 239, 136)",
+            "name": "qsxqsxqsxqsxqsxqsxX"
+        },
+        {
+            "id": "Intrant id_30d0f3",
+            "top": 111,
+            "left": 499,
+            "color": "rgb(52, 239, 196)",
+            "name": "qxqsxqsxqsxqsxqsxqsX"
+        },
+        {
+            "id": "Intrant id_237fe9",
+            "top": 114,
+            "left": 804,
+            "color": "rgb(52, 239, 196)",
+            "name": "qsxqsxqsxqsqsxX"
+        },
+        {
+            "id": "Intrant id_0d3dd8",
+            "top": 20,
+            "left": 392,
+            "color": "rgb(52, 53, 239)",
+            "name": "qsxqsxqsxqsxqsxqsqxX"
+        },
+        {
+            "id": "Intrant id_0f3836",
+            "top": 14,
+            "left": 624,
+            "color": "rgb(52, 53, 239)",
+            "name": "qsxqsxqsxqsxqsxsqxsX"
+        },
+        {
+            "id": "Intrant id_1e7b45",
+            "top": 15,
+            "left": 875,
+            "color": "rgb(52, 53, 239)",
+            "name": "qsxqsxqsqsxsqxsqsxqsX"
+        }
+    ],
+    "connections": [
+        {
+            "uuids": [
+                "Intrant id_eed665_top",
+                "Intrant id_8ec006_bottom"
+            ]
+        },
+        {
+            "uuids": [
+                "Intrant id_1c4ca8_top",
+                "Intrant id_8ec006_bottom"
+            ]
+        },
+        {
+            "uuids": [
+                "Intrant id_8ec006_top",
+                "Intrant id_237fe9_bottom"
+            ]
+        },
+        {
+            "uuids": [
+                "Intrant id_8ec006_top",
+                "Intrant id_30d0f3_bottom"
+            ]
+        },
+        {
+            "uuids": [
+                "Intrant id_30d0f3_top",
+                "Intrant id_0d3dd8_bottom"
+            ]
+        },
+        {
+            "uuids": [
+                "Intrant id_30d0f3_top",
+                "Intrant id_0f3836_bottom"
+            ]
+        },
+        {
+            "uuids": [
+                "Intrant id_237fe9_top",
+                "Intrant id_1e7b45_bottom"
+            ]
+        }
+    ]
+}

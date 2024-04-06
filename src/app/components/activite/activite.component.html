@@ -1,0 +1,104 @@
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <i class="item-page"><img src="assets/icons/activite.png" alt=""
+                    class="img-responsive img-circle item-icon" /></i>&nbsp;&nbsp;
+            <span class="titrePage">{{ "sactivite" | translate }}</span>
+        </ng-template>
+
+        <ng-template pTemplate="right" style="background-color: #1976d2;">
+            <button class="pure-material-button-contained bg-primary"><i class="fa fa-plus"></i> &nbsp; <span>{{
+                    "Ajouter" | translate }}</span></button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-primary"><i class="fa fa-plus"></i> &nbsp; <span>{{
+                    "Ajouter" | translate }}</span></button>&nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-primary"><i class="fa fa-plus"></i> &nbsp; <span>{{
+                    "Ajouter" | translate }}</span></button>&nbsp;&nbsp;
+        </ng-template>
+    </p-toolbar>
+    <div class="row mb-2" style="padding-left: 2%;padding-right: 2%; margin-top: -1%;">
+        <div class="brise-input">
+            <input (input)="dt.filterGlobal($any($event.target).value, 'contains')" type="text" name="text" required>
+            <label><i class="pi pi-search"></i> {{ "research" | translate }}</label>
+            <span class="line"></span>
+        </div>
+    </div>
+    <p-table #dt [value]="products" [resizableColumns]="true" styleClass="p-datatable-gridlines"
+        [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pResizableColumn><img src="assets/icons/dossier.png" alt=""
+                    class="img-responsive img-circle" style="width: 30px; height: 30px;" />&nbsp;Programmes en nomenclature</th>
+                <th pResizableColumn>Objectifs opérationnels</th>
+                <th pResizableColumn>Indicateurs de performance</th>
+                <th pResizableColumn>Evaluation</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>
+                    <ul *ngFor="let item of programmes">
+                        <span (click)="getMongo(item.id, 2); collapse(item.id, programmes)" class="ele">
+                            <img *ngIf="item.state==false" src="assets/icons/programme.png" alt=""
+                                class="img-responsive img-circle" style="width: 25px; height: 25px;" />
+                            <img *ngIf="item.state==true" src="assets/icons/programme-open.png" alt=""
+                                class="img-responsive img-circle" style="width: 25px; height: 25px;" />
+                            <span><span style="font-weight: bold;">PROGRAM - </span>&nbsp;{{item.libelle}}</span>
+                            <span *ngIf="item.state==true">
+                                <ul *ngFor="let item2 of listAction">
+                                    <span *ngIf="item2.parentID==item.id" (click)="getMongo(item.id, 3)">
+                                        <img *ngIf="item2.state==false" src="assets/icons/programme.png" alt=""
+                                            class="img-responsive img-circle" style="width: 25px; height: 25px;" />
+                                        <img *ngIf="item2.state==true" src="assets/icons/programme-open.png" alt=""
+                                            class="img-responsive img-circle" style="width: 25px; height: 25px;" />
+                                        <span><span style="font-weight: bold;">ACTION -
+                                            </span>&nbsp;{{item2.libelle}}</span>
+                                    </span>
+                                    <ul *ngFor="let item3 of listActivite">
+                                        <span *ngIf="item3.parentID==item2.id" (click)="getMongo(item3.id, 4)">
+                                            <img *ngIf="item3.state==false" src="assets/icons/programme.png" alt=""
+                                                class="img-responsive img-circle" style="width: 25px; height: 25px;" />
+                                            <img *ngIf="item3.state==true" src="assets/icons/programme-open.png" alt=""
+                                                class="img-responsive img-circle" style="width: 25px; height: 25px;" />
+                                            <span><span style="font-weight: bold;">ACTIVITE -
+                                                </span>&nbsp;{{item3.libelle}}</span>
+                                        </span>
+                                        <ul *ngFor="let item4 of listTache">
+                                            <span *ngIf="item4.parentID==item2.id">
+                                                <img src="assets/icons/tache.png" alt=""
+                                                    class="img-responsive img-circle"
+                                                    style="width: 25px; height: 25px;" />
+                                                <span><span style="font-weight: bold;">TÂCHE -
+                                                    </span>&nbsp;{{item4.libelle}}</span>
+                                            </span>
+                                        </ul>
+                                    </ul>
+                                </ul>
+                            </span>
+
+                        </span>
+                    </ul>
+                </td>
+                <td>
+                    <span *ngIf="listAction.length==0">Liste des actions</span>
+                    <ul *ngFor="let item of listAction">
+                        <img src="assets/icons/action.png" alt="" class="img-responsive img-circle"
+                            style="width: 25px; height: 25px;" />
+                        <span>{{item.libelle}}</span>
+                    </ul>
+                </td>
+                <td>
+                    Liste des programmes
+                    <ul *ngFor="let item of programmes">
+                        <li style="list-style: none;">{{item.libelle}}</li>
+                    </ul>
+                </td>
+                <td>
+                    Liste des programmes
+                    <ul *ngFor="let item of programmes">
+                        <li style="list-style: none;">{{item.libelle}}</li>
+                    </ul>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

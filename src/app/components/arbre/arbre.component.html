@@ -1,0 +1,227 @@
+<style>
+    .eleo:hover {
+        cursor: pointer;
+        color: rgb(59, 138, 165);
+    }
+</style>
+<div class="container-fluid texte" style="padding: -2%;">
+    <div class="row">
+        <div class="col d-flex justify-content-start">
+            <p-button icon="pi pi-chevron-left" (click)="retour()" label="Retour"
+                styleClass="p-button-text p-button-secondary">
+            </p-button>
+            <h5 *ngIf="route.snapshot.params.typeArbreID=='ARBT20220427145445.201.221'"
+                class="d-flex justify-content-center" style="color: brown;"> Arbre à Problème :
+            </h5>
+            <h5 *ngIf="route.snapshot.params.typeArbreID!='ARBT20220427145445.201.221'"
+                class="d-flex justify-content-center" style="color:brown"> Arbre à Objectif :
+            </h5>
+            <h5 class="d-flex justify-content-center text-primary">
+                <span *ngIf="verifyLength(route.snapshot.params.libelleFr)"
+                    pTooltip="{{route.snapshot.params.libelleFr}}" tooltipPosition="top">
+                    {{defineDescription(route.snapshot.params.libelleFr)}}...
+                </span>
+                <span *ngIf="verifyLength(route.snapshot.params.libelleFr)==false">
+                    {{route.snapshot.params.libelleFr}}
+                </span>
+            </h5>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <p-button icon="pi pi-briefcase" (click)="showPositionDialog('right')" label="Outils"
+                styleClass="p-button-text p-button-secondary">
+            </p-button>
+            <!-- <p-button icon="pi pi-window-minimize" (click)="goOrienteObj()" label="Orienté programmes"
+                styleClass="p-button-text p-button-secondary">
+            </p-button> -->
+            <p-button *ngIf="route.snapshot.params.typeArbreID=='ARBT20220427145445.201.221' && haveOneCor==false;"
+                icon="pi pi-window-maximize" (click)="basculer2()" label="Basculer vers arbre à objectif"
+                styleClass="p-button-text p-button-secondary">
+            </p-button>
+            <p-button icon="pi pi-info-circle" (click)="helpMe('top')" label="Aide"
+                styleClass="p-button-text p-button-secondary">
+            </p-button>
+        </div>
+        <div class="col d-flex justify-content-end">
+
+
+            <p-button icon="pi pi-refresh" (click)="rechargerment()" label="Actualiser"
+                styleClass="p-button-text p-button-primary">
+            </p-button>
+            <p-button
+                *ngIf="route.snapshot.params.arbreCorrespondantID == 'null' && route.snapshot.params.typeArbreID=='ARBT20220427145445.011.102'"
+                icon="pi pi-window-maximize" (click)="correspondre()" label="Faire correspondre"
+                styleClass="p-button-text p-button-secondary">
+            </p-button>
+            <p-button icon="pi pi-save" label="Sauvegarder" (click)="save(arbre)"
+                styleClass="p-button-text p-button-primary">
+            </p-button>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+
+    <div
+        style="border: 1px solid rgba(140, 139, 139, 0.279); background-color: rgba(228, 249, 251, 0.746); border-radius: 8px;height:80vw;">
+        <p-scrollPanel [style]="{width: '100%', height: '80vw'}" styleClass="custombar1">
+            <div class="card shadow"
+                style="background-color: rgba(234, 234, 234, 0.319); height: 165px; width: 220px; left: 10; top: 390px;  position: relative;">
+                <div class="modal-header">
+                    <span class="text-primary text-center">Objets</span>
+                </div>
+                <nodes-container-arbre #nodeContainer [nodes]="nodes" [connections]="connections">
+                </nodes-container-arbre>
+            </div>
+            <!-- <button (click)="nodeContainer.addNode()">Creer un neud</button> -->
+
+        </p-scrollPanel>
+    </div>
+</div>
+
+<p-dialog header="Outils" [(visible)]="diaplayOutils" [style]="{width: '14vw'}" [baseZIndex]="10000"
+    [position]="position">
+    <div class="shadow"
+        style="border: 1px solid transparent; background-color: rgba(213, 213, 213, 0.746); border-radius: 8px; ">
+        <div *ngFor="let item of maPalletPerso" style="list-style: none; margin-top:2%;">
+
+            <div style="padding-left: 10%;" class="d-flex">
+                <span [style]="{'background-color':item.color, 'height':'15px', 'width':'15px','border-radius':'10px'}">
+                </span>
+                <p style="text-transform: lowercase;" (click)="addNode(item)" class="eleo"
+                    pTooltip="Ajouter un {{item.text}}" tooltipPosition="right">
+                    &nbsp;&nbsp;{{item.text}}&nbsp;&nbsp;<span style=" font-size: 22px; color: #fff;">+</span></p>
+                <!-- (click)="addNode(item)" -->
+            </div>
+            <hr style="margin-top: -5px;">
+        </div>
+    </div>
+    <ng-template pTemplate="footer" class="text-center">
+        <p-button icon="pi pi-trash" (click)="nodeService.clear(route.snapshot.params.liens)" label="Effacer le graphe"
+            styleClass="p-button-danger p-button-text" pTooltip="Effacer completement tout le graphe"
+            tooltipPosition="right">
+        </p-button>
+    </ng-template>
+
+</p-dialog>
+
+<p-dialog header="Documentation" [(visible)]="diaplayHelp" [style]="{width: '30vw'}" [baseZIndex]="10000"
+    [position]="posirionHelp">
+    <div class="modal-body">
+        <p>
+            <span class="text-primary font-weight-bold">Etape 1</span>
+            <span>- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, perferendis. Aspernatur itaque
+                soluta sequi
+                dolore delectus libero minima, unde voluptate ducimus quae, eaque aliquid repellendus iusto dolorem
+                beatae, rem
+                non!</span>
+        </p>
+        <br>
+        <p>
+            <span class="text-primary font-weight-bold">Etape 2</span>
+            <span>- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, perferendis. Aspernatur itaque
+                soluta sequi
+                dolore delectus libero minima, unde voluptate ducimus quae, eaque aliquid repellendus iusto dolorem
+                beatae, rem
+                non!</span>
+        </p>
+        <br>
+        <p>
+            <span class="text-primary font-weight-bold">Etape 3</span>
+            <span>- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, perferendis. Aspernatur itaque
+                soluta sequi
+                dolore delectus libero minima, unde voluptate ducimus quae, eaque aliquid repellendus iusto dolorem
+                beatae, rem
+                non!</span>
+        </p>
+        <br>
+        <p>
+            <span class="text-primary font-weight-bold">Etape 4</span>
+            <span>- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, perferendis. Aspernatur itaque
+                soluta sequi
+                dolore delectus libero minima, unde voluptate ducimus quae, eaque aliquid repellendus iusto dolorem
+                beatae, rem
+                non!</span>
+        </p>
+        <br>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="diaplayHelp=false" label="Fermer"
+            styleClass="p-button-secondary p-button-text"></p-button>
+    </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [header]="title" [(visible)]="modalDetail" [modal]="true" [style]="{width: '20vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="input-group mb-6">
+                <textarea rows="2" textarea type="text" class="form-control" id="libelle" name="libelle"
+                    [(ngModel)]="libelle"></textarea>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="modalDetail=false" label="Annuler"
+            styleClass="p-button-secondary p-button-text"></p-button>
+        <p-button icon="pi pi-plus" (click)="creUn(libelle)" label="Ajouter"
+            styleClass="p-button-success p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Liste des arbre à problème disponibles" [(visible)]="modalListArbre" [modal]="true"
+    [style]="{width: '20vw'}" [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+                <div class="input-group mb-6">
+                    <label for="code" class="col-sm-12 col-md-12 col-lg-12 col-xl-12">Arbre à problème à faire
+                        correspondre</label>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <p-dropdown [style]="{width:'100%',height:'35px'}" [(ngModel)]="arbre.arbreCorrespondantID"
+                            [showClear]="true" optionValue="arbreID" [options]="tabArbrePb" optionLabel="libelleFr"
+                            placeholder=" " name="arbreID">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="modalListArbre=false" label="Annuler"
+            styleClass="p-button-secondary p-button-text"></p-button>
+        <p-button icon="pi pi-check-circle" label="Valider" (click)="validCorrespondance(arbre)"
+            styleClass="p-button-success p-button-text"></p-button>
+        <!--  (click)="correspondance()" -->
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="dialogConfirmAction" header="Confirmation !" [modal]="true" [style]="{width: '30vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="color" class="text-center" style="font-size: 20px; font-weight: 700;"
+                    [style.color]="color">{{message}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="backAcc()" label="Ok" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<!-- SPINNER DE CHARGEMENT DU TREETABLE -->
+<div class="progress-spinner" *ngIf="displaySpinner">
+    <div class="d-flex justify-content-center">
+        <p-progressSpinner styleClass="custom-spinner" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+    </div>
+    <div class="d-flex justify-content-center affiche">
+        <h6 style="color: rgb(255, 255, 255);z-index: 999;">Chargement des taches...</h6>
+    </div>
+</div>

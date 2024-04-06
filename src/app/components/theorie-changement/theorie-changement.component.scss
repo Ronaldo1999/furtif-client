@@ -1,0 +1,233 @@
+.boutonAdd:hover {
+    font-weight: bold;
+    font-size: 36px;
+    color: wheat;
+    cursor: pointer;
+}
+
+#boutonAdd1 {
+    margin-top: -15px;
+    margin-left: 20px;
+}
+
+.intrant-pointer {
+    width: 250px;
+    height: 50px;
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid transparent;
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        right: -25px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgba(189,
+                193,
+                197);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+}
+
+.activite-pointer {
+    width: 250px;
+    height: 50px;
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgba(189,
+                193,
+                197);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        right: -25px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgb(117, 130, 194);
+        ;
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+}
+
+.extrant-pointer {
+    width: 250px;
+    height: 50px;
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgba(117,
+                194,
+                182);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        right: -25px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgb(183, 234, 220);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+}
+
+.resultat-pointer {
+    width: 250px;
+    height: 50px;
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgba(183,
+                234,
+                220);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        right: -25px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgb(236,
+                157,
+                30);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+}
+
+.intermediaire-pointer {
+    width: 250px;
+    height: 50px;
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgba(236,
+                157,
+                30);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        right: -25px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgb(230,
+                184,
+                59);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+}
+
+.finaux-pointer {
+    width: 250px;
+    height: 50px;
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgba(230,
+                184,
+                59);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        right: -25px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 25px solid rgb(95,
+                101,
+                103);
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+    }
+}
+
+.aligne-bien {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.align-middle {
+    text-align: center;
+}
+
+.meswe:hover {
+    color: #fff;
+    border: 1px solid grey;
+    cursor: pointer;
+}
+
+.my-card {
+    position: absolute;
+    left: 40%;
+    top: -20px;
+    border-radius: 50%;
+}

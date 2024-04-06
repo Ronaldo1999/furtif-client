@@ -1,0 +1,928 @@
+<html lang="en" dir="ltr">
+<p-menu #menu [popup]="true" [model]="itemsMenu"></p-menu>
+<p-menu #menuLang [popup]="true" [model]="langues"></p-menu>
+<p-menu #menuNav [popup]="true" [model]="navigation"></p-menu>
+
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <i class='bx bxs-pyramid'></i>
+      <span class="logo_name"></span>
+    </div>
+    <ul class="nav-links" style="margin-top: -2%;">
+      <li *ngIf="habilitation('DU00')" (click)="mouf = 1; getRoute('dashboard'); toggleStatus('dashboard')"
+        [ngClass]="status == 'dashboard' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/dashboard.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'dashboard' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li routerLink="/home/dashboard"><a class="link_name">{{ 'dashboard' | translate }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/activite.png" alt=""
+                class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'Budgetisation' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'Budgetisation' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('activite'); toggleStatus('activite')"
+            [ngClass]="status == 'activite' ? 'activef' : ' '"><a>{{ 'PTA' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('activite');"><a>{{ 'suiviMission' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('activite');"><a>{{ 'suiviIncdicateur' | translate }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/strategie.png" alt=""
+                class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'STRATEGIE' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'STRATEGIE' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('objectiRI'); toggleStatus('objectiRI')"
+            [ngClass]="status == 'objectiRI' ? 'activef' : ' '"><a>{{ 'Mission/objectif' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('axeStrategique'); toggleStatus('axeStrategique')"
+            [ngClass]="status == 'axeStrategique' ? 'activef' : ' '"><a>{{ 'axeStrategique' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('repIndicateur'); toggleStatus('repIndicateur')"
+            [ngClass]="status == 'repIndicateur' ? 'activef' : ' '"><a>{{ 'Repertoire des indicateurs' | translate
+              }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/cadreStrategique.png" alt=""
+                class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'cadreStrategique' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'cadreStrategique' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('programme'); toggleStatus('programme')"
+            [ngClass]="status == 'programme' ? 'activef' : ' '"><a>{{ 'programme' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('psp'); toggleStatus('psp')" [ngClass]="status == 'psp' ? 'activef' : ' '">
+            <a>{{ 'Plan stratégique' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('caneva'); toggleStatus('caneva')"
+            [ngClass]="status == 'caneva' ? 'activef' : ' '"><a>{{ 'Caneva' | translate }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/outilsAnalyse.png" alt=""
+                class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'outilsAnalyse' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'outilsAnalyse' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('diagnostics'); toggleStatus('diagnostics')"
+            [ngClass]="status == 'diagnostics' ? 'activef' : ' '"><a>{{ 'diagnosticSwott' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('arbreObjectif'); toggleStatus('arbreObjectif')"
+            [ngClass]="status == 'arbreObjectif' ? 'activef' : ' '"><a>{{ 'arbreObjectif' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('cadreLogic'); toggleStatus('cadreLogic')"
+            [ngClass]="status == 'cadreLogic' ? 'activef' : ' '"><a>{{ 'cadreLogic' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('theoChange'); toggleStatus('theoChange')"
+            [ngClass]="status == 'theoChange' ? 'activef' : ' '"><a>{{ 'theoChange' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('client'); toggleStatus('client')"
+        [ngClass]="status == 'client' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/clientf.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'sclient' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'sclient' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('budget'); toggleStatus('budget')"
+        [ngClass]="status == 'budget' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/budget.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'budget' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'sclient' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('sprojet'); toggleStatus('sprojet')"
+        [ngClass]="status == 'sprojet' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/projet.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'sprojet' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'sprojet' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('site'); toggleStatus('site')" [ngClass]="status == 'site' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/site.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'ssite' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'ssite' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('schantier'); toggleStatus('schantier')"
+        [ngClass]="status == 'schantier' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/schantier.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'schantier' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'schantier' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('smainouevre'); toggleStatus('smainouevre')"
+        [ngClass]="status == 'smainouevre' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/smainouevre.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'smainouevre' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'smainouevre' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('smateriel'); toggleStatus('smateriel')"
+        [ngClass]="status == 'smateriel' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/smateriel.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'smateriel' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'smateriel' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('setudes'); toggleStatus('setudes')"
+        [ngClass]="status == 'setudes' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/setudes.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'setudes' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'setudes' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('sdocuments'); toggleStatus('sdocuments')"
+        [ngClass]="status == 'sdocuments' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/sdocuments.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'sdocuments' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'sdocuments' | translate }}</a></li>
+        </ul>
+      </li>
+
+
+      <li (click)="mouf = 1; getRoute('spersonnel'); toggleStatus('spersonnel')"
+        [ngClass]="status == 'spersonnel' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/spersonnel.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'spersonnel' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'spersonnel' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('fichepaie'); toggleStatus('fichepaie')"
+        [ngClass]="status == 'fichepaie' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/fichepaie.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'fichepaie' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'fichepaie' | translate }}</a></li>
+        </ul>
+      </li>
+      <li *ngIf="habilitation('DU0202') && module=='mod2'" (click)="mouf = 1; getRoute('users'); toggleStatus('users')"
+        [ngClass]="status == 'users' ? 'activef' : ' '">
+        <a> <i> <img src="assets/icons/actions/userf.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'gusers' | translate }}</span></a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'gusers' | translate }}</a></li>
+        </ul>
+      </li>
+      <li *ngIf="habilitation('DU0201') && module=='mod2'"
+        (click)="mouf = 1; getRoute('groupes'); toggleStatus('groupes')"
+        [ngClass]="status == 'groupes' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/groupes.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'groupes' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'gusers' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('droits'); toggleStatus('droits')"
+        [ngClass]="status == 'droits' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/droits.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'droits' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'droits' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('statistiques'); toggleStatus('statistiques')"
+        [ngClass]="status == 'statistiques' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/statistiques.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'statistiques' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'statistiques' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('suiviphysicofinancier'); toggleStatus('suiviphysicofinancier')"
+        [ngClass]="status == 'suiviphysicofinancier' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/suiviphysicofinancier.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'suivi physico-financier' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'suivi physico-financier' | translate }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/controlfinancier.png" alt=""
+                class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'Contrôl financier' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'Contrôl financier' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('bca'); toggleStatus('bca')" [ngClass]="status == 'bca' ? 'activef' : ' '">
+            <a>{{ 'Bons de commandes' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('lc'); toggleStatus('lc')" [ngClass]="status == 'lc' ? 'activef' : ' '"><a>{{
+              'Lettres de commandes' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('marche'); toggleStatus('marche')"
+            [ngClass]="status == 'marche' ? 'activef' : ' '"><a>{{ 'Marches' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('factMandat'); toggleStatus('factMandat')"
+            [ngClass]="status == 'factMandat' ? 'activef' : ' '"><a>{{ 'Mandats de travail' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('factMission'); toggleStatus('factMission')"
+            [ngClass]="status == 'factMission' ? 'activef' : ' '"><a>{{ 'Ordres de mission' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('decision'); toggleStatus('decision')"
+            [ngClass]="status == 'decision' ? 'activef' : ' '"><a>{{ 'Décisions' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('liasseDep'); toggleStatus('liasseDep')"
+            [ngClass]="status == 'liasseDep' ? 'activef' : ' '"><a>{{ 'Liasse de la dépense' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('gestMercuriale'); toggleStatus('gestMercuriale')"
+            [ngClass]="status == 'gestMercuriale' ? 'activef' : ' '"><a>{{ 'gestMercuriale' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('optimusCoup'); toggleStatus('optimusCoup')"
+            [ngClass]="status == 'optimusCoup' ? 'activef' : ' '"><a>{{ 'Optimisation des coûts' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('histoRejet'); toggleStatus('histoRejet')"
+            [ngClass]="status == 'histoRejet' ? 'activef' : ' '"><a>{{ 'Historique des rejets' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('statEngagement'); toggleStatus('statEngagement')"
+            [ngClass]="status == 'statEngagement' ? 'activef' : ' '"><a>{{ 'Statistique des rejets' | translate }}</a>
+          </li>
+          <li (click)="mouf = 1; getRoute('ficheEngagement'); toggleStatus('ficheEngagement')"
+            [ngClass]="status == 'ficheEngagement' ? 'activef' : ' '"><a>{{ 'Fiche des engagements' | translate }}</a>
+          </li>
+          <li (click)="mouf = 1; getRoute('rapport'); toggleStatus('rapport')"
+            [ngClass]="status == 'rapport' ? 'activef' : ' '"><a>{{ 'Rapports' | translate }}</a></li>
+        </ul>
+      </li>
+      <li (click)="mouf = 1; getRoute('suivibudgetaire'); toggleStatus('suivibudgetaire')"
+        [ngClass]="status == 'suivibudgetaire' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/suivibudgetaire.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'Suivi budgétaire' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'Suivi budgétaire' | translate }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/reportingf.png" alt=""
+                class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'Reporting' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'Reporting' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('ReportSimplifie'); toggleStatus('ReportSimplifie')"
+            [ngClass]="status == 'ReportSimplifie' ? 'activef' : ' '"><a>{{ 'Reporting simplifie' | translate }}</a>
+          </li>
+          <li (click)="mouf = 1; getRoute('rapportPerf'); toggleStatus('rapportPerf')"
+            [ngClass]="status == 'rapportPerf' ? 'activef' : ' '"><a>{{ 'Rapport de performace' | translate }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/suivi.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'suivi' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'suivi' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('elabPT'); toggleStatus('elabPT')"
+            [ngClass]="status == 'elabPT' ? 'activef' : ' '"><a>{{ 'suivi des taches' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('suiviCP'); toggleStatus('suiviCP')"
+            [ngClass]="status == 'suiviCP' ? 'activef' : ' '"><a>{{ 'suivi de la commande publique' | translate }}</a>
+          </li>
+          <li (click)="mouf = 1; getRoute('collecteDS'); toggleStatus('collecteDS')"
+            [ngClass]="status == 'collecteDS' ? 'activef' : ' '"><a>{{ 'Collecte des donnees de suivi' | translate
+              }}</a></li>
+          <li (click)="mouf = 1; getRoute('extraction'); toggleStatus('extraction')"
+            [ngClass]="status == 'extraction' ? 'activef' : ' '"><a>{{ 'Extraction' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('rappPer'); toggleStatus('rappPer')"
+            [ngClass]="status == 'rappPer' ? 'activef' : ' '"><a>{{ 'Rapports périodiques' | translate }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/performance.png" alt=""
+                class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'Performance' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'Performance' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('suivIndicateur'); toggleStatus('suivIndicateur')"
+            [ngClass]="status == 'suivIndicateur' ? 'activef' : ' '"><a>{{ 'suivi des indicateurs' | translate }}</a>
+          </li>
+          <li (click)="mouf = 1; getRoute('valIndicateur'); toggleStatus('valIndicateur')"
+            [ngClass]="status == 'valIndicateur' ? 'activef' : ' '"><a>{{ 'validation des indicateurs' | translate
+              }}</a></li>
+          <li (click)="mouf = 1; getRoute('TabInd'); toggleStatus('TabInd')"
+            [ngClass]="status == 'TabInd' ? 'activef' : ' '"><a>{{ 'Tableau de bord des indicateurs' | translate }}</a>
+          </li>
+          <li (click)="mouf = 1; getRoute('tabAnnuel'); toggleStatus('tabAnnuel')"
+            [ngClass]="status == 'tabAnnuel' ? 'activef' : ' '"><a>{{ 'Annual Dashboard' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('balancedScoreCard'); toggleStatus('balancedScoreCard')"
+            [ngClass]="status == 'balancedScoreCard' ? 'activef' : ' '"><a>{{ 'Balanced Score-Card' | translate }}</a>
+          </li>
+          <li (click)="mouf = 1; getRoute('ranking'); toggleStatus('ranking')"
+            [ngClass]="status == 'ranking' ? 'activef' : ' '"><a>{{ 'Ranking' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('grilleEval'); toggleStatus('grilleEval')"
+            [ngClass]="status == 'grilleEval' ? 'activef' : ' '"><a>{{ 'grille evaluation' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('noteAnalyse'); toggleStatus('noteAnalyse')"
+            [ngClass]="status == 'noteAnalyse' ? 'activef' : ' '"><a>{{ 'note analyse' | translate }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/gouvernance.png" alt=""
+                class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'Gouvernance' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'Gouvernance' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('notifCS'); toggleStatus('notifCS')"
+            [ngClass]="status == 'notifCS' ? 'activef' : ' '"><a>{{ 'Notifications' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('suivieAct'); toggleStatus('suivieAct')"
+            [ngClass]="status == 'suivieAct' ? 'activef' : ' '"><a>{{ 'Suivi des activités' | translate }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="icon-link">
+          <a>
+            <i> <img src="assets/icons/actions/espacedocumentaire.png" alt=""
+                class="img-responsive img-circle mon-icon-menu" /></i>
+            <span class="link_name">{{ 'espace documentaire' | translate }}</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name">{{ 'espace documentaire' | translate }}</a></li>
+          </ul>
+          <i class='bx bxs-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li (click)="mouf = 1; getRoute('notifCS'); toggleStatus('notifCS')"
+            [ngClass]="status == 'notifCS' ? 'activef' : ' '"><a>{{ 'textes et lois' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('notifCS'); toggleStatus('notifCS')"
+            [ngClass]="status == 'notifCS' ? 'activef' : ' '"><a>{{ 'ressources media' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('notifCS'); toggleStatus('notifCS')"
+            [ngClass]="status == 'notifCS' ? 'activef' : ' '"><a>{{ 'ressources internet' | translate }}</a></li>
+          <li (click)="mouf = 1; getRoute('notifCS'); toggleStatus('notifCS')"
+            [ngClass]="status == 'notifCS' ? 'activef' : ' '"><a>{{ 'mes documents' | translate }}</a></li>
+        </ul>
+      </li>
+
+      <li (click)="mouf = 1; getRoute('historique'); toggleStatus('historique')"
+        [ngClass]="status == 'historique' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/historique.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'historique' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'historique' | translate }}</a></li>
+        </ul>
+      </li>
+      <!--  <li>
+        <a>
+          <i class='bx bx-history'></i>
+          <span class="link_name">History</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">History</a></li>
+        </ul>
+      </li> -->
+
+      <li>
+        <div class="profile-details">
+          <div class="profile-content" pTooltip="{{ 'Mon profil' | translate }}" tooltipPosition="top"
+            routerLink="/homer/profil">
+            <img src="assets/icons/user2.png" alt="profileImg">
+          </div>
+          <div class="name-job">
+            <div class="profile_name mon-icon" routerLink="/homer/profil">{{ 'Utilisateur' | translate }}</div>
+            <div class="job">{{ user.username }}</div>
+          </div>
+          <i class='bx bx-log-out' pTooltip="{{ 'leaveApp' | translate }}" tooltipPosition="top" (click)="logOut()"></i>
+        </div>
+      </li>
+    </ul>
+    <!--  <ul class="nav-links" style="margin-top: -2%;">
+      <li *ngIf="habilitation('DU00')" (click)="mouf = 1; getRoute('dashboard'); toggleStatus('dashboard')"
+        [ngClass]="status == 'dashboard' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/dashboard.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'dashboard' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li routerLink="/home/dashboard"><a class="link_name">{{ 'dashboard' | translate }}</a></li>
+        </ul>
+      </li>
+      
+      <li *ngIf="habilitation('DU0101') && module=='mod1'" (click)="mouf = 1; getRoute('sdocuments'); toggleStatus('sdocuments')"
+        [ngClass]="status == 'sdocuments' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/sdocuments.png" alt=""
+              class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'mesdocs' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'mesdocs' | translate }}</a></li>
+        </ul>
+      </li>
+
+      
+      <li *ngIf="habilitation('DU0202') && module=='mod2'" (click)="mouf = 1; getRoute('users'); toggleStatus('users')"
+        [ngClass]="status == 'users' ? 'activef' : ' '">
+        <a> <i> <img src="assets/icons/actions/userf.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'gusers' | translate }}</span></a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'gusers' | translate }}</a></li>
+        </ul>
+      </li>
+      <li *ngIf="habilitation('DU0201') && module=='mod2'" (click)="mouf = 1; getRoute('groupes'); toggleStatus('groupes')"
+        [ngClass]="status == 'groupes' ? 'activef' : ' '">
+        <a>
+          <i> <img src="assets/icons/actions/groupes.png" alt="" class="img-responsive img-circle mon-icon-menu" /></i>
+          <span class="link_name">{{ 'groupes' | translate }}</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name">{{ 'gusers' | translate }}</a></li>
+        </ul>
+      </li>
+     
+
+      <li>
+        <div class="profile-details">
+          <div class="profile-content" pTooltip="{{ 'Mon profil' | translate }}" tooltipPosition="top"
+            routerLink="/homer/profil">
+            <img src="assets/icons/user2.png" alt="profileImg">
+          </div>
+          <div class="name-job">
+            <div class="profile_name mon-icon" routerLink="/homer/profil">{{ 'Utilisateur' | translate }}</div>
+            <div class="job">{{ user.username }}</div>
+          </div>
+          <i class='bx bx-log-out' pTooltip="{{ 'leaveApp' | translate }}" tooltipPosition="top" (click)="logOut()"></i>
+        </div>
+      </li>
+    </ul> -->
+  </div>
+  <section class="home-section">
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper main">
+      <!-- Top navigation-->
+
+      <nav class="navbar navbar-expand-lg navbar-light ronNav fixed-top">
+        <div class="container-fluid">
+          <div class="home-content">
+            <img pTooltip="{{ 'backToHome' | translate }}" tooltipPosition="right" src="assets/images/logo.png" alt=""
+              srcset="" class="img-responsive img-logo" routerLink="/homer/accueil" />
+            <img pTooltip="{{ 'reduire' | translate }}" tooltipPosition="right" src="assets/icons/menu.png" alt=""
+              class="bx bx-menu img-responsive img-circle mon-icon-menu2" />
+            <!-- <i class='bx bx-menu'></i> -->
+          </div> &nbsp; &nbsp;
+          <div class="text-left">
+            <span><img src="{{ src }}" alt="" class="img-responsive img-circle mon-img" /> &nbsp;</span>
+            <span style="font-weight: 600; text-transform: uppercase">{{ libelleModule | translate }}</span>
+          </div> &nbsp; &nbsp;
+          <button pButton pRipple (click)="goBack()" type="button" class="p-button-text p-button-secondary">
+            <img src="assets/icons/actions/back.png" alt="" class="img-responsive img-circle mon-icon-menu" />
+            <span>{{'back' |translate}}</span>
+          </button>
+          <!-- <button *ngIf="mouf!=0" pButton pRipple (click)="getModule(accueil)" type="button" class="p-button-text p-button-secondary">
+            <img src="assets/icons/actions/back.png" alt="" class="img-responsive img-circle mon-icon-menu" />
+            <span>{{'back' |translate}}</span>
+          </button> -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+
+          <div class="collapse navbar-collapse" style="margin-right: 3%;" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+              <li class="nav-item">
+                <button pButton pRipple routerLink="/homer/accueil" type="button"
+                  class="p-button-text p-button-secondary">
+                  <img src="assets/icons/actions/accueil.png" alt=""
+                    class="img-responsive img-circle mon-icon-menu" />&nbsp;
+                  <span>{{'home' |translate}}</span>
+                </button>
+              </li>&nbsp;&nbsp;&nbsp;
+              <li class="nav-item">
+                <button pButton pRipple (click)="menuLang.toggle($event)" type="button"
+                  class="p-button-text p-button-secondary">
+                  <img src="assets/icons/actions/langue.png" alt=""
+                    class="img-responsive img-circle mon-icon-menu" />&nbsp;
+                  <span>{{'langue' |translate}}</span>
+                </button>
+              </li>&nbsp;&nbsp;&nbsp;
+              <li class="nav-item">
+                <button pButton pRipple routerLink="/homer/attente" type="button"
+                  class="p-button-text p-button-secondary" [style]="{height:'35px'}">&nbsp;
+                  <img src="assets/icons/notification.png" alt="" class="img-responsive img-circle mon-icon-menu" />
+                  <span>{{'notifiations' |translate}}</span>
+                </button>
+              </li>&nbsp;&nbsp;&nbsp;
+              <li class="nav-item">
+                <button pButton pRipple routerLink="/homer/help" type="button" class="p-button-text p-button-secondary">
+                  <img src="assets/icons/actions/help.png" alt="" class="img-responsive img-circle mon-icon-menu" />
+                  <span>{{'help' |translate}}</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- Page content-->
+      <div *ngIf="mouf == 0">
+        <br><br>
+        <div class="row">
+          <div class="col-5">
+            <img src="{{getModuleImg(accueil)}}" style="text-align: center;" alt="" srcset="">
+          </div>
+          <div class="col-7">
+            <p-messages severity="info">
+              <ng-template pTemplate>
+                <img src="assets/icons/actions/help.png" width="32" />
+                <span class="custom-message">{{'rais1' |translate}}</span>
+              </ng-template>
+            </p-messages>
+            <p-messages severity="warn">
+              <ng-template pTemplate>
+                <img src="assets/icons/actions/help.png" width="32" />
+                <span class="custom-message">{{'rais2' |translate}}</span>
+              </ng-template>
+            </p-messages>
+            <p-messages severity="success">
+              <ng-template pTemplate>
+                <img src="assets/icons/actions/help.png" width="32" />
+                <span class="custom-message">{{'rais3' |translate}}</span>
+              </ng-template>
+            </p-messages>
+          </div>
+        </div>
+        <div class="wrapper">
+          <div class="message">
+            <h1>{{accueil |translate}}</h1>
+            <p>{{accueil+'Label'|translate}}</p>
+          </div>
+          <p-dock [model]="dockBasicItems" position="bottom"
+            [style]="{position: 'fixed', bottom: '0', display: 'flex'}">
+            <ng-template pTemplate="item" let-item>
+              <img class="mon-icon" [src]="item.icon" [alt]="item.label" pTooltip="{{item.label|translate}}"
+                tooltipPosition="top" width="100%">
+            </ng-template>
+          </p-dock>
+        </div>
+      </div>
+
+      <div class="wrapper" *ngIf="mouf == 1" style="margin-top:5%; padding: 1%;">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </section>
+</body>
+
+
+</html>
+
+
+<p-dialog [modal]="true" header="Confirmation" [(visible)]="errorDialog" [style]="{ width: '30vw' }" [closable]="false">
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="text-center">
+                <img *ngIf="color == 'rgb(255, 166, 0)'" src="assets/icons/actions/notItem.png"
+                  style="height: 100px; width: 100px" alt="" class="img-responsive mon-img" />
+                <img *ngIf="color == 'rgb(255, 34, 0)'" src="assets/icons/actions/errorSynch.png"
+                  style="height: 100px; width: 100px" alt="" class="img-responsive mon-img" />
+                <div class="txt">
+                  <span [style.color]="color" class="font-weight-bold">{{ messageSynch }}</span><br />
+                  <span class="font-weight-bold" *ngIf="color == 'rgb(255, 34, 0)'">{{ "canSynch" | translate }}</span>
+                </div>
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <!-- <div class="col d-flex justify-content-center">
+      <button mat-raised-button color="secondary" (click)="errorDialog = false"> <mat-icon>cancel</mat-icon>&nbsp; <span>{{ "fermer" | translate }}</span></button>&nbsp;&nbsp;
+      <button *ngIf="color == 'rgb(255, 166, 0)'" mat-raised-button class="btn-add" (click)="errorDialog = false; getdd()"> <mat-icon>refresh</mat-icon>&nbsp;{{ "Relancer" | translate }} </button>
+      <button mat-button (click)="errorDialog = false; getdd()" *ngIf="color == 'rgb(255, 34, 0)'"> <mat-icon class="text-success">search</mat-icon>&nbsp;<span class="text-success">{{ "Rechercher les elements à sysnchroniser" | translate }}</span> </button>
+    </div> -->
+  </ng-template>
+</p-dialog>
+
+<p-dialog [modal]="true" header="Confirmation" [(visible)]="stopDialog" [style]="{ width: '30vw' }" [closable]="false">
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="text-center">
+                <img *ngIf="color == 'rgb(255, 166, 0)'" src="assets/icons/actions/notItem.png"
+                  style="height: 100px; width: 100px" alt="" class="img-responsive mon-img" />
+                <img *ngIf="color == 'rgb(255, 34, 0)'" src="assets/icons/actions/errorSynch.png"
+                  style="height: 100px; width: 100px" alt="" class="img-responsive mon-img" />
+                <div class="txt">
+                  <span [style.color]="color" class="font-weight-bold">{{ messageSynch }}</span><br />
+                  <span class="font-weight-bold" *ngIf="color == 'rgb(255, 34, 0)'">{{ "canSynch" | translate }}</span>
+                </div> <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <!-- <div class="col d-flex justify-content-center">
+      <button mat-raised-button color="secondary" (click)="errorDialog = false"> <mat-icon>cancel</mat-icon>&nbsp; <span>{{ "fermer" | translate }}</span></button>&nbsp;&nbsp;
+      <button *ngIf="color == 'rgb(255, 166, 0)'" mat-raised-button class="btn-add" (click)="errorDialog = false; getdd()"> <mat-icon>refresh</mat-icon>&nbsp;{{ "Relancer" | translate }} </button>
+      <button mat-button (click)="errorDialog = false; getdd()" *ngIf="color == 'rgb(255, 34, 0)'"> <mat-icon class="text-success">search</mat-icon>&nbsp;<span class="text-success">{{ "Rechercher les elements à sysnchroniser" | translate }}</span> </button>
+    </div> -->
+  </ng-template>
+</p-dialog>
+
+<p-dialog [modal]="true" [(visible)]="onLocalDialog" [style]="{ width: '600px' }" [closable]="false">
+  <ng-template pTemplate="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col d-flex justify-content-start">
+          <img src="assets/images/logo.png" style="height: 25px; width:25px;" class="img-responsive mon-icon" />&nbsp;
+          <h6>FURTIF</h6>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="text-center">
+                <img src="assets/icons/actions/onLocal.png" style="height: 100px; width: 100px" alt=""
+                  class="img-responsive mon-img" />
+                <div class="txt"> <span [style.color]="color" class="font-weight-bold">{{ messageSynch }}</span> </div>
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <!--  <div class="col d-flex justify-content-center">
+      <button mat-raised-button color="secondary" (click)="onLocalDialog = false"> <mat-icon>cancel</mat-icon>&nbsp;
+        <span>{{ "fermer" | translate }}</span> </button>
+    </div> -->
+  </ng-template>
+</p-dialog>
+
+<!-- ********************************** dialogConfirm ********************************** -->
+<p-dialog [modal]="true" header="Confirmation" [(visible)]="dialogConfirm" [style]="{ width: '30vw' }"
+  [closable]="false">
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="text-center">
+                <!-- <img
+                  src="assets/icons/actions/icons8-cloud_done.png"
+                  style="height: 100px; width: 100px"
+                  alt=""
+                  class="img-responsive mon-img"
+                /> -->
+                <div class="txt"> <span class="smgPushOk">{{ messageSynch }}</span> </div>
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <!-- <div class="col d-flex justify-content-center">
+      <button mat-raised-button color="secondary" (click)="closeNon()">
+        <mat-icon>cancel</mat-icon>&nbsp;
+        <span>{{ "non" | translate }}</span></button
+      >&nbsp;&nbsp;
+      <button mat-raised-button class="btn-add" (click)="synchroniser()">
+        <mat-icon>check</mat-icon>&nbsp;{{ "oui" | translate }}
+      </button>
+    </div> -->
+  </ng-template>
+</p-dialog>
+
+<p-dialog [modal]="true" header="Confirmation" [(visible)]="dialogConfirmSynch" [style]="{ width: '30vw' }"
+  [closable]="false">
+  <ng-template pTemplate="body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="text-center">
+                <img src="assets/icons/actions/icons8-cloud_done.png" style="height: 100px; width: 100px" alt=""
+                  class="img-responsive mon-img" />
+                <div class="txt"> <span class="smgPushOk">{{ "smgPushOk" | translate }}</span> </div>
+                <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <!-- <div class="col d-flex justify-content-center"> <button mat-raised-button color="secondary"
+        (click)="dialogConfirmSynch = false"> <mat-icon>cancel</mat-icon>&nbsp; <span>{{ "fermer" | translate }}</span>
+      </button> </div> -->
+  </ng-template>
+</p-dialog>
+<!-- logout -->
+<p-dialog [modal]="true" [(visible)]="logoutDialog" [style]="{ width: '400px' }" [modal]="true" [closable]="false"
+  [draggable]="false" [resizable]="false">
+  <ng-template pTemplate="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col d-flex justify-content-start">
+          <img src="assets/images/logo.png" style="height: 30px; width:30px;" class="img-responsive mon-icon" />&nbsp;
+          <h4>{{ "disconnect" | translate }}</h4>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <img src="assets/icons/deconnexion.png" style="height: 70px; width:70px;"
+          class="img-responsive mon-icon" />&nbsp;<h4 class="text-center text-danger"
+          style="font-size: 20px; font-weight: 700; color: red">{{ "deconnecteQuest" | translate }}</h4>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="row justify-content-center">
+      <button class="pure-material-button-contained bg-secondary" (click)="close()"><span>&nbsp;&nbsp;<i
+            class='bx bxs-minus-circle icon-btn'></i>&nbsp;&nbsp;{{ "annuler" | translate }}&nbsp;&nbsp;</span></button>
+      &nbsp;&nbsp;&nbsp;
+      <button class="pure-material-button-contained bg-danger" (click)="logout()"><span>&nbsp;&nbsp;<i
+            class='bx bxs-log-out icon-btn'></i>&nbsp;&nbsp;{{ "quitter" |
+          translate }}&nbsp;&nbsp;</span></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<div class="progress-spinner" *ngIf="displaySpinnerTentative" style="z-index: 9999">
+  <div class="d-flex justify-content-center">
+    <p-progressSpinner styleClass="custom-spinner" strokeWidth="8" animationDuration=".7s" styleClass="w-4rem h-4rem"
+      fill="var(--surface-ground)"></p-progressSpinner>
+  </div>
+  <div class="d-flex justify-content-center affiche">
+    <div class="text-center" style="color: rgb(255, 255, 255); z-index: 9999">
+      <img src="assets/icons/icons8-remote_working.png" style="height: 100px; width: 100px" alt=""
+        class="img-responsive mon-img" />
+      <h6>{{ messageTentative | translate }}...</h6>
+    </div>
+  </div>
+</div>
+
+<div class="progress-spinner" *ngIf="displaySpinnerResearchData" style="z-index: 9999">
+  <div class="d-flex justify-content-center">
+    <p-progressSpinner styleClass="custom-spinner" strokeWidth="8" animationDuration=".7s" styleClass="w-4rem h-4rem"
+      fill="var(--surface-ground)"></p-progressSpinner>
+  </div>
+  <div class="d-flex justify-content-center affiche">
+    <div class="text-center" style="color: rgb(255, 255, 255); z-index: 9999">
+      <img src="assets/icons/actions/icons8-view.png" style="height: 100px; width: 100px" alt=""
+        class="img-responsive mon-img" />
+      <h6>{{ "searchSyn" | translate }}...</h6>
+    </div>
+  </div>
+</div>
+
+<div class="progress-spinner" *ngIf="spinner==true" style="z-index: 9999">
+  <div class="spinner">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+<div class="progress-spinner" *ngIf="displaySpinnerSynchData" style="z-index: 9999">
+  <div class="d-flex justify-content-center">
+    <p-progressSpinner styleClass="custom-spinner" strokeWidth="8" animationDuration=".7s" styleClass="w-4rem h-4rem"
+      fill="var(--surface-ground)"></p-progressSpinner>
+  </div>
+  <div class="d-flex justify-content-center affiche">
+    <!-- <div class="text-center" style="color: rgb(255, 255, 255); z-index: 9999">
+      <img src="assets/icons/actions/icons8-upload_to_cloud2.png" style="height: 100px; width: 100px" alt=""
+        class="img-responsive mon-img" />
+      <button mat-button color="secondary" (click)="stop()"> <mat-icon color="warn">cancel</mat-icon>&nbsp; <span
+          class="text-danger">{{ "stopOP" | translate }}</span> </button>
+      <h6>{{ "sychtion" | translate }}...</h6>
+    </div> -->
+  </div>
+</div>

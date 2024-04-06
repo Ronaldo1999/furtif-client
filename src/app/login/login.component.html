@@ -1,0 +1,175 @@
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#" style="font-family: 'Quicksand', sans-serif;
+    font-weight: 700;">Giuseppe Mele</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#services">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav> -->
+
+
+<!-- Masthead -->
+<header class="masthead text-white text-center">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 mx-auto">
+        <h1 class="mb-5" style="color: white; font-size: 4rem; text-shadow: 2px 4px 3px rgba(0,0,0,0.3);">
+          Pilotez à distance avec <h1 class="text-primary">FURTIF</h1>
+        </h1>
+
+      </div>
+      <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+        <h3>Gerer votre Business comme un pro sans bouger de chez vous</h3>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 2%;">
+      <div class="col-md-10 col-lg-8 col-xl-5 mx-auto">
+        <button type="button" (click)="loginDialog = true;" class="btn btn-block btn-lg btn-primary">Acceder à mon
+          espace</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+
+<p-dialog [modal]="true" [(visible)]="confirm" [style]="{ width: '400px' }" [modal]="true" [closable]="false"
+  [draggable]="false" [resizable]="false">
+  <ng-template pTemplate="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col d-flex justify-content-start">
+          <img src="assets/images/logo.png" style="height: 30px; width:30px;" class="img-responsive mon-icon" />&nbsp;
+          <h4>{{ "Erreur de connexion" | translate }}</h4>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <img src="assets/icons/deconnexion.png" style="height: 70px; width:70px;"
+          class="img-responsive mon-icon" />&nbsp;<h4 class="text-center text-danger"
+          style="font-size: 20px; font-weight: 700; color: red">{{ errorMessage }}</h4>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="row justify-content-center">
+      <button class="pure-material-button-contained bg-secondary" (click)="close()"><span>&nbsp;&nbsp;<i
+            class='bx bxs-minus-circle icon-btn'></i>&nbsp;&nbsp;{{ "fermer" | translate }}&nbsp;&nbsp;</span></button>
+      <span *ngIf="users.length>0">&nbsp;&nbsp;&nbsp;</span>
+      <button *ngIf="users.length>0" class="pure-material-button-contained bg-danger" (click)="gotomenu()"> <span>{{
+          "Ok, continuer" | translate
+          }}</span>&nbsp; <i class="pi pi-caret-right"></i></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [modal]="true" [(visible)]="loginDialog" [style]="{ width: '500px' }" [modal]="true" [closable]="false"
+  [draggable]="false" [resizable]="false">
+  <ng-template pTemplate="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col d-flex justify-content-center">
+          <h4>{{ "Connexion" | translate }}</h4>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <div class="modal-body">
+    <div class="row" style="margin-top: 1%;">
+      <div class="col-md-12 text-center">
+        <img src="assets/icons/user.png" style="height: 50px; width: 50px;" alt="profileImg">
+      </div>
+      <div class="col-md-12">
+        <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+          <div class="text-center">
+            <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed">
+              <span class="font-weight-bold">{{'Echec de connexion:' | translate}}</span> {{ errorMessage | translate }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Nom d'utilisateur</label>
+            <input class="form-control form-control-lg" type="text" [(ngModel)]="form.username" required
+              #username="ngModel" placeholder="Entrez votre login" name="email" required />
+            <div style="position: relative; margin-top: -10px; color:red" role="alert"
+              *ngIf="username.errors && f.submitted">
+              {{ 'Username is required' | translate }}
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input class="form-control form-control-lg" [(ngModel)]="form.password" required minlength="4"
+              #password="ngModel" type="password" placeholder="Entrez votre Password" name="password" required />
+            <div style="position: relative; margin-top: -10px; color:red" role="alert"
+              *ngIf="password.errors && f.submitted">
+              <div *ngIf="password.errors.required">{{ 'requierdPassword' | translate }}</div>
+              <div *ngIf="password.errors.minlength">
+                {{ 'maxLenghtPass' | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 text-center">
+            <a href="#" class="text-center">Mot de passe oublié ?</a>
+          </div>
+          <div class="row" style="margin-top: 4%;">
+            <div class="col-6">
+              <button type="button" style="float: right;" class="pure-material-button-contained bg-secondary"
+              (click)="loginDialog=false"><span>&nbsp;&nbsp;<i class='bx bxs-minus-circle icon-btn'></i>&nbsp;&nbsp;{{
+                "Annuler" | translate
+                }}&nbsp;&nbsp;</span></button>
+            </div>
+            <div class="col-6">
+              <button type="submit" class="pure-material-button-contained bg-primary" (click)="gotomenu()"> <span>{{
+                "Se connecter" | translate
+                }}</span>&nbsp; <i class="pi pi-caret-right"></i></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+</p-dialog>
+
+<div class="progress-spinner" *ngIf="spinner==true" style="z-index: 9999">
+  <div class="spinner">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div class="d-flex justify-content-center affiche">
+    <h6 style="color: rgb(255, 255, 255); z-index: 999">Chargement...</h6>
+  </div>
+</div>

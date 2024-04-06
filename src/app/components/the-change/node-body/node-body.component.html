@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="col-12 mt-2">
+        <label>Libellé</label>
+        <textarea [(ngModel)]="node.name" name="libelle" class="form-control" rows="2"></textarea>
+        <small class="p-invalid" style="color: red;" *ngIf="!node.name">
+            Champs requis</small>
+    </div>
+</div>
+
+<footer class="fixed-bottom">
+    <div class="d-flex justify-content-end m-4">
+        <button type="submit" class="btn btn-success btn-sm mx-2" (click)="nodeSave()">
+            <span *ngIf="config.data.param=='insert'">Ajouter</span>
+            <span *ngIf="config.data.param=='update'">Modifier</span>
+        </button>
+        <button class="btn btn-danger btn-sm mx-2" (click)="close()">Annuler</button>
+    </div>
+</footer>

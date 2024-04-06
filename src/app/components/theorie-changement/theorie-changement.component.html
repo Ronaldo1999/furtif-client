@@ -1,0 +1,333 @@
+<div class="container-fluid texte" style="padding: -2%;">
+    <div class="row">
+        <div class="col d-flex justify-content-start">
+            <p-button icon="pi pi-chevron-left" (click)="retour()" label="Quitter"
+                styleClass="p-button-text p-button-secondary">
+            </p-button>
+            <h5 class="d-flex justify-content-center text-primary"> {{theorie.libelleFr}}
+            </h5>
+        </div>
+        <div class="col d-flex justify-content-start">
+            <p-button icon="pi pi-info-circle" (click)="helpMe('top')" label="Aide"
+                styleClass="p-button-text p-button-secondary">
+            </p-button>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <!-- <p-button icon="pi pi-refresh" (click)="recharger()" label="Actualiser"
+                styleClass="p-button-text p-button-primary">
+            </p-button> -->
+            <p-button icon="pi pi-print" label="Imprimer" styleClass="p-button-text p-button-secondary">
+            </p-button>
+            <p-button icon="pi pi-save" label="Sauvegarder" (click)="saveTheorie()"
+                styleClass="p-button-text p-button-primary">
+            </p-button>
+        </div>
+        <hr style="margin-bottom: 1%;">
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="table-responsive">
+        <div class="row" style="position: relative;left: 6%; margin-top: -0.5%;  bottom: -6px; z-index: 10000;">
+            <!-- <div class="col-md-1"></div> -->
+            <div class="col-md-2"><span pTooltip="Hypothèses de démarage" tooltipPosition="top"
+                    style="background-color: rgb(189, 193, 197); border-radius: 15px; padding: 3px;"
+                    class="shadow meswe" (click)="showHypoList('top', 'HD')">HD({{getTabByType('HD').length}})</span>
+            </div>
+            <div class="col-md-2"><span pTooltip="Hypothèses de mise en oeuvre" tooltipPosition="top"
+                    style="background-color: rgb(117, 194, 182); border-radius: 15px; padding: 3px; margin-left: -5%;"
+                    class="shadow meswe" (click)="showHypoList('top','HM')">HM({{getTabByType('HM').length}})</span>
+            </div>
+            <div class="col-md-2"><span
+                    style="background-color: rgb(183, 234, 220); border-radius: 15px; padding: 3px; margin-left: -15%;"
+                    class="shadow meswe" (click)="showHypoList('top','HBB')" pTooltip="Hypothèses de base de boulot"
+                    tooltipPosition="top">HBB({{getTabByType('HBB').length}})</span>
+            </div>
+            <div class="col-md-2"><span
+                    style="background-color: rgb(236, 157, 30); border-radius: 15px; padding: 3px;margin-left: -25%;"
+                    class="shadow meswe" (click)="showHypoList('top','HP')" pTooltip="Hypothèses de pilotage"
+                    tooltipPosition="top">HP({{getTabByType('HP').length}})</span></div>
+            <div class="col-md-2"><span
+                    style="background-color: rgb(230, 184, 59); border-radius: 15px; padding: 3px;margin-left: -30%;"
+                    class="shadow meswe" (click)="showHypoList('top','HR')" pTooltip="Hypothèses de retrait"
+                    tooltipPosition="top">HR({{getTabByType('HR').length}})</span></div>
+            <!-- <div class="col-md-1"></div> -->
+        </div>
+        <table class="table">
+            <thead>
+                <tr style="height: 20px">
+                    <th colspan="1" style="width: 16%; background-color:rgb(189, 193, 197);"
+                        class="intrant-pointer aligne-bien">
+                        <p class="align-middle">
+                            <span style="color:#ffff; margin-left: 20px; ">Principaux intrants ou moyens </span>
+                            <span class="boutonAdd" id="boutonAdd1" style="font-size:30px;color:#ffff; float:right"
+                                pTooltip="Ajouter un Intrant" (click)="addNodeIntrant()" tooltipPosition="top">+</span>
+                        </p>
+                    </th>
+                    <th colspan="1" style="width: 16%; background-color:rgb(117, 194, 182);"
+                        class="activite-pointer aligne-bien">
+                        <p class="align-middle">
+                            <span style="color:#ffff; margin-left: 20px; text-align:center;">Principales
+                                taches</span>
+                            <span class="boutonAdd" style="font-size:30px;color:#ffff; float:right"
+                                pTooltip="Ajouter une activité" (click)="addNodeActivite()"
+                                tooltipPosition="top">+</span>
+                        </p>
+                    </th>
+                    <th colspan="1" style="width: 16%; background-color:rgba(183, 234, 220);"
+                        class="extrant-pointer aligne-bien">
+                        <p class="align-middle">
+                            <span style="color:#ffff; margin-left: 20px; text-align:center;">Extrants (produits et
+                                services)
+                            </span>
+                            <span class="boutonAdd" id="boutonAdd1" style="font-size:30px;color:#ffff; float:right"
+                                pTooltip="Ajouter un extrant" (click)="addNodeExtrant()" tooltipPosition="top">+</span>
+                        </p>
+                    </th>
+                    <th colspan="1" style="width: 16%; background-color:rgb(236, 157, 30);"
+                        class="resultat-pointer aligne-bien">
+                        <p class="align-middle">
+                            <span style="color:#ffff; margin-left: 20px; text-align:center;">Résultats immédiats
+                            </span>
+                            <span class="boutonAdd" style="font-size:30px;color:#ffff;float:right"
+                                pTooltip="Ajouter un effet instantané" (click)="addNodeInstant()"
+                                tooltipPosition="top">+</span>
+                        </p>
+                    </th>
+                    <th colspan="1" style="width: 16%; background-color:rgb(230, 184, 59); "
+                        class="intermediaire-pointer aligne-bien">
+                        <p class="align-middle">
+                            <span style="color:#ffff; margin-left: 20px; text-align:center;">Résultats intermédiaires
+                            </span>
+                            <span class="boutonAdd" style="font-size:30px;color:#ffff; float:right"
+                                pTooltip="Ajouter un Effets courts terme" (click)="addNodeEffCourtTerme()"
+                                tooltipPosition="top">+</span>
+                        </p>
+                    </th>
+                    <th colspan="1" style="width: 16%; background-color:rgb(95, 101, 103);"
+                        class="finaux-pointer aligne-bien">
+                        <p class="align-middle">
+
+                            <span style="color:#ffff; margin-left: 20px; text-align:center;">Résultats finaux
+                            </span>
+
+                            <span class="boutonAdd" style="font-size:30px;color:#ffff; float:right"
+                                pTooltip="Ajouter un Effet longs terme" (click)="addNodeEffLongterme()"
+                                tooltipPosition="top">+</span>
+                        </p>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <p-scrollPanel [style]="{ width: '100%', height: '33vw' }" styleClass="custombar1">
+            <!-- <div
+                style="border: 1px solid rgba(140, 139, 139, 0.279); background-color: rgba(228, 249, 251, 0.746); border-radius: 8px;height:80vw;">
+                
+            </div> -->
+            <div class="card">
+                <p-scrollPanel [style]="{width: '100%', height: '80vw'}" styleClass="custombar1">
+                    <nodes-container #nodeContainer [nodes]="nodes" [connections]="connections"></nodes-container>
+                </p-scrollPanel>
+            </div>
+        </p-scrollPanel>
+    </div>
+</div>
+
+<p-dialog [header]="title" [(visible)]="modalDetail" [modal]="true" [style]="{width: '30vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <label for="libelle" class="font-weight-bold">Libellé de l'{{type}}</label>
+            <div class="input-group mb-6">
+                <textarea rows="2" textarea type="text" class="form-control" id="libelle" name="libelle"
+                    [(ngModel)]="libelle"></textarea>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="modalDetail=false" label="Annuler"
+            styleClass="p-button-secondary p-button-text"></p-button>
+        <p-button icon="pi pi-plus" (click)="saveObject()" label="Ajouter" styleClass="p-button-success p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="dialogConfirmAction" header="Confirmation !" [modal]="true" [style]="{width: '20vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="color" class="text-center" style="font-size: 20px; font-weight: 700;"
+                    [style.color]="color">{{message}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="dialogConfirmAction=false" label="Ok" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [header]="titleListeHypo" [(visible)]="diaplayHypothese" [style]="{width: '40vw'}" [baseZIndex]="10000"
+    [position]="positionHypothese">
+    <div class="modal-body jumbotron">
+        <div class="row card">
+            <p-table #dt [value]="listHypo" [globalFilterFields]="['libelleFr']" [rowHover]="true" [rows]="3"
+                [paginator]="false" styleClass="p-datatable-sm" [rowHover]="true" dataKey="theoriehypotheseID"
+                [showCurrentPageReport]="true">
+
+                <ng-template pTemplate="caption">
+                    <div>
+                        <div class="row">
+                            <div class="d-flex justify-content-center">
+                                <i class="pi pi-search"></i>&nbsp;&nbsp;
+                                <input pInputText type="text" style="width:50%"
+                                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                    placeholder="Rechercher..." />
+                                <button pTooltip="Nouvelle hypothèse" (click)="newHypothesee()" tooltipPosition="top"
+                                    pButton pRipple icon="pi pi-plus"
+                                    class="p-button-rounded p-button-primary p-mr-2"></button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr class="texte">
+                        <th colspan="1" style="width: 5%; text-align: center;"> N° </th>
+                        <th colspan="1" style="width: 65%;"> Libellé </th>
+                        <th colspan="1" style="width: 15%;text-align: center;">Actions </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-hypothese let-i="rowIndex">
+                    <tr class="texte">
+                        <td colspan="1" style="text-align: center;" class="text-primary">{{i+1}}</td>
+                        <td colspan="1">{{hypothese.libelleFr}}</td>
+                        <td style="text-align: center;">
+                            <button pTooltip="Modifier" tooltipPosition="top" pButton pRipple icon="pi pi-pencil"
+                                (click)="editHypo(hypothese)"
+                                class="p-button-rounded p-button-success p-mr-2"></button>&nbsp;
+                            <button pTooltip="Supprimer" tooltipPosition="top" pButton pRipple icon="pi pi-trash"
+                                (click)="suppress(hypothese)" class="p-button-rounded p-button-danger"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary" *ngIf="listHypo.length<1">
+                    <div class="p-d-flex p-ai-center p-jc-between text-danger text-center">
+                        Aucun enregistrements trouvé pour le type {{typeHypothese}}.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="diaplayHypothese=false" label="Fermer"
+            styleClass="p-button-secondary p-button-text"></p-button>
+    </ng-template>
+</p-dialog>
+<p-dialog [header]="titleHypo" [(visible)]="diaplayNewHypothese" [style]="{width: '30vw'}" [baseZIndex]="10000"
+    [position]="positionHypothese">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <label for="newHypothese">Intitulé de l'hypothèse</label>
+                <textarea rows="2" textarea type="text" class="form-control" id="newTitre" name="newTitre"
+                    [(ngModel)]="hypothese.libelleFr"></textarea>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="diaplayNewHypothese=false" label="Annuler"
+            styleClass="p-button-secondary p-button-text"></p-button>
+        <p-button icon="pi pi-save" (click)="saveHypothese(hypothese)" label="Enregistrer"
+            styleClass="p-button-success p-button-text"></p-button>
+    </ng-template>
+</p-dialog>
+
+<!-- Dialog de confirmation de suppression -->
+<p-dialog header="Attention !" [(visible)]="dialogDelete" [modal]="true" [style]="{width: '20vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700; color: red;">Êtes-vous
+                    certain de vouloir supprimer cette hypothèse ?</label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="dialogDelete=false" label="Annuler" styleClass="p-button-text">
+        </p-button>
+        <p-button icon="pi pi-trash" (click)="deleteHypothese(hypothese)" label="Supprimer"
+            styleClass="p-button-text p-button-danger">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Documentation" [(visible)]="diaplayHelp" [style]="{width: '30vw'}" [baseZIndex]="10000"
+    [position]="posirionHelp">
+    <div class="modal-body">
+        <p>
+            <span class="text-primary font-weight-bold">Etape 1</span>
+            <span>- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, perferendis. Aspernatur itaque
+                soluta sequi
+                dolore delectus libero minima, unde voluptate ducimus quae, eaque aliquid repellendus iusto dolorem
+                beatae, rem
+                non!</span>
+        </p>
+        <br>
+        <p>
+            <span class="text-primary font-weight-bold">Etape 2</span>
+            <span>- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, perferendis. Aspernatur itaque
+                soluta sequi
+                dolore delectus libero minima, unde voluptate ducimus quae, eaque aliquid repellendus iusto dolorem
+                beatae, rem
+                non!</span>
+        </p>
+        <br>
+        <p>
+            <span class="text-primary font-weight-bold">Etape 3</span>
+            <span>- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, perferendis. Aspernatur itaque
+                soluta sequi
+                dolore delectus libero minima, unde voluptate ducimus quae, eaque aliquid repellendus iusto dolorem
+                beatae, rem
+                non!</span>
+        </p>
+        <br>
+        <p>
+            <span class="text-primary font-weight-bold">Etape 4</span>
+            <span>- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, perferendis. Aspernatur itaque
+                soluta sequi
+                dolore delectus libero minima, unde voluptate ducimus quae, eaque aliquid repellendus iusto dolorem
+                beatae, rem
+                non!</span>
+        </p>
+        <br>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="diaplayHelp=false" label="Fermer"
+            styleClass="p-button-secondary p-button-text"></p-button>
+    </ng-template>
+</p-dialog>
+
+<div class="progress-spinner" *ngIf="spinner==true" style="z-index: 9999">
+    <div class="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="d-flex justify-content-center affiche">
+        <h6 style="color: rgb(255, 255, 255); z-index: 999">Chargement...</h6>
+    </div>
+</div>

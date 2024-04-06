@@ -1,0 +1,281 @@
+<!-- <div class="row gutters-sm">
+  <div class="col-md-4 mb-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex flex-column align-items-center text-center">
+          <img
+            src="assets/icons/icons8-circled_user_male_skin_type_6.png"
+            alt="profil"
+            class="rounded-circle"
+            width="150"
+          />
+          <div class="mt-3">
+            <h4>{{ userGlobal.user.login }}</h4>
+            <p class="text-secondary mb-1">
+              {{ userGlobal.user.fonction }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-3">
+            <h6 class="mb-0">{{ "nom" | translate }}</h6>
+          </div>
+          <div class="col-sm-9 text-secondary">
+            {{ userGlobal.user.nom }}
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-sm-3">
+            <h6 class="mb-0">{{ "prenom" | translate }}</h6>
+          </div>
+          <div class="col-sm-9 text-secondary">
+            {{ userGlobal.user.prenom }}
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-sm-3">
+            <h6 class="mb-0">Email</h6>
+          </div>
+          <div class="col-sm-9 text-secondary">
+            {{ userGlobal.user.email }}
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-sm-3">
+            <h6 class="mb-0">{{ "telephone" | translate }}</h6>
+          </div>
+          <div class="col-sm-9 text-secondary">
+            (237) {{ userGlobal.user.telephone }}
+          </div>
+        </div>
+      
+        <hr />
+        <div class="row">
+          <p-button
+            (click)="showModalDialog()"
+            icon="pi pi-external-link"
+            label="Edit"
+          >
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="main">
+  <h2>IDENTITY</h2>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-3">
+          <div class="d-flex flex-column align-items-center text-center">
+            <img src="assets/icons/icons8-circled_user_male_skin_type_6.png" alt="profil" class="rounded-circle"
+              width="150" />
+            <div class="mt-3">
+              <h4>{{ userGlobal.user.login }}</h4>
+              <p class="text-secondary mb-1">
+                {{ userGlobal.user.fonction }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-9">
+          <i class="fa fa-edit fa-xs edit text-primary mon-icon"  pTooltip="{{ 'editProfil' | translate }}" tooltipPosition="top" (click)="showModalDialog()"></i>
+          <table>
+            <tbody>
+              <tr>
+                <td>{{ "nom" | translate }}</td>
+                <td>:</td>
+                <td> {{ userGlobal.user.nom }}</td>
+              </tr>
+              <tr>
+                <td>{{ "prenom" | translate }}</td>
+                <td>:</td>
+                <td>{{ userGlobal.user.prenom }}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>:</td>
+                <td> {{ userGlobal.user.email }}</td>
+              </tr>
+              <tr>
+                <td>{{ "telephone" | translate }}</td>
+                <td>:</td>
+                <td>(237) {{ userGlobal.user.telephone }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+
+    </div>
+  </div>
+
+  <h2>SOCIAL MEDIA</h2>
+  <div class="card">
+    <div class="card-body">
+      <i class="fa fa-pen fa-xs edit"></i>
+      <div class="social-media">
+        <span class="fa-stack fa-sm">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="fa-stack fa-sm">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="fa-stack fa-sm">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="fa-stack fa-sm">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-invision fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="fa-stack fa-sm">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="fa-stack fa-sm">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-whatsapp fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="fa-stack fa-sm">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-snapchat fa-stack-1x fa-inverse"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog header="Mettre à jour mon profil" [(visible)]="displayModal" [modal]="true" [style]="{ width: '60%' }"
+  [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <form name="form" (ngSubmit)="userForm.form.valid && onSubmit()" #userForm="ngForm">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <label for="">{{ "nom" | translate }}</label>
+        </div>
+        <div class="col-md-8">
+          <input type="text" [(ngModel)]="userGlobal.user.nom" name="nom" class="form-control" />
+        </div>
+        <small class="p-invalid" style="color: red" *ngIf="submitted && !userGlobal.user.nom">{{ "require" | translate
+          }}</small>
+      </div>
+      <br />
+
+      <div class="row">
+        <div class="col-md-4">
+          <label for="">{{ "prenom" | translate }}</label>
+        </div>
+        <div class="col-md-8">
+          <input type="text" [(ngModel)]="userGlobal.user.prenom" name="prennom" id="" class="form-control" />
+        </div>
+        <small class="p-invalid" style="color: red" *ngIf="submitted && !userGlobal.user.prenom">{{ "require" |
+          translate }}</small>
+      </div>
+      <br />
+
+      <div class="row">
+        <div class="col-md-4">
+          <label for="">{{ "telephone" | translate }}</label>
+        </div>
+        <div class="col-md-8">
+          <input type="text" [(ngModel)]="userGlobal.user.telephone" name="phone" id="" class="form-control" />
+        </div>
+      </div>
+      <br />
+
+      <div class="row">
+        <div class="col-md-4">
+          <label for="">{{ "email" | translate }}</label>
+        </div>
+        <div class="col-md-8">
+          <input type="email" [(ngModel)]="userGlobal.user.email" name="email" id="" class="form-control" />
+        </div>
+      </div>
+      <br />
+
+      <!-- <div class="row">
+          <div class="col-md-4">
+            <label for="">Whatsapp</label>
+          </div>
+          <div class="col-md-8">
+            <input
+              [(ngModel)]="userGlobal.user.whatsapp"
+              name="whatsapp"
+              id=""
+              class="form-control"
+            />
+          </div>
+        </div>
+        <br />
+
+        <div class="row">
+          <div class="col-md-4">
+            <label for="">Facebook</label>
+          </div>
+          <div class="col-md-8">
+            <input
+              [(ngModel)]="userGlobal.user.facebook"
+              name="facebook"
+              id=""
+              class="form-control"
+            />
+          </div>
+        </div>
+        <br />
+
+        <div class="row">
+          <div class="col-md-4">
+            <label for="">Twitter</label>
+          </div>
+          <div class="col-md-8">
+            <input
+              [(ngModel)]="userGlobal.user.twitter"
+              name="twitter"
+              id=""
+              class="form-control"
+            />
+          </div>
+        </div> -->
+      <br />
+
+      <div class="row">
+        <div class="col-md-4">
+          <label for="">{{ "password" | translate }}</label>
+        </div>
+        <div class="col-md-8">
+          <input name="password" [(ngModel)]="userGlobal.user.password" type="password"
+            class="form-control form-control-sm" (ngModelChange)="validerPass()"
+            [ngClass]="validerPass() ? ' is-valid' : 'is-invalid'" />
+          <small class="p-invalid" style="color: orange" *ngIf="!validerPass()">
+            {{ "passRegex" | translate }}</small>
+        </div>
+      </div>
+      <br />
+    </div>
+    <br />
+
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-sm btn-primary mx-2" (click)="changeValide()">
+        {{ "modifier" | translate }}
+      </button>
+      <button type="button" class="btn btn-sm btn-secondary mx-2" (click)="closeDialog()">
+        {{ "annuler" | translate }}
+      </button>
+    </div>
+  </form>
+</p-dialog>

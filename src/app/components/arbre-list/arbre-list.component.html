@@ -1,0 +1,319 @@
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <i class="item-page"><img src="assets/icons/actions/arbre.png" alt=""
+                    class="img-responsive img-circle item-icon" /></i>&nbsp;&nbsp;
+            <span class="titrePage">{{ "arbreObjectif" | translate }}</span>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <p-splitButton *ngIf="selectedArbres.length" icon="pi pi-cog" [model]="items" [style]="{height:'35px'}"
+                styleClass="p-button-raised p-button-secondary mr-2 mb-2"></p-splitButton>
+            &nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-primary" (click)="addArbre()"><i class="fa fa-plus"></i>
+                &nbsp; <span>{{
+                    "Ajouter" | translate }}</span></button>&nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-secondary" (click)="rechercher()"><i
+                    class="fa fa-refresh"></i> &nbsp; <span>{{
+                    "actualiser" | translate }}</span></button>&nbsp;&nbsp;
+            <button [disabled]="!selectedArbres || !selectedArbres.length" (click)="delete('delArbreList')"
+                class="pure-material-button-contained bg-danger"><i class="fa fa-trash"></i> &nbsp; <span>{{
+                    "Supprimer" | translate }}</span></button>
+
+        </ng-template>
+    </p-toolbar>
+    <div class="row mb-2" style="padding-left: 2%;padding-right: 2%; margin-top: -1%;">
+        <div class="brise-input">
+            <input (input)="dt.filterGlobal($any($event.target).value, 'contains')" type="text" name="text" required>
+            <label><i class="pi pi-search"></i> {{ "research" | translate }}</label>
+            <span class="line"></span>
+        </div>
+    </div>
+    <p-scrollPanel [style]="{ width: '100%', height: '33vw' }" styleClass="custombar1">
+        <p-table #dt [value]="tabArbreFiltre" [rows]="8" styleClass="p-datatable-sm" [paginator]="true"
+            currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} éléments"
+            [showCurrentPageReport]="true" [globalFilterFields]="[ 'code','libelleFr', 'libelleUs']"
+            [(selection)]="selectedArbre" [rowHover]="true" dataKey="arbreID">
+
+            <ng-template pTemplate="header">
+                <tr class="texte">
+                    <th colspan="1" style="width: 5%; text-align: center;"> N° </th>
+                    <th colspan="1" style="width: 7%;" pSortableColumn="code">
+                        Code <p-sortIcon field="code"></p-sortIcon>
+                    </th>
+                    <th colspan="1" style="width: 35%;" pSortableColumn="libelleFr">
+                        Libellé de l'arbre<p-sortIcon field="libelleFr"></p-sortIcon>
+                    </th>
+                    <th colspan="1" style="width: 15%;" pSortableColumn="creation_date">
+                        Date de création <p-sortIcon field="creation_date"></p-sortIcon>
+                    </th>
+                    <th colspan="1" style="width: 15%;" pSortableColumn="arbreTypeID">
+                        Type d'arbre <p-sortIcon field="arbreTypeID"></p-sortIcon>
+                    </th>
+                    <th colspan="1" class="text-center" style="width: 12%;">
+                        arbre à objectif
+                    </th>
+
+                    <th colspan="1" style="width: 15%;text-align: center;">Actions </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3%; text-align: center">N°</th>
+                    <th style="width: 3rem"> <p-tableHeaderCheckbox></p-tableHeaderCheckbox> </th>
+                    <th colspan="1" style="width: 10%;" pSortableColumn="code"> Code <p-sortIcon
+                            field="code"></p-sortIcon></th>
+                    <th colspan="1" style="width: 30%;" pSortableColumn="libelleFr">Libellé de l'arbre<p-sortIcon
+                            field="libelleFr"></p-sortIcon> </th>
+                    <th colspan="1" style="width: 15%;" pSortableColumn="creation_date"> Date de création <p-sortIcon
+                            field="creation_date"></p-sortIcon></th>
+                    <th colspan="1" style="width: 14%;" pSortableColumn="arbreTypeID">Type d'arbre <p-sortIcon
+                            field="arbreTypeID"></p-sortIcon></th>
+                    <th colspan="1" class="text-center" style="width: 12%;">arbre à objectif </th>
+                    <th style="width: 16%" class="text-center"> <i class="pi pi-cog"></i> </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-arbre let-i="rowIndex">
+                <tr>
+                    <td class="text-center">{{i+1}}</td>
+                    <td> <p-tableCheckbox [value]="arbre"></p-tableCheckbox> </td>
+                    <td>{{arbre.code}}</td>
+                    <td>{{arbre.libelleFr}}</td>
+                    <td>{{arbre.creation_date | date:'longDate'}}</td>
+                    <td>{{getLibelleByID(arbre.arbreTypeID)}}</td>
+                    <td style="text-align: center;">
+                        <img *ngIf="arbre.arbreTypeID=='ARBT20220427145445.201.221'"
+                            (click)="arbreFindCorrespondant(arbre)" pTooltip="{{ 'Arbre correspoandant' | translate }}"
+                            tooltipPosition="top" src="assets/icons/arbre.png" class="img-responsive icon-action" />
+
+                    </td>
+                    <td class="text-center">
+                        <img (click)="get(arbre, 'edit')" pTooltip="{{ 'modifier' | translate }}" tooltipPosition="top"
+                            src="assets/icons/pencil.png" class="img-responsive icon-action" />&nbsp;&nbsp;
+                        <img (click)="consulter2(arbre)" pTooltip="{{ 'consulter' | translate }}" tooltipPosition="top"
+                            src="assets/icons/eye.png" class="img-responsive icon-action" />&nbsp;&nbsp;
+                        <img (click)="delete('delClient', arbre)" pTooltip="{{ 'supprimer' | translate }}"
+                            tooltipPosition="left" src="assets/icons/remove.png" class="img-responsive icon-action" />
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-scrollPanel>
+</div>
+
+
+<p-dialog [header]="libelle" [(visible)]="arbreUpdateModal" [modal]="true" [style]="{width: '40vw'}" [draggable]="true"
+    [resizable]="false">
+    <ng-template pTemplate="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col d-flex justify-content-start">
+                    <img src="assets/images/logo.png" style="height: 25px; width:25px;"
+                        class="img-responsive mon-icon" />&nbsp;<h4>{{ action+"Arbre" | translate }}</h4>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div class="modal-body">
+        <div class="row mb-2" style="margin-top: 1%;">
+            <div class="col-2">
+                <div class="brise-input">
+                    <input [(ngModel)]="arbre.code" [readonly]="action=='view'" type="text" name="text" required>
+                    <label *ngIf="action!='view'">{{ "code" | translate }}</label>
+                    <span class="line"></span>
+                </div>
+            </div>
+            <!-- <label for="code" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Code</label>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <input [readonly]="action=='view'" [required]="action=='new' || action=='edit'" type="text"
+                    class="form-control form-control-sm" name="code" [(ngModel)]="arbre.code" required />
+            </div> -->
+        </div>
+        <div class="row mb-2" *ngIf="action=='new'">
+            <div class="col-12">
+                <div class="select">
+                    <select [(ngModel)]="arbre.arbreTypeID" class="select-text" required>
+                        <option value="" disabled selected></option>
+                        <option *ngFor="let c of tabType" [ngValue]="c.arbreTypeID">
+                            <span>{{c.libelleFr}}</span>
+                        </option>
+                    </select>
+                    <span class="select-highlight"></span>
+                    <span class="select-bar"></span>
+                    <label class="select-label">{{ "Type" | translate }}</label>
+                </div>
+            </div>
+            <!-- <label for="code" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Type
+                d'arbre</label>
+            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <p-dropdown [style]="{width:'100%',height:'35px'}" [(ngModel)]="arbre.arbreTypeID"
+                    [showClear]="true" optionValue="arbreTypeID" [options]="tabType" optionLabel="libelleFr"
+                    placeholder=" " name="arbreTypeID">
+                </p-dropdown>
+            </div> -->
+        </div>
+        <div class="row mb-2" *ngIf="arbre.arbreTypeID && arbre.arbreTypeID!='ARBT20220427145445.201.221'">
+            <div class="col-12">
+                <div class="select">
+                    <select [(ngModel)]="arbre.arbreCorrespondantID" class="select-text" required>
+                        <option value="" disabled selected></option>
+                        <option *ngFor="let c of tabArbrePb" [ngValue]="c.arbreID">
+                            <span>{{c.libelleFr}}</span>
+                        </option>
+                    </select>
+                    <span class="select-highlight"></span>
+                    <span class="select-bar"></span>
+                    <label class="select-label">{{ "arbre-correspondant" | translate }}</label>
+                </div>
+            </div>
+            <!-- <label for="code" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Arbre à problèmes</label>
+            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <p-dropdown [style]="{width:'100%',height:'35px'}" [(ngModel)]="arbre.arbreCorrespondantID"
+                    [showClear]="true" optionValue="arbreID" [options]="tabArbrePb" optionLabel="libelleFr"
+                    placeholder=" " name="arbreID">
+                </p-dropdown>
+            </div> -->
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-6">
+                <div class="brise-input">
+                    <input [(ngModel)]="arbre.libelleFr" [readonly]="action=='view'" type="text" name="text" required>
+                    <label *ngIf="action!='view'">{{ "libelleFr" | translate }}</label>
+                    <span class="line"></span>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="brise-input">
+                    <input [(ngModel)]="arbre.libelleUs" [readonly]="action=='view'" type="text" name="text" required>
+                    <label *ngIf="action!='view'">{{ "libelleUs" | translate }}</label>
+                    <span class="line"></span>
+                </div>
+            </div>
+            <!-- <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libellé en
+                Français</label>
+            <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                <input [required]="action=='new' || action=='edit'" type="text"
+                    class="form-control form-control-sm" name="libelleFr" [readonly]="action=='view'"
+                    [(ngModel)]="arbre.libelleFr" required />
+            </div> -->
+        </div>
+        <!-- <div class="row mb-2">
+            <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libellé
+                en anglais</label>
+            <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                <input [required]="action=='new' || action=='edit'" class="form-control form-control-sm"
+                    name="libelleUs" [readonly]="action=='view'" [(ngModel)]="arbre.libelleUs" required />
+            </div>
+        </div> -->
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="row justify-content-center">
+            <button class="pure-material-button-contained bg-secondary" (click)="arbreUpdateModal=false">
+                <span *ngIf="action!='view'">
+                    <i class='bx bxs-minus-circle icon-btn'></i>&nbsp;
+                    <span>{{ "annuler" | translate }}</span>
+                </span>
+                <span *ngIf="action=='view'">
+                    <i class='pi pi-times'></i>&nbsp;
+                    <span>{{ "fermer" | translate }}</span>
+                </span>
+            </button>&nbsp;&nbsp;
+            <button *ngIf="action=='new'" class="pure-material-button-contained bg-success" (click)="saveArbre()"><i
+                    class="pi pi-save"></i>
+                &nbsp;<span>{{ "enregistrer" | translate }}</span>
+            </button>
+            <button *ngIf="action=='edit'" class="pure-material-button-contained bg-primary" (click)="saveArbre()"><i
+                    class="pi pi-save"></i>
+                &nbsp;<span>{{ "sauvegarder" | translate }}</span>
+            </button>
+
+        </div>
+    </ng-template>
+    <!--  <ng-template pTemplate="footer">
+        <button icon="pi pi-times" (click)="arbreUpdateModal=false" pButton pRipple type="button" [label]="btnCancel"
+            class="p-button-secondary p-button-text"></button>
+        <button icon="pi pi-save" [disabled]="arbre.libelleFr==null" (click)="saveArbre()" pButton pRipple type="button"
+            label="Enregistrer" *ngIf="action!='view'" class="p-button-success p-button-text"></button>
+    </ng-template> -->
+</p-dialog>
+
+
+<!-- Dialog de confirmation de suppression -->
+<p-dialog [header]="libelleSupres" [(visible)]="displayModalDel" [modal]="true" [style]="{width: '40vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700; color: red;">Êtes-vous
+                    certain de vouloir supprimer cet arbre ?</label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="displayModalDel=false" label="Annuler" styleClass="p-button-text">
+        </p-button>
+        <p-button icon="pi pi-trash" style="color:red" (click)="deleteAbre(arbre)" label="Supprimer"
+            styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+
+<!-- Dialog de confirmation d'action -->
+<p-dialog [(visible)]="dialogConfirmAction" [header]="ConfirmationLibelle" [modal]="true" [style]="{width: '30vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700;"
+                    [style.color]="color">{{message}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="dialogConfirmAction=false" label="Ok" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+<!-- Dialog d'aide -->
+<p-dialog [(visible)]="helpDialog" header="Assistant d'utilisation" [modal]="true" [style]="{width: '40vw'}"
+    [draggable]="true" [resizable]="false" [closable]="false">
+    <div class="modal-body">
+        <div>
+            <img style="height: 250px; width: 100%;" src="/asset/Sans titre.png" alt=""
+                class="img-responsive img-fluid">
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="helpDialog=false" label="Fermer" styleClass="p-button-text">
+        </p-button>
+        <p-button icon="pi pi-angle-left" (click)="dialogConfirmAction=false" label="Précédant" iconPos="left"
+            styleClass="p-button-text">
+        </p-button>
+        <p-button icon="pi pi-angle-right" (click)="dialogConfirmAction=false" label="Suivant" iconPos="right"
+            styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<div class="progress-spinner" *ngIf="spinner==true" style="z-index: 9999">
+    <div class="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="d-flex justify-content-center affiche">
+        <h6 style="color: rgb(255, 255, 255); z-index: 999">Chargement...</h6>
+    </div>
+</div>

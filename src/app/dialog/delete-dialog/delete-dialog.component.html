@@ -1,0 +1,25 @@
+<div class="modal-body">
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <div class="col-md-12 text-center">
+                <img src="assets/icons/atention.png" style="height: 50px; width:50px;"
+                    class="img-responsive mon-icon" />&nbsp;
+                <h4 class="text-center text-danger" style="font-size: 15px; font-weight: 700;">{{errorMessage|
+                    translate}}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <button class="pure-material-button-contained bg-secondary" (click)="close()"><span>&nbsp;&nbsp;<i
+                        class='bx bxs-minus-circle icon-btn'></i>&nbsp;&nbsp;{{ "annuler" | translate
+                    }}&nbsp;&nbsp;</span></button>
+            &nbsp;&nbsp;&nbsp;
+        </div>
+        <div class="col-6">
+            <button class="pure-material-button-contained bg-danger" (click)="delete()"><span>&nbsp;&nbsp;<i
+                        class='bx bxs-trash-alt icon-btn'></i>&nbsp;&nbsp;{{ "supprimer" |
+                    translate }}&nbsp;&nbsp;</span></button>
+        </div>
+    </div>
+</div>

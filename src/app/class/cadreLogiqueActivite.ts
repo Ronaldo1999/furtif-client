@@ -1,0 +1,35 @@
+export class CadreLogiqueActivite {
+    cadreLogiqueActiviteID!: string;
+    last_update!: string;
+    user_update!: string;
+    ip_update!: string;
+    libelleFr!: string;
+    libelleUs!: string;
+    millesime!: string;
+    niveauActiviteID!: number;
+    cadreLogiqueActiviteParentID!: string;
+    cadreLogiqueObjectifID!: string;
+    cadreLogiqueID!: string;
+    code!: string;
+    organisationID!: string;
+    presentationFr!: string;
+    presentationUs!: string;
+    strategieFr!: string;
+    strategieUs!: string;
+    structureResponsable!: string;
+    agentResponsable!: string;
+    autreResponsable!: string;
+    titre!: number;
+    structureID!: string;
+    calendrier!: string;
+    pgCode!: string;
+    acCode!: string;
+    activiteParentFr!: string;
+    poids!: number;
+    taux!: number;
+    cout!: number;
+    echeance!: string;
+    reference!: number;
+    cible!: number;
+    statut!: number;
+}

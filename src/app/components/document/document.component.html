@@ -1,0 +1,809 @@
+<p-menu #menuType [popup]="true" [model]="items"></p-menu>
+<p-menu #menuStatut [popup]="true" [model]="itemsStatuts"></p-menu>
+<p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+        <i class="item-page"><img src="assets/icons/actions/sdocuments.png" alt=""
+                class="img-responsive img-circle item-icon" /></i>&nbsp;&nbsp;
+        <span class="titrePage">{{ libeType }}</span>
+    </ng-template>
+    <ng-template pTemplate="right">
+        <span style="font-family: Arial, sans-serif; font-size: 16px; font-weight:600">{{ "filterBy" | translate
+            }}</span>&nbsp;&nbsp;&nbsp;
+        <p-splitButton label="Type" [model]="items" [style]="{height:'35px'}"
+            styleClass="p-button-raised p-button-secondary mr-2 mb-2">
+        </p-splitButton>
+        &nbsp;&nbsp;
+        <p-splitButton label="Status" [model]="itemsStatuts" [style]="{'height':'35px','margin-top': '1%'}"
+            styleClass="p-button-raised p-button-secondary mr-2 mb-2"></p-splitButton>&nbsp;&nbsp;
+        <button *ngIf="habilitation('DU010101')" class="pure-material-button-contained bg-primary" (click)="create()"><i class="fa fa-plus"></i>&nbsp;
+            <span>{{ "Ajouter" | translate }}</span></button>&nbsp;&nbsp;
+        <button class="pure-material-button-contained bg-secondary" (click)="documentList()"><i
+                class="fa fa-refresh"></i> &nbsp;
+            <span>{{ "actualiser" | translate }}</span></button>&nbsp;&nbsp;
+        <button pTooltip="{{ 'parametres' | translate }}" tooltipPosition="top"
+            class="pure-material-button-contained bg-secondary" (click)="getParametres()"><i class="pi pi-cog"></i>
+            &nbsp;
+        </button>
+    </ng-template>
+</p-toolbar>
+<div class="card">
+    <div class="row mb-2" style="padding-left: 2%;padding-right: 2%; margin-top: -1%;">
+        <div [ngClass]="{ 'col-12': !selectedDocument || !selectedDocument.length, 'col-10': selectedDocument}">
+            <div class="brise-input">
+                <input (input)="dt.filterGlobal($any($event.target).value, 'contains')" type="text" name="text"
+                    required>
+                <label><i class="pi pi-search"></i> {{ "research" | translate }}</label>
+                <span class="line"></span>
+            </div>
+        </div>
+        <div *ngIf="selectedDocument.length" class="col-2" style="margin-top: 3%;">
+            <p-splitButton *ngIf="selectedDocument.length" (onDropdownClick)="onDropMenu()" label="Options"
+                icon="pi pi-cog" [model]="itemsMenu" [style]="{height:'35px'}"
+                styleClass="p-button-raised p-button-secondary mr-2 mb-2">
+            </p-splitButton>
+        </div>
+    </div>
+    <p-scrollPanel [style]="{ width: '100%', height: '33vw' }" styleClass="custombar1">
+        <p-table #dt [value]="documents" [rows]="8" styleClass="p-datatable-sm" [paginator]="true"
+            currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} éléments"
+            (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [showCurrentPageReport]="true"
+            [globalFilterFields]="[ 'documentID', 'typedocumentID','statutdocumentID','datedebut','datefin',
+            'datesignature','lieusignature','nomfichier','cheminfichier','extension','objet','partieprenante',
+            'close','couleur','created_at','created_by','last_update','user_update','ip_update','datelimite','oldname',
+            'avenant','ville','engagementfinancier','observation']" [(selection)]="selectedDocument" [rowHover]="true"
+            dataKey="documentID">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3%; text-align: center">N°</th>
+                    <th style="width: 3rem"> <p-tableHeaderCheckbox></p-tableHeaderCheckbox> </th>
+                    <th pSortableColumn="objet" style="width: 28%">{{ "objet" | translate }}<p-sortIcon
+                            field="objet"></p-sortIcon></th>
+                    <th pSortableColumn="datedebut" style="width: 12%"> {{ "debut" | translate }} <p-sortIcon
+                            field="datedebut"></p-sortIcon></th>
+                    <th pSortableColumn="datefin" style="width: 12%"> {{ "fin" | translate
+                        }}<p-sortIcon field="datefin"></p-sortIcon></th>
+                    <th pSortableColumn="partieprenante" style="width: 30%"> {{ "Signataires" | translate }} <p-sortIcon
+                            field="partieprenante"></p-sortIcon> </th>
+                    <th style="width: 12%" pSortableColumn="statutdossierID"> {{ "Statut" | translate }}<p-sortIcon
+                            field="statutdossierID"></p-sortIcon></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-document let-i="rowIndex">
+                <tr>
+                    <td class="text-center">{{i+1}}</td>
+                    <td> <p-tableCheckbox [value]="document"></p-tableCheckbox> </td>
+                    <td>{{ document.objet }}</td>
+                    <td>{{ document.datedebut | date:'longDate' }}</td>
+                    <td>{{ document.datefin | date:'longDate' }}</td>
+                    <td style="font-weight: 600; font-style: italic;color: brown;">{{getSignataires(document)}}</td>
+                    <td style="font-size: 14px;"><span *ngIf="document.statutdocumentID && habilitation('DU010105')"
+                            pTooltip="{{ 'updateStatutDoc' | translate }}" tooltipPosition="left"
+                            (click)="sendtojustice(document, 'right', 'updateStatut')" class="instanceEncour"
+                            [style.color]="getStatut(document).couleur">
+                            <span *ngIf="verifyLengthStatut(getStatut(document).libelleFr)"
+                                pTooltip="{{ getStatut(document).libelleFr }}" tooltipPosition="top"> {{
+                                defineDescriptionStatut(getStatut(document).libelleFr) }}... </span>
+                            <span *ngIf="verifyLengthStatut(getStatut(document).libelleFr) == false"> {{
+                                getStatut(document).libelleFr }} </span>
+                        </span>
+                        <span *ngIf="!document.statutdocumentID && habilitation('DU010105')" pTooltip="{{ 'sendtojustice' | translate }}"
+                            tooltipPosition="top" (click)="sendtojustice(document, 'right', 'send')" class="instance">
+                            <img tooltipPosition="top" src="assets/icons/sendtojustice.png"
+                                class="img-responsive icon-action" />{{ 'Envoyer' | translate }}</span>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-scrollPanel>
+</div>
+
+<p-dialog [(visible)]="displayModal" [modal]="true" [style]="{ width: '800px' }" [baseZIndex]="10000" [draggable]="true"
+    [resizable]="true" [closable]="false">
+    <ng-template pTemplate="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col d-flex justify-content-start">
+                    <img src="assets/images/logo.png" style="height: 30px; width:30px;"
+                        class="img-responsive mon-icon" />&nbsp;<h5>{{ action+"Document" | translate }}</h5>
+                </div>
+                <div class="col d-flex justify-content-end mon" *ngIf="action!='new' && habilitation('DU010106')">
+                    <img pTooltip="{{ 'history' | translate }}" tooltipPosition="top" src="assets/icons/history1.png"
+                        (click)="getHisto(document)" style="height: 25px; width:25px;"
+                        class="img-responsive mon-icon" />&nbsp;<h6 pTooltip="{{ 'history' | translate }}"
+                        tooltipPosition="top" (click)="getHisto(document)">{{ 'Historique' | translate }}
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div class="modal-body">
+        <p-accordion>
+            <p-accordionTab [selected]="true">
+                <ng-template pTemplate="header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col d-flex justify-content-start">
+                                <img src="assets/icons/caneva.png" style="height: 30px; width:30px;"
+                                    class="img-responsive mon-icon" />&nbsp;<h5>{{ "infoPrincipal" | translate }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="row">
+                    <div class="col-10">
+                        <div class="select">
+                            <select [(ngModel)]="document.typedocumentID" class="select-text" required>
+                                <option value="" disabled selected></option>
+                                <option *ngFor="let c of typeDocuments" [ngValue]="c.typedocumentID">
+                                    <span class="de" [style]="{'color':c.couleur}">{{c.libelleFr}}</span>
+                                </option>
+                            </select>
+                            <span class="select-highlight"></span>
+                            <span class="select-bar"></span>
+                            <label class="select-label">{{ "typeDocument" | translate }}</label>
+                        </div>
+                    </div>
+                    <div class="col-1" style="margin-top: 5%;">
+                        <button pTooltip="{{ 'newTypeDoc' | translate }}" tooltipPosition="top"
+                            class="pure-material-button-contained bg-secondary" (click)="createType()">
+                            <i class='pi pi-plus'></i>&nbsp;
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ "objet" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                            <textarea [(ngModel)]="document.objet" class="form-control" [readonly]="action=='view'"
+                                rows="2" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>{{ "dateDebut" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" [(ngModel)]="document.datedebut" name="" id="">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>{{ "datefin" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" [(ngModel)]="document.datefin" name="" id="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ "color" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                            <input type="color" class="form-control" [(ngModel)]="document.couleur" name="" id="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ "closeContractuels" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                            <textarea [(ngModel)]="document.close" class="form-control" [readonly]="action=='view'"
+                                rows="4" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ "Avenants" | translate }}</label>
+                            <textarea [(ngModel)]="document.avenant" class="form-control" [readonly]="action=='view'"
+                                rows="3" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ "Ville" | translate }}</label>
+                            <input type="text" name="ville" id="ville" [(ngModel)]="document.ville"
+                                class="form-control" [readonly]="action=='view'">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ "Engagement financier" | translate }}</label>
+                            <input type="text" name="engagementfinancier" id="engagementfinancier"
+                                [(ngModel)]="document.engagementfinancier" class="form-control" [readonly]="action=='view'">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ "Observations" | translate }}</label>
+                            <textarea [(ngModel)]="document.observation" class="form-control"
+                                [readonly]="action=='view'" rows="3" required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </p-accordionTab>
+            <p-accordionTab>
+                <ng-template pTemplate="header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col d-flex justify-content-start">
+                                <img src="assets/icons/signataires.png" style="height: 30px; width:30px;"
+                                    class="img-responsive mon-icon" />&nbsp;<h5>{{ "signataires" | translate }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="row" style="margin-top: 1%;">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>{{ "Signataire 1" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                            <input type="text" [(ngModel)]="sign1.nom" class="form-control" [readonly]="action=='view'"
+                                rows="2" required>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>{{ "Signataire 2" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                            <input type="text" [(ngModel)]="sign2.nom" class="form-control" [readonly]="action=='view'"
+                                rows="2" required>
+                        </div>
+                    </div>
+                </div>
+            </p-accordionTab>
+            <p-accordionTab>
+                <ng-template pTemplate="header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col d-flex justify-content-start">
+                                <img src="assets/icons/piecejointe.png" style="height: 30px; width:30px;"
+                                    class="img-responsive mon-icon" />&nbsp;<h5>{{ "piecejointe" | translate }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="row" style="margin-top: 2%" *ngIf="!this.selectedFile">
+                    <div style="padding: 15px">
+                        <div>
+                            <div class="dropzone" fileDragDrop (filesChangeEmiter)="onFileChange($any($event))">
+                                <div class="text-wrapper">
+                                    <div class="centered">
+                                        <input type="file" name="file" id="file" (change)="onFileSelected($event)"
+                                            accept="image/*,.xlsx,.xls,.doc, .docx,.ppt,.pptx,.txt,application/pdf" />
+                                        <label for="file"><span class="textLink">{{ 'selectYourFile' | translate
+                                                }}</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 1%" *ngIf="this.selectedFile">
+                    <div class="paramFileCard">
+                        <div class="row">
+                            <div class="col-1">
+                                <img src="assets/icons/document.png" style="height: 25px; width:25px;"
+                                    class="img-responsive mon-icon" />
+                            </div>
+                            <div class="col-9">
+                                <span class="paramFile">{{ this.selectedFile?.name }}</span>
+                            </div>
+                            <div class="col-1">
+                                <img (click)="deletePj()" pTooltip="{{ 'supprimer' | translate }}"
+                                    tooltipPosition="left" src="assets/icons/remove.png"
+                                    class="img-responsive icon-action" />
+
+                                <img *ngIf="document.nomfichier" (click)="download()"
+                                    pTooltip="{{ 'clickToUpoad' | translate }}" tooltipPosition="left"
+                                    src="assets/icons/download.png" class="img-responsive icon-action" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="row justify-content-center">
+            <button class="pure-material-button-contained bg-secondary" (click)="close()">
+                <span *ngIf="action!='view'">
+                    <i class='bx bxs-minus-circle icon-btn'></i>&nbsp;
+                    <span>{{ "annuler" | translate }}</span>
+                </span>
+                <span *ngIf="action=='view'">
+                    <i class='pi pi-times'></i>&nbsp;
+                    <span>{{ "fermer" | translate }}</span>
+                </span>
+            </button>&nbsp;&nbsp;
+            <button *ngIf="action=='new'" class="pure-material-button-contained bg-success" (click)="save(document)"><i
+                    class="pi pi-save"></i>
+                &nbsp;<span>{{ "enregistrer" | translate }}</span>
+            </button>
+            <button *ngIf="action=='edit'" class="pure-material-button-contained bg-primary" (click)="save(document)"><i
+                    class="pi pi-save"></i>
+                &nbsp;<span>{{ "sauvegarder" | translate }}</span>
+            </button>
+
+        </div>
+    </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="histDialog" [style]="{width: '850px'}" [baseZIndex]="10000" [position]="position">
+    <ng-template pTemplate="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col d-flex justify-content-start">
+                    <img src="assets/icons/history1.png" style="height: 25px; width:25px;"
+                        class="img-responsive mon-icon" />&nbsp;<h6>{{ 'histoDocument' | translate }}</h6>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div class="modal-body">
+        <div *ngIf="historiques.length!=0">
+            <div *ngFor="let ele of historiques">
+                <div class="paramHistoCard" [ngClass]="{ actib: ele.actif === 1, inactib: ele.actif === 0}">
+                    <div class="row">
+                        <div class="col-1">
+                            <img src="assets/icons/history.png" style="height: 25px; width:25px;"
+                                class="img-responsive mon-icon" />
+                        </div>
+                        <div class="col-9">
+                            <span class="paramclientEl"><span style="font-style: italic;">{{ ele.titreaffaire
+                                    }}</span>&nbsp;{{ ele.datelimite|date:'longDate' }}</span>
+                        </div>
+                        <div class="col-1">
+                            <img (click)="deleteHisto('delHisto', ele)" pTooltip="{{ 'supprimer' | translate }}"
+                                tooltipPosition="left" src="assets/icons/remove.png"
+                                class="img-responsive icon-action" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="historiques.length==0">
+            <div class="row" style="margin-top: 2%;">
+                <div class="col d-flex justify-content-center">
+                    <div class="col-md-12 text-center">
+                        <img src="assets/icons/notfound.png" style="height: 60px; width:60px;"
+                            class="img-responsive mon-icon" />&nbsp;<h5 class="text-center text-secondary"
+                            style="font-size: 22px; font-weight: 700">{{'noting' |translate }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="row justify-content-center">
+            <button (click)="histDialog = false" [style]="{height:'35px'}" pButton pRipple type="button"
+                class="p-button-text p-button-secondary">
+                <i class='bx bxs-minus-circle icon-btn'></i>&nbsp;
+                <span>{{ "Fermer" | translate }}</span>
+            </button>
+            <!--  <button [style]="{height:'35px'}" pButton pRipple type="button" class="p-button-text p-button-success">
+                <img src="assets/icons/compile.png" alt="" class="img-responsive img-circle mon-icon-menu" />
+                <span>{{'compileall' |translate}}</span>
+            </button> -->
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="statusDialog" [modal]="true" [style]="{ width: '600px' }" [baseZIndex]="10000" [draggable]="true"
+    [resizable]="true" [closable]="false">
+    <ng-template pTemplate="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col d-flex justify-content-start">
+                    <img src="assets/images/logo.png" style="height: 30px; width:30px;"
+                        class="img-responsive mon-icon" />&nbsp;<h6>{{ action+'Document' | translate }}</h6>
+                </div>
+                <div class="col d-flex justify-content-end mon">
+                    <img src="assets/icons/addelementb.png" (click)="createStatut()" style="height: 25px; width:25px;"
+                        class="img-responsive mon-icon" />&nbsp;<h6 (click)="createStatut()">{{ 'Nouveau' | translate }}
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div class="modal-body">
+        <div class="row" style="margin-top: 1%;">
+            <div class="form-check" *ngFor="let ele of statutDocuments">
+                <span class="paramclientCard">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                        [value]="ele.statutdocumentID" [(ngModel)]="histo.statutdocumentID" />
+                    <label style="text-transform: uppercase" class="form-check-label" for="inlineRadio1">{{
+                        ele.libelleFr }}</label>
+                </span>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="form-group">
+                <label>{{ "dateDelaisMax" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                <input type="datetime-local" class="form-control" [(ngModel)]="histo.datelimite" name="" id="">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="form-group">
+                <label>{{ "titreaffaire" | translate }}</label>
+                <input type="text" class="form-control" [(ngModel)]="histo.titreaffaire" name="" id="">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="form-group">
+                <label>{{ "decision" | translate }}</label>
+                <input type="text" class="form-control" [(ngModel)]="histo.decision" name="" id="">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="form-group">
+                <label>{{ "chargedossier" | translate }}</label>
+                <input type="text" class="form-control" [(ngModel)]="histo.chargedossier" name="" id="">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>{{ "nomshuissiersavocats" | translate }}</label>
+                    <textarea [(ngModel)]="histo.nomshuissiersavocats" class="form-control" [readonly]="action=='view'"
+                        rows="3" required></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>{{ "chargesaffaire" | translate }}</label>
+                    <textarea [(ngModel)]="histo.chargesaffaire" class="form-control" [readonly]="action=='view'"
+                        rows="3" required></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>{{ "momsavocatspartieadverse" | translate }}</label>
+                    <textarea [(ngModel)]="histo.momsavocatspartieadverse" class="form-control"
+                        [readonly]="action=='view'" rows="3" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 1%;">
+            <div class="form-group">
+                <label>{{ "etatprocedure" | translate }}</label>
+                <input type="text" class="form-control" [(ngModel)]="histo.etatprocedure" name="" id="">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>{{ "nomjugesdecision" | translate }}</label>
+                    <textarea [(ngModel)]="histo.nomjugesdecision" class="form-control" [readonly]="action=='view'"
+                        rows="3" required></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="form-group">
+                <label>{{ "avisaudience" | translate }}</label>
+                <input type="text" class="form-control" [(ngModel)]="histo.avisaudience" name="" id="">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>{{ "demanderequierant" | translate }}</label>
+                    <textarea [(ngModel)]="histo.demanderequierant" class="form-control" [readonly]="action=='view'"
+                        rows="3" required></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="row justify-content-center">
+            <button class="pure-material-button-contained bg-secondary" (click)="closeStatutList()">
+                <i class='bx bxs-minus-circle icon-btn'></i>&nbsp;
+                <span>{{ "annuler" | translate }}</span>
+            </button>&nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-primary" (click)="saveHisto()"><i class="pi pi-save"></i>
+                &nbsp;<span>{{ "sauvegarder" | translate }}</span>
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="parametreDialog" [modal]="true" [style]="{ width: '800px' }" [baseZIndex]="10000"
+    [draggable]="true" [resizable]="true" [closable]="false">
+    <ng-template pTemplate="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col d-flex justify-content-start">
+                    <img src="assets/icons/parametres.png" style="height: 30px; width:30px;"
+                        class="img-responsive mon-icon" />&nbsp;<h5>{{ 'parametres' | translate }}</h5>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div class="modal-body">
+        <div class="row" style="margin-top: 1%;">
+            <p-tabView styleClass="tabview-custom">
+                <p-tabPanel header="{{ 'typeDocument' | translate }}" *ngIf="habilitation('DU0102')">
+                    <ng-template pTemplate="header">
+                        <img src="assets/icons/typedoc.png" style="height: 25px; width:25px;"
+                            class="img-responsive mon-icon" />&nbsp;&nbsp;
+                        <span class="text-small">{{ "typeDocument" | translate }}</span>
+                    </ng-template>
+                    <div class="row mb-2">
+                        <p-table #listForm [value]="typeDocuments" [globalFilterFields]="['libelleFr']"
+                            [rowHover]="true" [rows]="10" [paginator]="false"
+                            styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+                            [showCurrentPageReport]="true" [(selection)]="selectedTypeDocument" [rowHover]="true"
+                            dataKey="typedocumentID">
+                            <ng-template pTemplate="header">
+                                <tr class="texte">
+                                    <th colspan="1" style="width: 5%; text-align: center"> {{ "num" | translate }}</th>
+                                    <th colspan="1" style="width: 5%"> {{ "Couleur" | translate }}</th>
+                                    <th colspan="1" style="width: 25%"> {{ "LibelleFr" | translate }}</th>
+                                    <th colspan="1" style="width: 50%"> {{ "Description" | translate }}</th>
+                                    <th colspan="1" style="width: 15%; text-align: center;">
+                                        <img  *ngIf="habilitation('DU010201')" (click)="createType()" pTooltip="{{ 'newTypeDoc' | translate }}"
+                                            tooltipPosition="top" src="assets/icons/addelement.png"
+                                            class="img-responsive icon-action" />
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-typeDoc let-i="rowIndex">
+                                <tr class="texte">
+                                    <td colspan="1" style="text-align: center" class="text-primary">{{ i + 1 }}</td>
+                                    <td [style]="{'background-color':typeDoc.couleur}" colspan="1" class="text-center">
+                                    </td>
+                                    <td colspan="1">{{ typeDoc.libelleFr }}</td>
+                                    <td colspan="1">{{ typeDoc.description }}</td>
+
+                                    <td class="text-right">
+                                        <img *ngIf="habilitation('DU010202')" (click)="getType(typeDoc, 'edit')" pTooltip="{{ 'modifier' | translate }}"
+                                            tooltipPosition="top" src="assets/icons/pencil.png"
+                                            class="img-responsive icon-action" />&nbsp;&nbsp;
+                                        <img *ngIf="habilitation('DU010204')" (click)="deleteType('delTypeDoc', typeDoc)"
+                                            pTooltip="{{ 'supprimer' | translate }}" tooltipPosition="left"
+                                            src="assets/icons/remove.png" class="img-responsive icon-action" />
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="{{ 'statutDocument' | translate }}"  *ngIf="habilitation('DU0103')">
+                    <ng-template pTemplate="header">
+                        <img src="assets/icons/statutDocument.png" style="height: 25px; width:25px;"
+                            class="img-responsive mon-icon" />&nbsp;&nbsp;
+                        <span class="text-small">{{ "statutDocument" | translate }}</span>
+                    </ng-template>
+                    <div class="row mb-2">
+                        <p-table #cd [value]="statutDocuments" [globalFilterFields]="['libelleFr']" [rowHover]="true"
+                            [rows]="10" [paginator]="false" styleClass="p-datatable-sm p-datatable-gridlines"
+                            [rowHover]="true" [showCurrentPageReport]="true" [(selection)]="selectedTypeDocument"
+                            [rowHover]="true" dataKey="typedocumentID">
+                            <ng-template pTemplate="header">
+                                <tr class="texte">
+                                    <th colspan="1" style="width: 5%; text-align: center"> {{ "num" | translate }}</th>
+                                    <th colspan="1" style="width: 5%"> {{ "Couleur" | translate }}</th>
+                                    <th colspan="1" style="width: 25%"> {{ "LibelleFr" | translate }}</th>
+                                    <th colspan="1" style="width: 50%"> {{ "Description" | translate }}</th>
+                                    <th colspan="1" style="width: 15%; text-align: center;"><img
+                                            (click)="createStatut()" *ngIf="habilitation('DU010301')"  pTooltip="{{ 'newStatutDoc' | translate }}"
+                                            tooltipPosition="top" src="assets/icons/addelement.png"
+                                            class="img-responsive icon-action" /></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-typeDoc let-i="rowIndex">
+                                <tr class="texte">
+                                    <td colspan="1" style="text-align: center" class="text-primary">{{ i + 1 }}</td>
+                                    <td [style]="{'background-color':typeDoc.couleur}" colspan="1" class="text-center">
+                                    </td>
+                                    <td colspan="1">{{ typeDoc.libelleFr }}</td>
+                                    <td colspan="1">{{ typeDoc.description }}</td>
+
+                                    <td class="text-right">
+                                        <img *ngIf="habilitation('DU010302')" (click)="getStat(typeDoc, 'edit')" pTooltip="{{ 'modifier' | translate }}"
+                                            tooltipPosition="top" src="assets/icons/pencil.png"
+                                            class="img-responsive icon-action" />&nbsp;&nbsp;
+                                        <img *ngIf="habilitation('DU010304')" (click)="deleteStatut('delStatutDoc', typeDoc)"
+                                            pTooltip="{{ 'supprimer' | translate }}" tooltipPosition="left"
+                                            src="assets/icons/remove.png" class="img-responsive icon-action" />
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="row justify-content-center">
+            <button class="pure-material-button-contained bg-secondary" (click)="parametreDialog = false">
+                <i class='bx bxs-minus-circle icon-btn'></i>&nbsp;
+                <span>{{ "Fermer" | translate }}</span>
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p-dialog [(visible)]="typeDialog" [modal]="true" [style]="{ width: '600px' }" [baseZIndex]="10000" [draggable]="true"
+    [resizable]="true" [closable]="false">
+    <ng-template pTemplate="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col d-flex justify-content-start">
+                    <img src="assets/images/logo.png" style="height: 30px; width:30px;"
+                        class="img-responsive mon-icon" />&nbsp;<h5>{{ actionType+'TypeDocument' | translate }}</h5>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div class="modal-body">
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="brise-input">
+                    <input [(ngModel)]="typeDocument.libelleFr" [readonly]="action=='view'" type="text" name="text"
+                        required>
+                    <label *ngIf="action!='view'">{{ "LibelleFr" | translate }}&nbsp;<span
+                            class="text-danger">*</span></label>
+                    <span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="brise-input">
+                    <input [(ngModel)]="typeDocument.libelleUs" [readonly]="action=='view'" type="text" name="text"
+                        required>
+                    <label *ngIf="action!='view'">{{ "LibelleUs" | translate }}&nbsp;<span
+                            class="text-danger">*</span></label>
+                    <span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>{{ "colorType" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                    <input type="color" class="form-control" [(ngModel)]="typeDocument.couleur" name="" id="">
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>{{ "Description" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                    <textarea [(ngModel)]="typeDocument.description" class="form-control" [readonly]="action=='view'"
+                        rows="3" required></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="row justify-content-center">
+            <button class="pure-material-button-contained bg-secondary" (click)="closeType()">
+                <i class='bx bxs-minus-circle icon-btn'></i>&nbsp;
+                <span>{{ "annuler" | translate }}</span>
+            </button>&nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-primary" (click)="saveType(typeDocument)"><i
+                    class="pi pi-save"></i>
+                &nbsp;<span>{{ "sauvegarder" | translate }}</span>
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="statusUpdateDialog" [modal]="true" [style]="{ width: '600px' }" [baseZIndex]="10000"
+    [draggable]="true" [resizable]="true" [closable]="false">
+    <ng-template pTemplate="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col d-flex justify-content-start">
+                    <img src="assets/images/logo.png" style="height: 30px; width:30px;"
+                        class="img-responsive mon-icon" />&nbsp;<h5>{{ actionType+'StatutDocument' | translate }}</h5>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div class="modal-body">
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="brise-input">
+                    <input [(ngModel)]="statutDocument.libelleFr" [readonly]="action=='view'" type="text" name="text"
+                        required>
+                    <label *ngIf="action!='view'">{{ "LibelleFr" | translate }}&nbsp;<span
+                            class="text-danger">*</span></label>
+                    <span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="brise-input">
+                    <input [(ngModel)]="statutDocument.libelleUs" [readonly]="action=='view'" type="text" name="text"
+                        required>
+                    <label *ngIf="action!='view'">{{ "LibelleUs" | translate }}&nbsp;<span
+                            class="text-danger">*</span></label>
+                    <span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>{{ "colorStatut" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                    <input type="color" class="form-control" [(ngModel)]="statutDocument.couleur" name="" id="">
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>{{ "Description" | translate }}&nbsp;<span class="text-danger">*</span></label>
+                    <textarea [(ngModel)]="statutDocument.description" class="form-control" [readonly]="action=='view'"
+                        rows="3" required></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="row justify-content-center">
+            <button class="pure-material-button-contained bg-secondary" (click)="statusUpdateDialog = false">
+                <i class='bx bxs-minus-circle icon-btn'></i>&nbsp;
+                <span>{{ "annuler" | translate }}</span>
+            </button>&nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-primary" (click)="saveStatut(statutDocument)"><i
+                    class="pi pi-save"></i>
+                &nbsp;<span>{{ "sauvegarder" | translate }}</span>
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<div class="progress-spinner" *ngIf="spinner==true" style="z-index: 9999">
+    <div class="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="d-flex justify-content-center affiche">
+        <h6 style="color: rgb(255, 255, 255); z-index: 999">Chargement...</h6>
+    </div>
+</div>

@@ -1,0 +1,186 @@
+
+
+* {
+  transition: 0.5s;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.h-100 {
+  height: 15vh !important;
+  background-color: transparent;
+}
+
+.align-middle {
+  position: relative;
+  top: 0%;
+  transform: translateY(-3%);
+}
+.br {
+  background: red;
+}
+.column {
+  margin-top: 3rem;
+  padding-left: 3rem;
+  background-color: transparent;
+
+  &:hover {
+    padding-left: 0;
+    cursor: pointer;
+    .macard .txt {
+      margin-left: 1rem;
+
+      h6,
+      p {
+        color: rgba(255, 255, 255, 1);
+        opacity: 1;
+      }
+    }
+
+    a {
+      color: rgba(255, 255, 255, 1);
+
+      &:after {
+        width: 10%;
+      }
+    }
+    h6 {
+      color: rgb(149, 146, 146);
+      opacity: 1;
+      text-shadow: 2px 4px 4px rgba(46, 120, 173, 0.28);
+      &:after {
+        width: 10%;
+      }
+    }
+  }
+}
+h6{
+    text-transform: uppercase;
+    color: #fff;
+}
+.macard {
+  border-radius: 8px;
+  min-height: 100px;
+  margin: 0;
+  padding: 1.2rem 1.2rem;
+  border: none;
+  text-align: center;
+  color: rgb(250, 250, 250);
+  letter-spacing: 0.05rem;
+  font-family:  Arial, Helvetica, sans-serif;
+  box-shadow: 0 0 21px rgba(0, 0, 0, 0.27);
+
+  .txt {
+    //margin-left: -3rem;
+    z-index: 1;
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+
+    p {
+      //font-size: .7rem;
+      font-size: 14px;
+      font-family:  Arial, Helvetica, sans-serif;
+      letter-spacing: 0rem;
+      margin-top: 33px;
+      opacity: 1;
+      color: rgba(255, 255, 255, 1);
+    }
+  }
+
+  a {
+    z-index: 3;
+    font-size: 0.7rem;
+    color: rgba(0, 0, 0, 1);
+    margin-left: 1rem;
+    position: relative;
+    // bottom: -.5rem;
+    text-transform: uppercase;
+
+    &:after {
+      content: "";
+      display: inline-block;
+      height: 0.5em;
+      width: 0;
+      margin-right: -100%;
+      margin-left: 10px;
+      border-top: 1px solid rgb(161, 46, 46);
+      //border-top: 1px solid rgba(255, 255, 255, 1);
+      transition: 0.5s;
+    }
+  }
+
+  .ico-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  i {
+    position: relative;
+    right: -50%;
+    top: 60%;
+    font-size: 12rem;
+    line-height: 0;
+    opacity: 0.2;
+    color: rgba(255, 255, 255, 1);
+    z-index: 0;
+  }
+}
+
+.grand-menu-item:hover {
+  cursor: pointer;
+}
+
+.ele {
+  margin-top: 1%;
+}
+body { /* peut fonctionner sur n'importe quel sélecteur */
+  scrollbar-width: none;
+  scrollbar-color: #346abf white; /* ascensseur bleu sur fond blanc */
+}
+.corp {
+  margin: 0;
+  padding: 0;
+  height: 91.3vh; /* 100% de la hauteur de la fenêtre */
+  background-image: url("../../assets/images/backi.jpg"); /* Remplacez 'votre-image.jpg' par le chemin de votre image */
+  background-size: cover; /* Redimensionne l'image pour couvrir l'ensemble du fond */
+  background-position: center; /* Centre l'image */
+  background-repeat: no-repeat; /* Empêche la répétition de l'image */
+}
+
+.icconf{
+  font-size: 32px;
+}
+.smgOnlineOk{
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  color: #16729c;
+}
+
+
+
+.ronNav{
+  background-color: rgba(220, 224, 223, 0.893);
+  line-height: 2.6;
+}
+
+.box {
+  background-color: rgba(6, 6, 6, 0.39);
+  backdrop-filter: blur(10px);
+}
+
+.box:hover{
+  cursor: move;
+}
+body {
+  overflow: hidden;
+}

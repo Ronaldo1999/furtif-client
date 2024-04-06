@@ -1,0 +1,831 @@
+<p-contextMenu #cm1 [model]="itemsContextTitre"></p-contextMenu>
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <i class="item-page"><img src="assets/icons/actions/caneva.png" alt=""
+                    class="img-responsive img-circle item-icon" /></i>&nbsp;&nbsp;
+            <span class="titrePage">{{ "caneva" | translate }}</span>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <p-splitButton *ngIf="selectedCanevas.length" icon="pi pi-cog" [model]="items" [style]="{height:'35px'}"
+                styleClass="p-button-raised p-button-secondary mr-2 mb-2"></p-splitButton>
+            &nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-primary" (click)="newCaneva()"><i class="fa fa-plus"></i>
+                &nbsp; <span>{{
+                    "Ajouter" | translate }}</span></button>&nbsp;&nbsp;
+            <button class="pure-material-button-contained bg-secondary" (click)="rechercher()"><i
+                    class="fa fa-refresh"></i> &nbsp; <span>{{
+                    "actualiser" | translate }}</span></button>&nbsp;&nbsp;
+            <button [disabled]="!selectedCanevas || !selectedCanevas.length" (click)="delete('delCanevaList')"
+                class="pure-material-button-contained bg-danger"><i class="fa fa-trash"></i> &nbsp; <span>{{
+                    "Supprimer" | translate }}</span></button>&nbsp;&nbsp;
+
+        </ng-template>
+    </p-toolbar>
+    <div class="row mb-2" style="padding-left: 2%;padding-right: 2%; margin-top: -1%;">
+        <div class="brise-input">
+            <input (input)="dt.filterGlobal($any($event.target).value, 'contains')" type="text" name="text" required>
+            <label><i class="pi pi-search"></i> {{ "research" | translate }}</label>
+            <span class="line"></span>
+        </div>
+    </div>
+    <p-scrollPanel [style]="{ width: '100%', height: '33vw' }" styleClass="custombar1">
+        <p-table #dt [value]="canevas" [rows]="8" styleClass="p-datatable-sm" [paginator]="true"
+            currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} éléments"
+            [showCurrentPageReport]="true" [globalFilterFields]="[ 'nom','email', 'contact', 'fax']"
+            [(selection)]="selectedCanevas" [rowHover]="true" dataKey="canevaID">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3%; text-align: center">N°</th>
+                    <th style="width: 3rem"> <p-tableHeaderCheckbox></p-tableHeaderCheckbox> </th>
+                    <th colspan="1" style="width: 65%;"> Libellé </th>
+                    <th colspan="1" style="width: 15%;"> Date création </th>
+                    <th style="width: 12%" class="text-center"> <i class="pi pi-cog"></i> </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-caneva let-i="rowIndex">
+                <tr>
+                    <td class="text-center">{{i+1}}</td>
+                    <td> <p-tableCheckbox [value]="caneva"></p-tableCheckbox> </td>
+                    <td colspan="1">{{caneva.libelleFr}}</td>
+                    <td colspan="1">{{caneva.creation_date | date:'longDate'}}</td>
+                    <td class="text-center">
+                        <img (click)="edit(caneva)" pTooltip="{{ 'modifier' | translate }}" tooltipPosition="top"
+                            src="assets/icons/pencil.png" class="img-responsive icon-action" />&nbsp;&nbsp;
+                        <img (click)="leveToi(caneva)" pTooltip="{{ 'consulter' | translate }}"
+                            tooltipPosition="top" src="assets/icons/eye.png"
+                            class="img-responsive icon-action" />&nbsp;&nbsp;
+                        <img (click)="delete('delCaneva', caneva)" pTooltip="{{ 'supprimer' | translate }}"
+                            tooltipPosition="left" src="assets/icons/remove.png" class="img-responsive icon-action" />
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-scrollPanel>
+</div>
+
+<!-- Gestion des caneva -->
+<p-dialog [header]="libelle" [(visible)]="modalNewCan" [modal]="true" [style]="{width:'40vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Français</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleFr"
+                                [(ngModel)]="caneva.libelleFr" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="libelleUs" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libelle Anglais</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleUs"
+                                [(ngModel)]="caneva.libelleUs" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="description" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Description</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <textarea rows="5" type="text" class="form-control form-control-sm" name="description"
+                                [(ngModel)]="caneva.description" required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button icon="pi pi-times" (click)="modalNewCan=false" pButton pRipple type="button" label="Annuler"
+            class="p-button-secondary p-button-text"></button>
+        <button icon="pi pi-save" *ngIf="action=='new' || action=='edit'" (click)="save()" pButton pRipple type="button"
+            label="Sauvegarder" class="p-button-success p-button-text"></button>
+    </ng-template>
+
+</p-dialog>
+
+<!-- Dialog de confirmation de suppression -->
+<p-dialog header="Suppression" [(visible)]="dialogDelete" [modal]="true" [style]="{width: '40vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700; color: red;">Êtes-vous
+                    certain de vouloir supprimer ce model de caneva ?</label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="dialogDelete=false" label="Annuler" styleClass="p-button-text">
+        </p-button>
+        <p-button icon="pi pi-trash" style="color:red" (click)="deleteCan(caneva)" label="Supprimer"
+            styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+<p-dialog header="Suppression" [(visible)]="dialogDeleteCaneva" [modal]="true" [style]="{width: '40vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700; color: red;">Êtes-vous
+                    certain de vouloir supprimer cet element de caneva ?</label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="dialogDeleteCaneva=false" label="Annuler" styleClass="p-button-text">
+        </p-button>
+        <p-button icon="pi pi-trash" style="color:red" (click)="deleteCsCaneva(titre)" label="Supprimer"
+            styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<!-- Dialog de confirmation d'action -->
+<p-dialog [(visible)]="dialogConfirmAction" [header]="ConfirmationLibelle" [modal]="true" [style]="{width: '30vw'}"
+    [draggable]="true" [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <label for="" class="text-center" style="font-size: 20px; font-weight: 700;"
+                    [style.color]="color">{{message}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" (click)="dialogConfirmAction=false" label="Ok" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+<!-- Dialog de confirmation d'action -->
+<p-dialog [(visible)]="dialogGesTitre" [header]="'Conception du '+caneva.libelleFr" [modal]="true"
+    [style]="{width: '70vw'}" [draggable]="true" [resizable]="true">
+    <div class="modal-body">
+        <!--  <div class="row">
+            <div class="col-9 d-flex justify-content-center">
+            </div>
+            <div class="col-3 d-flex justify-content-end">
+                <p-button icon="pi pi-times" (click)="dialogGesTitre=false" label="Fermer" styleClass="p-button-text">
+                </p-button>
+            </div>
+        </div>
+        <hr style="margin-bottom: 20px;"> -->
+        <div class="row justify-content-center">
+            <div class="col-md-2 text-left">
+                <p-panel header="OUTILS" [toggleable]="true">
+                    <div class="row">
+                        <!-- (click)="addTitre()" -->
+                        <button icon="pi pi-plus" (click)="addTitre()" pButton pRipple type="button"
+                            label="Ajouter un titre" class="p-button-primary p-button-text"></button>
+                    </div>
+                    <div class="row">
+                        <!-- (click)="addSousTitre()" -->
+                        <button icon="pi pi-plus" (click)="addSousTitre()" pButton pRipple type="button"
+                            label="Ajouter un sous-titre" class="p-button-primary p-button-text"></button>
+                    </div>
+                </p-panel>
+            </div>
+            <div class="col-md-10">
+                <p-panel header="RENDU" [toggleable]="true">
+                    <span>
+                        <p-scrollPanel [style]="{width: '100%', height: '450px'}" styleClass="custombar1">
+                            <p-table [value]="listTitres" #fc [(contextMenuSelection)]="selectedTitre"
+                                [contextMenu]="cm1" styleClass="p-datatable-sm" responsiveLayout="scroll"
+                                [rowHover]="true">
+                                <ng-template pTemplate="body" let-titre let-i="index">
+                                    <ul>
+                                        <li *ngIf="titre.sititre==1" class="cscaneva"
+                                            style="list-style: none; font-weight: 600;">
+                                            <tr [pContextMenuRow]="titre">
+                                                <span class="parent" (mouseover)="changeColor(titre)"
+                                                    (mouseleave)="mouseUp(titre)" [style.color]="titre.color">
+                                                    <span *ngIf="verifyLength(titre.libelleFr)"
+                                                        pTooltip="{{titre.libelleFr}}" tooltipPosition="top">
+                                                        {{defineDescription(titre.libelleFr)}}...
+                                                    </span>
+                                                    <span *ngIf="verifyLength(titre.libelleFr)==false">
+                                                        {{titre.libelleFr}}
+                                                    </span>
+                                                    <span *ngIf="titre.description"> :
+                                                    </span><span>{{titre.description}}</span>
+                                                    &nbsp;&nbsp;
+                                                    <span [style.visibility]="titre.visibilte" class="acti">
+                                                        <button pButton pRipple icon="pi pi-fw pi-plus"
+                                                            (click)="addSubTitle(titre)" tooltipPosition="top"
+                                                            pTooltip="Ajouter un sous-titre"
+                                                            class="p-button-rounded p-button-outlined p-button-success"></button>&nbsp;&nbsp;
+                                                        <button pButton pRipple icon="pi pi-pencil"
+                                                            (click)="updateTitre(titre)" tooltipPosition="top"
+                                                            pTooltip="Modifier le titre"
+                                                            class="p-button-rounded p-button-outlined p-button-primary"></button>&nbsp;&nbsp;
+                                                        <button pButton pRipple icon="pi pi-fw pi-arrow-right"
+                                                            tooltipPosition="top" pTooltip="Deplacer le titre"
+                                                            (click)="deplacementCaneva(titre)"
+                                                            class="p-button-rounded p-button-outlined p-button-secondary"></button>&nbsp;&nbsp;
+                                                        <button pButton pRipple icon="pi pi-fw pi-trash"
+                                                            tooltipPosition="top" pTooltip="Supprimer le titre"
+                                                            (click)="deleteTitre(titre)"
+                                                            class="p-button-rounded p-button-outlined p-button-danger"></button>
+
+                                                    </span>
+                                                </span>
+
+                                            </tr>
+                                            <span *ngFor="let stitre of listTitres">
+                                                <ul>
+                                                    <li *ngIf="stitre.parent==titre.cscanevaID && stitre.sititre==0"
+                                                        class="cscaneva" style="list-style: none; font-weight: 600;">
+                                                        <tr [pContextMenuRow]="stitre">
+                                                            <span (mouseover)="changeColor(stitre)"
+                                                                (mouseleave)="mouseUp(stitre)"
+                                                                [style.color]="stitre.color">
+                                                                <span>{{stitre.numero}}<span *ngIf="stitre.numero">
+                                                                        -
+                                                                    </span></span>
+                                                                <span *ngIf="verifyLength(stitre.libelleFr)"
+                                                                    pTooltip="{{stitre.libelleFr}}"
+                                                                    tooltipPosition="top">
+                                                                    {{defineDescription(stitre.libelleFr)}}...
+                                                                </span>
+                                                                <span *ngIf="verifyLength(stitre.libelleFr)==false">
+                                                                    {{stitre.libelleFr}}
+                                                                </span>
+                                                                <span *ngIf="stitre.description"> :
+                                                                </span><span>{{stitre.description}}</span>
+                                                                &nbsp;&nbsp;
+                                                                <span [style.visibility]="stitre.visibilte"
+                                                                    class="acti">
+                                                                    <button pButton pRipple icon="pi pi-fw pi-plus"
+                                                                        (click)="addSubTitle(stitre)"
+                                                                        tooltipPosition="top"
+                                                                        pTooltip="Ajouter un sous-titre"
+                                                                        class="p-button-rounded p-button-outlined p-button-success"></button>&nbsp;&nbsp;
+                                                                    <button pButton pRipple icon="pi pi-pencil"
+                                                                        (click)="updateTitre(stitre)"
+                                                                        tooltipPosition="top"
+                                                                        pTooltip="Modifier le titre"
+                                                                        class="p-button-rounded p-button-outlined p-button-primary"></button>&nbsp;&nbsp;
+                                                                    <button pButton pRipple
+                                                                        icon="pi pi-fw pi-arrow-right"
+                                                                        tooltipPosition="top"
+                                                                        pTooltip="Deplacer le titre"
+                                                                        (click)="deplacementCaneva(stitre)"
+                                                                        class="p-button-rounded p-button-outlined p-button-secondary"></button>&nbsp;&nbsp;
+                                                                    <button pButton pRipple icon="pi pi-fw pi-trash"
+                                                                        tooltipPosition="top"
+                                                                        pTooltip="Supprimer le titre"
+                                                                        (click)="deleteTitre(stitre)"
+                                                                        class="p-button-rounded p-button-outlined p-button-danger"></button>
+
+                                                                </span>
+                                                            </span>
+                                                        </tr>
+                                                        <span *ngFor="let sstitre of listTitres">
+                                                            <ul>
+                                                                <li *ngIf="sstitre.parent==stitre.cscanevaID && sstitre.sititre==0"
+                                                                    class="cscaneva"
+                                                                    style="list-style: none; font-weight: 600;">
+                                                                    <tr [pContextMenuRow]="sstitre">
+                                                                        <span (mouseover)="changeColor(sstitre)"
+                                                                            (mouseleave)="mouseUp(sstitre)"
+                                                                            [style.color]="sstitre.color">
+                                                                            <span>{{sstitre.numero}}<span
+                                                                                    *ngIf="sstitre.numero"> -
+                                                                                </span></span>
+                                                                            <span
+                                                                                *ngIf="verifyLength(sstitre.libelleFr)"
+                                                                                pTooltip="{{sstitre.libelleFr}}"
+                                                                                tooltipPosition="top">
+                                                                                {{defineDescription(sstitre.libelleFr)}}...
+                                                                            </span>
+                                                                            <span
+                                                                                *ngIf="verifyLength(sstitre.libelleFr)==false">
+                                                                                {{sstitre.libelleFr}}
+                                                                            </span>
+                                                                            <span *ngIf="sstitre.description"> :
+                                                                            </span><span>{{sstitre.description}}</span>
+                                                                            &nbsp;&nbsp;
+                                                                            <span [style.visibility]="sstitre.visibilte"
+                                                                                class="acti">
+                                                                                <button pButton pRipple
+                                                                                    icon="pi pi-fw pi-plus"
+                                                                                    (click)="addSubTitle(sstitre)"
+                                                                                    tooltipPosition="top"
+                                                                                    pTooltip="Ajouter un sous-titre"
+                                                                                    class="p-button-rounded p-button-outlined p-button-success"></button>&nbsp;&nbsp;
+                                                                                <button pButton pRipple
+                                                                                    icon="pi pi-pencil"
+                                                                                    (click)="updateTitre(sstitre)"
+                                                                                    tooltipPosition="top"
+                                                                                    pTooltip="Modifier le titre"
+                                                                                    class="p-button-rounded p-button-outlined p-button-primary"></button>&nbsp;&nbsp;
+                                                                                <button pButton pRipple
+                                                                                    icon="pi pi-fw pi-arrow-right"
+                                                                                    tooltipPosition="top"
+                                                                                    pTooltip="Deplacer le titre"
+                                                                                    (click)="deplacementCaneva(sstitre)"
+                                                                                    class="p-button-rounded p-button-outlined p-button-secondary"></button>&nbsp;&nbsp;
+                                                                                <button pButton pRipple
+                                                                                    icon="pi pi-fw pi-trash"
+                                                                                    tooltipPosition="top"
+                                                                                    pTooltip="Supprimer le titre"
+                                                                                    (click)="deleteTitre(sstitre)"
+                                                                                    class="p-button-rounded p-button-outlined p-button-danger"></button>
+                                                                            </span>
+                                                                        </span>
+                                                                    </tr>
+                                                                    <span *ngFor="let ssstitre of listTitres">
+                                                                        <ul>
+                                                                            <li *ngIf="ssstitre.parent==sstitre.cscanevaID && ssstitre.sititre==0"
+                                                                                class="cscaneva"
+                                                                                style="list-style: none; font-weight: 600;">
+                                                                                <tr [pContextMenuRow]="ssstitre">
+                                                                                    <span
+                                                                                        (mouseover)="changeColor(ssstitre)"
+                                                                                        (mouseleave)="mouseUp(ssstitre)"
+                                                                                        [style.color]="ssstitre.color">
+                                                                                        <span>{{ssstitre.numero}}<span
+                                                                                                *ngIf="ssstitre.numero">
+                                                                                                -
+                                                                                            </span></span>
+                                                                                        <span
+                                                                                            *ngIf="verifyLength(ssstitre.libelleFr)"
+                                                                                            pTooltip="{{ssstitre.libelleFr}}"
+                                                                                            tooltipPosition="top">
+                                                                                            {{defineDescription(ssstitre.libelleFr)}}...
+                                                                                        </span>
+                                                                                        <span
+                                                                                            *ngIf="verifyLength(ssstitre.libelleFr)==false">
+                                                                                            {{ssstitre.libelleFr}}
+                                                                                        </span>
+                                                                                        <span
+                                                                                            *ngIf="ssstitre.description">
+                                                                                            :
+                                                                                        </span><span>{{ssstitre.description}}</span>
+                                                                                        &nbsp;&nbsp;
+                                                                                        <span
+                                                                                            [style.visibility]="ssstitre.visibilte"
+                                                                                            class="acti">
+                                                                                            <button pButton pRipple
+                                                                                                icon="pi pi-fw pi-plus"
+                                                                                                (click)="addSubTitle(ssstitre)"
+                                                                                                tooltipPosition="top"
+                                                                                                pTooltip="Ajouter un sous-titre"
+                                                                                                class="p-button-rounded p-button-outlined p-button-success"></button>&nbsp;&nbsp;
+                                                                                            <button pButton pRipple
+                                                                                                icon="pi pi-pencil"
+                                                                                                (click)="updateTitre(ssstitre)"
+                                                                                                tooltipPosition="top"
+                                                                                                pTooltip="Modifier le titre"
+                                                                                                class="p-button-rounded p-button-outlined p-button-primary"></button>&nbsp;&nbsp;
+                                                                                            <button pButton pRipple
+                                                                                                icon="pi pi-fw pi-arrow-right"
+                                                                                                tooltipPosition="top"
+                                                                                                pTooltip="Deplacer le titre"
+                                                                                                (click)="deplacementCaneva(ssstitre)"
+                                                                                                class="p-button-rounded p-button-outlined p-button-secondary"></button>&nbsp;&nbsp;
+                                                                                            <button pButton pRipple
+                                                                                                icon="pi pi-fw pi-trash"
+                                                                                                tooltipPosition="top"
+                                                                                                pTooltip="Supprimer le titre"
+                                                                                                (click)="deleteTitre(ssstitre)"
+                                                                                                class="p-button-rounded p-button-outlined p-button-danger"></button>
+                                                                                        </span>
+                                                                                    </span>
+                                                                                </tr>
+                                                                                <span
+                                                                                    *ngFor="let lfstitre of listTitres">
+                                                                                    <ul>
+                                                                                        <li *ngIf="lfstitre.parent==ssstitre.cscanevaID && lfstitre.sititre==0"
+                                                                                            class="cscaneva"
+                                                                                            style="list-style: none; font-weight: 600;">
+                                                                                            <tr
+                                                                                                [pContextMenuRow]="lfstitre">
+                                                                                                <span
+                                                                                                    (mouseover)="changeColor(lfstitre)"
+                                                                                                    (mouseleave)="mouseUp(lfstitre)"
+                                                                                                    [style.color]="lfstitre.color">
+                                                                                                    <span>{{lfstitre.numero}}<span
+                                                                                                            *ngIf="lfstitre.numero">
+                                                                                                            -
+                                                                                                        </span></span>
+                                                                                                    <span
+                                                                                                        *ngIf="verifyLength(lfstitre.libelleFr)"
+                                                                                                        pTooltip="{{lfstitre.libelleFr}}"
+                                                                                                        tooltipPosition="top">
+                                                                                                        {{defineDescription(lfstitre.libelleFr)}}...
+                                                                                                    </span>
+                                                                                                    <span
+                                                                                                        *ngIf="verifyLength(lfstitre.libelleFr)==false">
+                                                                                                        {{lfstitre.libelleFr}}
+                                                                                                    </span>
+                                                                                                    <span
+                                                                                                        *ngIf="lfstitre.description">
+                                                                                                        :
+                                                                                                    </span><span>{{lfstitre.description}}</span>
+                                                                                                    &nbsp;&nbsp;
+                                                                                                    <span
+                                                                                                        [style.visibility]="lfstitre.visibilte"
+                                                                                                        class="acti">
+                                                                                                        <button pButton
+                                                                                                            pRipple
+                                                                                                            icon="pi pi-fw pi-plus"
+                                                                                                            (click)="addSubTitle(lfstitre)"
+                                                                                                            tooltipPosition="top"
+                                                                                                            pTooltip="Ajouter un sous-titre"
+                                                                                                            class="p-button-rounded p-button-outlined p-button-success"></button>&nbsp;&nbsp;
+                                                                                                        <button pButton
+                                                                                                            pRipple
+                                                                                                            icon="pi pi-pencil"
+                                                                                                            (click)="updateTitre(lfstitre)"
+                                                                                                            tooltipPosition="top"
+                                                                                                            pTooltip="Modifier le titre"
+                                                                                                            class="p-button-rounded p-button-outlined p-button-primary"></button>&nbsp;&nbsp;
+                                                                                                        <button pButton
+                                                                                                            pRipple
+                                                                                                            icon="pi pi-fw pi-arrow-right"
+                                                                                                            tooltipPosition="top"
+                                                                                                            pTooltip="Deplacer le titre"
+                                                                                                            (click)="deplacementCaneva(lfstitre)"
+                                                                                                            class="p-button-rounded p-button-outlined p-button-secondary"></button>&nbsp;&nbsp;
+                                                                                                        <button pButton
+                                                                                                            pRipple
+                                                                                                            icon="pi pi-fw pi-trash"
+                                                                                                            tooltipPosition="top"
+                                                                                                            pTooltip="Supprimer le titre"
+                                                                                                            (click)="deleteTitre(lfstitre)"
+                                                                                                            class="p-button-rounded p-button-outlined p-button-danger"></button>
+                                                                                                    </span>
+                                                                                                </span>
+                                                                                            </tr>
+                                                                                            <span
+                                                                                                *ngFor="let lSstitre of listTitres">
+                                                                                                <ul>
+                                                                                                    <li *ngIf="lSstitre.parent==lfstitre.cscanevaID && lSstitre.sititre==0"
+                                                                                                        class="cscaneva"
+                                                                                                        style="list-style: none; font-weight: 600;">
+                                                                                                        <tr
+                                                                                                            [pContextMenuRow]="lSstitre">
+                                                                                                            <span
+                                                                                                                (mouseover)="changeColor(lSstitre)"
+                                                                                                                (mouseleave)="mouseUp(lSstitre)"
+                                                                                                                [style.color]="lSstitre.color">
+                                                                                                                <span>{{lSstitre.numero}}<span
+                                                                                                                        *ngIf="lSstitre.numero">
+                                                                                                                        -
+                                                                                                                    </span></span>
+                                                                                                                <span
+                                                                                                                    *ngIf="verifyLength(lSstitre.libelleFr)"
+                                                                                                                    pTooltip="{{lSstitre.libelleFr}}"
+                                                                                                                    tooltipPosition="top">
+                                                                                                                    {{defineDescription(lSstitre.libelleFr)}}...
+                                                                                                                </span>
+                                                                                                                <span
+                                                                                                                    *ngIf="verifyLength(lSstitre.libelleFr)==false">
+                                                                                                                    {{lSstitre.libelleFr}}
+                                                                                                                </span>
+                                                                                                                <span
+                                                                                                                    *ngIf="lSstitre.description">
+                                                                                                                    :
+                                                                                                                </span><span>{{lSstitre.description}}</span>
+                                                                                                                &nbsp;&nbsp;
+                                                                                                                <span
+                                                                                                                    [style.visibility]="lSstitre.visibilte"
+                                                                                                                    class="acti">
+                                                                                                                    <button
+                                                                                                                        pButton
+                                                                                                                        pRipple
+                                                                                                                        icon="pi pi-fw pi-plus"
+                                                                                                                        (click)="addSubTitle(lSstitre)"
+                                                                                                                        tooltipPosition="top"
+                                                                                                                        pTooltip="Ajouter un sous-titre"
+                                                                                                                        class="p-button-rounded p-button-outlined p-button-success"></button>&nbsp;&nbsp;
+                                                                                                                    <button
+                                                                                                                        pButton
+                                                                                                                        pRipple
+                                                                                                                        icon="pi pi-pencil"
+                                                                                                                        (click)="updateTitre(lSstitre)"
+                                                                                                                        tooltipPosition="top"
+                                                                                                                        pTooltip="Modifier le titre"
+                                                                                                                        class="p-button-rounded p-button-outlined p-button-primary"></button>&nbsp;&nbsp;
+                                                                                                                    <button
+                                                                                                                        pButton
+                                                                                                                        pRipple
+                                                                                                                        icon="pi pi-fw pi-arrow-right"
+                                                                                                                        tooltipPosition="top"
+                                                                                                                        pTooltip="Deplacer le titre"
+                                                                                                                        (click)="deplacementCaneva(lSstitre)"
+                                                                                                                        class="p-button-rounded p-button-outlined p-button-secondary"></button>&nbsp;&nbsp;
+                                                                                                                    <button
+                                                                                                                        pButton
+                                                                                                                        pRipple
+                                                                                                                        icon="pi pi-fw pi-trash"
+                                                                                                                        tooltipPosition="top"
+                                                                                                                        pTooltip="Supprimer le titre"
+                                                                                                                        (click)="deleteTitre(lSstitre)"
+                                                                                                                        class="p-button-rounded p-button-outlined p-button-danger"></button>
+                                                                                                                </span>
+                                                                                                            </span>
+                                                                                                        </tr>
+                                                                                                        <span
+                                                                                                            *ngFor="let l2Sstitre of listTitres">
+                                                                                                            <ul>
+                                                                                                                <li *ngIf="l2Sstitre.parent==lSstitre.cscanevaID && l2Sstitre.sititre==0"
+                                                                                                                    class="cscaneva"
+                                                                                                                    style="list-style: none; font-weight: 600;">
+                                                                                                                    <tr
+                                                                                                                        [pContextMenuRow]="l2Sstitre">
+                                                                                                                        <span
+                                                                                                                            (mouseover)="changeColor(l2Sstitre)"
+                                                                                                                            (mouseleave)="mouseUp(l2Sstitre)"
+                                                                                                                            [style.color]="l2Sstitre.color">
+                                                                                                                            <span>{{l2Sstitre.numero}}<span
+                                                                                                                                    *ngIf="l2Sstitre.numero">
+                                                                                                                                    -
+                                                                                                                                </span></span>
+                                                                                                                            <span
+                                                                                                                                *ngIf="verifyLength(l2Sstitre.libelleFr)"
+                                                                                                                                pTooltip="{{l2Sstitre.libelleFr}}"
+                                                                                                                                tooltipPosition="top">
+                                                                                                                                {{defineDescription(l2Sstitre.libelleFr)}}...
+                                                                                                                            </span>
+                                                                                                                            <span
+                                                                                                                                *ngIf="verifyLength(l2Sstitre.libelleFr)==false">
+                                                                                                                                {{l2Sstitre.libelleFr}}
+                                                                                                                            </span>
+                                                                                                                            <span
+                                                                                                                                *ngIf="l2Sstitre.description">
+                                                                                                                                :
+                                                                                                                            </span><span>{{l2Sstitre.description}}</span>
+                                                                                                                            &nbsp;&nbsp;
+                                                                                                                            <span
+                                                                                                                                [style.visibility]="l2Sstitre.visibilte"
+                                                                                                                                class="acti">
+                                                                                                                                <button
+                                                                                                                                    pButton
+                                                                                                                                    pRipple
+                                                                                                                                    icon="pi pi-fw pi-plus"
+                                                                                                                                    (click)="addSubTitle(l2Sstitre)"
+                                                                                                                                    tooltipPosition="top"
+                                                                                                                                    pTooltip="Ajouter un sous-titre"
+                                                                                                                                    class="p-button-rounded p-button-outlined p-button-success"></button>&nbsp;&nbsp;
+                                                                                                                                <button
+                                                                                                                                    pButton
+                                                                                                                                    pRipple
+                                                                                                                                    icon="pi pi-pencil"
+                                                                                                                                    (click)="updateTitre(l2Sstitre)"
+                                                                                                                                    tooltipPosition="top"
+                                                                                                                                    pTooltip="Modifier le titre"
+                                                                                                                                    class="p-button-rounded p-button-outlined p-button-primary"></button>&nbsp;&nbsp;
+                                                                                                                                <button
+                                                                                                                                    pButton
+                                                                                                                                    pRipple
+                                                                                                                                    icon="pi pi-fw pi-arrow-right"
+                                                                                                                                    tooltipPosition="top"
+                                                                                                                                    pTooltip="Deplacer le titre"
+                                                                                                                                    (click)="deplacementCaneva(l2Sstitre)"
+                                                                                                                                    class="p-button-rounded p-button-outlined p-button-secondary"></button>&nbsp;&nbsp;
+                                                                                                                                <button
+                                                                                                                                    pButton
+                                                                                                                                    pRipple
+                                                                                                                                    icon="pi pi-fw pi-trash"
+                                                                                                                                    tooltipPosition="top"
+                                                                                                                                    pTooltip="Supprimer le titre"
+                                                                                                                                    (click)="deleteTitre(l2Sstitre)"
+                                                                                                                                    class="p-button-rounded p-button-outlined p-button-danger"></button>
+                                                                                                                            </span>
+                                                                                                                        </span>
+                                                                                                                    </tr>
+                                                                                                                    <span
+                                                                                                                        *ngFor="let l3Sstitre of listTitres">
+                                                                                                                        <ul>
+                                                                                                                            <li *ngIf="l3Sstitre.parent==l2Sstitre.cscanevaID && l3Sstitre.sititre==0"
+                                                                                                                                class="cscaneva"
+                                                                                                                                style="list-style: none; font-weight: 600;">
+                                                                                                                                <tr
+                                                                                                                                    [pContextMenuRow]="l3Sstitre">
+                                                                                                                                    <span
+                                                                                                                                        (mouseover)="changeColor(l3Sstitre)"
+                                                                                                                                        (mouseleave)="mouseUp(l3Sstitre)"
+                                                                                                                                        [style.color]="l3Sstitre.color">
+                                                                                                                                        <span>{{l3Sstitre.numero}}<span
+                                                                                                                                                *ngIf="l3Sstitre.numero">
+                                                                                                                                                -
+                                                                                                                                            </span></span>
+                                                                                                                                        <span
+                                                                                                                                            *ngIf="verifyLength(l3Sstitre.libelleFr)"
+                                                                                                                                            pTooltip="{{l3Sstitre.libelleFr}}"
+                                                                                                                                            tooltipPosition="top">
+                                                                                                                                            {{defineDescription(l3Sstitre.libelleFr)}}...
+                                                                                                                                        </span>
+                                                                                                                                        <span
+                                                                                                                                            *ngIf="verifyLength(l3Sstitre.libelleFr)==false">
+                                                                                                                                            {{l3Sstitre.libelleFr}}
+                                                                                                                                        </span>
+                                                                                                                                        <span
+                                                                                                                                            *ngIf="l3Sstitre.description">
+                                                                                                                                            :
+                                                                                                                                        </span><span>{{l3Sstitre.description}}</span>
+                                                                                                                                        &nbsp;&nbsp;
+                                                                                                                                        <span
+                                                                                                                                            [style.visibility]="l3Sstitre.visibilte"
+                                                                                                                                            class="acti">
+                                                                                                                                            <button
+                                                                                                                                                pButton
+                                                                                                                                                pRipple
+                                                                                                                                                icon="pi pi-fw pi-plus"
+                                                                                                                                                (click)="addSubTitle(l3Sstitre)"
+                                                                                                                                                tooltipPosition="top"
+                                                                                                                                                pTooltip="Ajouter un sous-titre"
+                                                                                                                                                class="p-button-rounded p-button-outlined p-button-success"></button>&nbsp;&nbsp;
+                                                                                                                                            <button
+                                                                                                                                                pButton
+                                                                                                                                                pRipple
+                                                                                                                                                icon="pi pi-pencil"
+                                                                                                                                                (click)="updateTitre(l3Sstitre)"
+                                                                                                                                                tooltipPosition="top"
+                                                                                                                                                pTooltip="Modifier le titre"
+                                                                                                                                                class="p-button-rounded p-button-outlined p-button-primary"></button>&nbsp;&nbsp;
+                                                                                                                                            <button
+                                                                                                                                                pButton
+                                                                                                                                                pRipple
+                                                                                                                                                icon="pi pi-fw pi-arrow-right"
+                                                                                                                                                tooltipPosition="top"
+                                                                                                                                                pTooltip="Deplacer le titre"
+                                                                                                                                                (click)="deplacementCaneva(l3Sstitre)"
+                                                                                                                                                class="p-button-rounded p-button-outlined p-button-secondary"></button>&nbsp;&nbsp;
+                                                                                                                                            <button
+                                                                                                                                                pButton
+                                                                                                                                                pRipple
+                                                                                                                                                icon="pi pi-fw pi-trash"
+                                                                                                                                                tooltipPosition="top"
+                                                                                                                                                pTooltip="Supprimer le titre"
+                                                                                                                                                (click)="deleteTitre(l3Sstitre)"
+                                                                                                                                                class="p-button-rounded p-button-outlined p-button-danger"></button>
+                                                                                                                                        </span>
+                                                                                                                                    </span>
+                                                                                                                                </tr>
+                                                                                                                            </li>
+                                                                                                                        </ul>
+                                                                                                                    </span>
+                                                                                                                </li>
+                                                                                                            </ul>
+                                                                                                        </span>
+                                                                                                    </li>
+                                                                                                </ul>
+                                                                                            </span>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </span>
+                                                                </li>
+                                                            </ul>
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </ng-template>
+                            </p-table>
+                        </p-scrollPanel>
+                    </span>
+                </p-panel>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+<p-dialog [header]="libelle" [(visible)]="dialogAddTitre" [modal]="true" [style]="{width:'35vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+                    <div class="row mb-2" *ngIf="Titre==false">
+                        <label for="parent" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">En dessous de </label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <span class="p-float-label">
+                                <p-dropdown [style]="{width:'100%',height:'35px'}" [disabled]="action=='view'"
+                                    [(ngModel)]="titre.parent" [showClear]="true" optionValue="cscanevaID"
+                                    [options]="listTitres" optionLabel="libelleFr" placeholder=" " name="parent">
+                                </p-dropdown>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Numéro</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleFr"
+                                [(ngModel)]="titre.numero" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libellé en Français</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleFr"
+                                [(ngModel)]="titre.libelleFr" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Libellé en Anglais</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <input type="text" class="form-control form-control-sm" name="libelleUs"
+                                [(ngModel)]="titre.libelleUs" required />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3"></div>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <div class="p-field-radiobutton">
+                                <p-radioButton name="lieCadreLogique" value="lieCadreLogique" [(ngModel)]="liason"
+                                    inputId="lieCadreLogique"></p-radioButton>
+                                <label for="lieCadreLogique">&nbsp;&nbsp;Lié à un cadre logique</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3"></div>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <div class="p-field-radiobutton">
+                                <p-radioButton name="lieDiagnostic" value="lieDiagnostic" [(ngModel)]="liason"
+                                    inputId="lieDiagnostic"></p-radioButton>
+                                <label for="lieDiagnostic">&nbsp;&nbsp;Lié à un outils de SWOTT</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3"></div>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <div class="p-field-radiobutton">
+                                <p-radioButton name="default" value="default" [(ngModel)]="liason" inputId="default">
+                                </p-radioButton>
+                                <label for="lieDiagnostic">&nbsp;&nbsp;Aucun</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <label for="phase" class="col-sm-12 col-md-12 col-lg-3 col-xl-3"
+                            style="margin-top: 2%;">Description</label>
+                        <div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+                            <textarea rows="5" type="text" class="form-control form-control-sm" name="libelleUs"
+                                [(ngModel)]="titre.description" required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <ng-template pTemplate="footer">
+        <button icon="pi pi-times" (click)="dialogAddTitre=false" pButton pRipple type="button" label="Annuler"
+            class="p-button-secondary p-button-text"></button>
+        <button icon="pi pi-save" *ngIf="action=='new' || action=='edit'" [disabled]="!titre.libelleFr"
+            (click)="saveTitre(titre)" pButton pRipple type="button" label="Ajouter"
+            class="p-button-success p-button-text"></button>
+    </ng-template>
+
+</p-dialog>
+
+<!-- Dialog de confirmation de suppression -->
+<p-dialog [header]="libelle" [(visible)]="dialogDeplacer" [modal]="true" [style]="{width:'35vw'}" [draggable]="true"
+    [resizable]="false">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="col-sm-12  col-md-12 col-lg-12 col-xl-12">
+                    <div class="row mb-2">
+                        <label for="code" class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Deplacer sous </label>
+                        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mt-1 mx-1">
+                            <span class="p-float-label">
+                                <p-dropdown [style]="{width:'80%',height:'35px'}" [disabled]="action=='view'"
+                                    [(ngModel)]="parentID" [showClear]="true" optionValue="cscanevaID"
+                                    [options]="listTitres" optionLabel="libelleFr" placeholder=" " name="parent">
+                                </p-dropdown>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button icon="pi pi-times" (click)="dialogDeplacer=false" pButton pRipple type="button" label="Annuler"
+            class="p-button-secondary p-button-text"></button>
+        <button icon="pi pi-check" (click)="deplacer(titre)" pButton pRipple type="button" label="Valider"
+            class="p-button-success p-button-text"></button>
+    </ng-template>
+
+</p-dialog>

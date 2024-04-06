@@ -1,0 +1,19 @@
+.paramclientEl {
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 16px;
+}
+
+.paramclientCard {
+    border-left: 5px solid #1d3b55;
+    margin-top: 1%;
+    background-color: #dde5eb;
+    padding: 5px;
+}
+
+.ng-autocomplete {
+    width: 100%;
+    //max-width: 600px;
+    display: table;
+    margin: 0 auto;
+}

@@ -1,0 +1,118 @@
+<div class="brise-text">
+	<textarea name="msg" id="" cols="30" rows="10" required></textarea>
+	<label>Message</label>
+</div>
+<div class="input-block">
+	<h1>Responsive material custom inputs</h1>
+	<span class="sub">By Vlad Brise</span>
+
+	<!-- 	Copy this form on your website -->
+	<form id="brise-form">
+		<h3>Custom inputs:</h3>
+		<div class="wrap-line">
+			<!-- Inputs -->
+			<div class="brise-input">
+				<input type="text" name="text" required>
+				<label>Name</label>
+				<span class="line"></span>
+			</div>
+			<div class="brise-input">
+				<input type="text" name="text" required>
+				<label>Email</label>
+				<span class="line"></span>
+			</div>
+			<!-- Inputs -->
+		</div>
+		<h3>Custom textarea:</h3>
+		<!-- Textarea -->
+		<div class="brise-text">
+			<textarea name="msg" id="" cols="30" rows="10" required></textarea>
+			<label>Message</label>
+		</div>
+		<!-- Tetarea -->
+		<h3>Custom checkboxes:</h3>
+		<div class="wrap-column">
+			<!-- Checkbox -->
+			<div class="brise-checkbox">
+				<label>
+					<input type="checkbox" name="check" required>
+					<span class="checkbox"></span>
+					<span class="label">Html</span>
+				</label>
+			</div>
+			<div class="brise-checkbox">
+				<label>
+					<input type="checkbox" name="check" required>
+					<span class="checkbox"></span>
+					<span class="label">CSS and Javascript</span>
+				</label>
+			</div>
+			<!-- Checkbox -->
+		</div>
+		<h3>Custom radio buttons:</h3>
+		<div class="wrap-column">
+			<!-- Radio -->
+			<div class="brise-radio">
+				<label>
+					<input name="radio" type="radio" required checked>
+					<span class="radio"></span>
+					<span class="label">Male</span>
+				</label>
+			</div>
+			<div class="brise-radio">
+				<label>
+					<input name="radio" type="radio" required>
+					<span class="radio"></span>
+					<span class="label">Female</span>
+				</label>
+			</div>
+			<!-- Radio -->
+		</div>
+		<h3>Custom upload button:</h3>
+		<!-- Upload file button -->
+		<div class="brise-upload">
+			<label>
+				<input type="file" name="file" accept="">
+				<span class="label">Upload file</span>
+			</label>
+		</div>
+		<!-- Upload file button -->
+		<h3>And simply submit:</h3>
+		<button class="brise-btn">Submit</button>
+	</form>
+
+	<!-- 	Copy this form on your website -->
+
+	<div class="links">
+		<a href="https://www.instagram.com/brisedesign/" target="_blank">
+			<div class="item">
+				<i class="fab fa-instagram"></i>
+			</div>
+			<span class="follow">Follow Us!</span>
+		</a>
+	</div>
+	<div class="foot"><a href="https://github.com/brisedesign/brise-custom-inputs" target="_blank">Setup from GitHub</a>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-12">
+		<div class="ng-autocomplete">
+			<ng-autocomplete [data]="countries" [searchKeyword]="keyword" placeholder="Enter the Country Name"
+				(selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
+				(inputFocused)='onFocused($event)' historyIdentifier="countries" [itemTemplate]="itemTemplate"
+				[notFoundTemplate]="notFoundTemplate">
+			</ng-autocomplete>
+
+			<ng-template #itemTemplate let-item>
+				<a [innerHTML]="item.name"></a>
+			</ng-template>
+
+			<ng-template #notFoundTemplate let-notFound>
+				<div [innerHTML]="notFound"></div>
+			</ng-template>
+		</div>
+
+	</div>
+</div> 
