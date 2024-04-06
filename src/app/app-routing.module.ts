@@ -50,7 +50,10 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [LoginActivateGuard],
     children: [
-   
+      { path: '', redirectTo: 'accueil', pathMatch: 'full' },
+      { path: 'compta', loadChildren: () => import('./modules/compta/compta-routing.module').then(m => m.ComptaRoutingModule) },
+      
+      
       { path: 'users', component: UsersComponent },
       { path: 'groupes', component: GroupesComponent },
       { path: 'droits', component: FonctionaliteComponent },
@@ -60,7 +63,7 @@ const routes: Routes = [
 
       { path: 'activite', component: ActiviteComponent },
       { path: 'client', component: ClientComponent },
-     
+
       { path: 'gestMercuriale', component: ArticleComponent },
       { path: 'repIndicateur', component: RepIndicateurComponent },
       { path: 'arbreObjectif', component: ArbreListComponent },
@@ -72,7 +75,7 @@ const routes: Routes = [
       { path: 'theoChange2', component: TheorieChangementComponent },
       { path: 'smateriel', component: MaterielComponent },
       { path: 'sprojet', component: ProjetComponent },
-    
+
     ],
   },
   {
@@ -93,4 +96,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
